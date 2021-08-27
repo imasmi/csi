@@ -36,7 +36,7 @@ $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 		}
 
 		foreach(explode(" ", $doc_191) as $value){
-			if(strpos($value, "8820400") !== false){
+			if(strpos($value, "88204") !== false){
 				$case = $PDO->query("SELECT id, number FROM caser WHERE number='" . substr($value, 0, 14 ) . "'")->fetch();
 				break;
 			}
