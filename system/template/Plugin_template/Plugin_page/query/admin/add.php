@@ -1,0 +1,90 @@
+<?php
+$PageAPP = new \system\module\Page\php\PageAPP;
+$CodeAPP = new \system\module\Code\php\CodeAPP;
+$check = array();
+$Object = $Plugin->object();
+$plugin = isset($Object->plugin) ? $Object->plugin : NULL;
+
+#CHECK IF FILE ALREADY EXISTS IN THIS FOLDER
+if(isset($_POST["filename"]) && $_POST["filename"] != ""){
+    $check_file = $PDO->query("SELECT * FROM " . $Query->table() . " WHERE link_id='" . $_POST["link_id"]. "' AND filename='" . $_POST["filename"] . "'");
+    if($check_file->rowCount() > 0){ $check["#filename"] = "There is a file with the same nema already.";}
+}
+
+if($CodeAPP->special_characters_check($_POST["filename"]) === true){$check["#filename"] = "Special characters are not allowed.";}
+
+foreach($Language->items as $value){
+    if($CodeAPP->special_characters_check($_POST[$value]) === true){
+        $check["#" . $value] = "Special characters are not allowed.";
+    }
+}
+
+if(empty($check)){
+
+#ADD NEW PAGE
+$array = array(
+        "link_id" => isset($_POST["link_id"]) ? $_POST["link_id"] : $Object->link_id,
+        "user_id" => $User->id,
+        "plugin" => isset($Object->plugin) ? $Object->plugin : NULL,
+        "row" => $Query->new_id($Page->table, "row", " WHERE link_id='" . $_POST["link_id"] . "'"),
+        "menu" => isset($_POST["menu"]) ? $_POST["menu"] : NULL,
+        "tag" => $Object->tag,
+        "type" => isset($_POST["type"]) ? $_POST["type"] : NULL,
+        "created" => date("Y-m-d H:i:s")
+);
+
+foreach($Language->items as $key=>$value){
+    $array[$value] = (strpos($_POST[$value], "http") !== false) ? $_POST[$value] : $PageAPP->url_format($_POST[$value]);
+}
+
+$new_page = $Query->insert($array, $Object->table);
+
+if($new_page){
+    $id = $PDO->lastInsertId();
+    $posts = array();
+    foreach($Language->items as $key=>$value){
+        $posts["Title_" . $value] = $_POST["Title_" . $value]; 
+        $posts["Menu_" . $value] = $_POST["Menu_" . $value]; 
+        $posts["Description_" . $value] = $_POST["Description_" . $value]; 
+    }
+    $FileAPP = new system\module\File\php\FileAPP($id, array("plugin" => $plugin));
+    $SettingAPP = new \system\module\Setting\php\SettingAPP($id, array("plugin" => $plugin));
+    $SettingAPP->save($posts);
+    $FileAPP->upload(array("page_id" => $id));
+    
+    /*
+    // Add Title and Menu settings directly with the same content with the language url
+    $settings_add = array($id, array("plugin" => $plugin));
+    $SettingAPP = new \system\module\Setting\php\SettingAPP($id);
+    foreach($Language->items as $lang=>$abbrev){
+        $settings_add["Title_" . $abbrev] = $_POST[$abbrev];
+        $settings_add["Menu_" . $abbrev] = $_POST[$abbrev];
+    }
+    $SettingAPP->save($settings_add);
+    
+    // Add Title text directly with the same content with the language url
+    $text_add = array(
+        "page_id" => $id,
+        "plugin" => $plugin,
+        "tag" => "Title"
+    );
+    foreach($Language->items as $lang=>$abbrev){
+        $text_add[$abbrev] = $_POST[$abbrev];
+    }
+    $Query->insert($text_add, $Text->table);
+    ?>
+    <script>window.open('<?php echo $Page->url($id);?>', '_self');</script>
+    */
+    ?>
+        <script>history.go(-2);</script>
+    <?php
+} else {
+    echo $Text->_("Something went wrong");
+}
+
+} else {
+    $Form->validate($check);    
+}
+
+exit;
+?>

@@ -1,0 +1,63 @@
+Software: Web by ImaSmi
+Licensor: ImaSmi ltd.
+License version: 1.0
+Copyright (C) 2021 ImaSmi ltd.
+
+By downloading, modifying, using, accessing or distributing this software or any part of it,
+you agree to the Terms and conditions of this agreement. You must not use the software if you 
+not agree with these Terms and conditions. If you receive the software on behalf of a legal entity, 
+you must ensure that you have the authority to accept these Terms and conditions on behalf of the entity.
+
+The person or entity that receives this software is referred to as "Licensee" hereinafter.
+
+Modified versions of software, plugins, themes or other types of software that are made by or through this 
+software or its source code will be referred to as "Derivative".
+
+1. LICENSE TERMS
+Provided that the Terms and conditions of this agreement are observed, ImaSmi ltd. issues to the Licensee a non-exclusive, 
+global, non-transferable and royalty-free license to use the software and make modifications to the software, as well as copies and Derivative.
+Licensee also has the right to distribute copies and Derivative of the software under the same Terms and conditions and provided that the recipients 
+of the Software accept the same license agreement.
+
+2. LICENSE CONDITIONS
+a. Licensee does not receive the right to use this software or its Derivative as a final service with similar functionality. 
+For services with similar functionalities within the meaning of this Agreement are accepted SaaS (Software as a service), PaaS
+(Platform as a service), web development framework, content management system or other similar Internet products that compete with this 
+software or the services offered by ImaSmi ltd. through it.
+b. Licensee must notify subsequent licensees if it provides them with a modified version of this software.
+c. On each copy or Derivative, Licensee must retain and not remove these Terms, as well as all reserved copyrights and other proprietary notices
+of ImaSmi ltd.
+
+b. On each Software copy, Licensee shall reproduce and not remove or alter all ImaSmi ltd. or third party copyright or other proprietary 
+notices contained in the Software, and Licensee must provide the notice below with each copy.
+
+3. DERIVATIVES
+Licensee may make its own Derivative to this software, as well as apply additional license Terms to any Derivative made to this software 
+in addition to these Terms and conditions. Licensee may redistribute, offer free of charge or for a fee, rent, issue warranties and maintain 
+this software or any Derivative made with it. Licensee, not ImaSmi ltd., will be responsible for such actions and obligations.
+
+4. SUBLICENSING
+This license does not grant sublicensing authority. In order to be provided to another party by the Licensee, the party must agree to 
+these Terms and conditions.
+
+5. INTELLECTUAL PROPERTY.
+a. ImaSmi ltd. reserves all intellectual property rights in this software, its code, titles, trademarks and all other rights not granted in this agreement. 
+b. Licensee acquires intellectual property rights over the Derivative made by him, only in the part that he has upgraded this software and has used 
+his own code, trademarks and titles.
+
+6.TERMINATION.
+This agreement will remain in force until it is violated, or one of the two parties states that it withdraws from it. If either party violates this agreement, 
+the license is automatically terminated immediately and permanently.
+
+7. WARRANTY DISCLAIMER
+This product comes without any warranty. Its use for any purpose is the sole responsibility of the Licensee. ImaSmi is not responsible for any damage caused by this 
+software and its use, as well as from the use of its Derivative.
+
+8. GENERAL
+а. These Terms and conditions are the entire agreement between the parties and no additions or modifications will be valid unless accepted by both parties. In case of
+any provision of this Agreement becomes inapplicable, it shall terminate immediately.
+b. Licensee is not authorized to assign its rights under these Terms and conditions to third parties. ImaSmi has the right to freely grant these rights.
+c. Current laws shall apply to all matters not covered by this Agreement.
+
+These Terms and conditions are an exact copy of Imasmi's Web 1.0 license. Any modification of these terms and conditions will be considered forged and not approved 
+or signed by ImaSmi ltd. The original version of these Terms and Conditions can be found at https://web.imasmi.com/license?version=1.0

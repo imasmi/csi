@@ -1,0 +1,39 @@
+<s:Envelope xmlns:a="http://www.w3.org/2005/08/addressing" xmlns:s="http://www.w3.org/2003/05/soap-envelope">
+  <s:Header>
+    <a:Action s:mustUnderstand="1">http://tempuri.org/IRegiXEntryPoint/ExecuteSynchronous</a:Action>
+    <a:MessageID>urn:uuid:9bf244b6-b598-4695-adda-896cc11dd8a4</a:MessageID>
+    <ActivityId CorrelationId="a04e4ba7-e675-40e6-82ee-2ce30376b3d3" xmlns="http://schemas.microsoft.com/2004/09/ServiceModel/Diagnostics">8db5c9bb-9521-4bea-be7d-d28790d54536</ActivityId>
+    <a:ReplyTo>
+      <a:Address>http://www.w3.org/2005/08/addressing/anonymous</a:Address>
+    </a:ReplyTo>
+  </s:Header>
+  <s:Body xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <ExecuteSynchronous xmlns="http://tempuri.org/">
+      <request>
+        <Operation>TechnoLogica.RegiX.NRAEmploymentContractsAdapter.APIService.INRAEmploymentContractsAPI.GetEmploymentContracts</Operation>
+        <Argument>
+          <EmploymentContractsRequest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://egov.bg/RegiX/NRA/EmploymentContracts/Request">
+            <Identity>
+              <ID>123456</ID>
+              <TYPE>LNC</TYPE>
+            </Identity>
+          </EmploymentContractsRequest>
+        </Argument>
+        <CallContext>
+          <ServiceURI>132-11123-01.01.2016</ServiceURI>
+          <ServiceType>За проверовъчна дейност</ServiceType>
+          <EmployeeIdentifier>tl_ytoteva</EmployeeIdentifier>
+          <EmployeeNames>Йорданка Тотева</EmployeeNames>
+          <EmployeeAditionalIdentifier />
+          <EmployeePosition>SW Developer</EmployeePosition>
+          <AdministrationOId>2.16.100.1.1.1.1.15</AdministrationOId>
+          <AdministrationName>Министерство на транспорта, информационните технологии и съобщенията</AdministrationName>
+          <LawReason>За целите на разработката и тестването на RegiX.</LawReason>
+          <Remark />
+        </CallContext>
+        <SignResult>true</SignResult>
+        <ReturnAccessMatrix>true</ReturnAccessMatrix>
+      </request>
+    </ExecuteSynchronous>
+  </s:Body>
+</s:Envelope>

@@ -1,0 +1,3 @@
+<?php 
+$Document->outgoing();
+?>

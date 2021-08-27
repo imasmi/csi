@@ -1,0 +1,10 @@
+#file-title{background-color: #08494c;color: #fff;}
+#file{display: none;}
+.file-change-button{margin: 0 auto; font-size: 20px; background-color: #b10000; display: block;}
+.file-preview{width: 100px; height: 40px; margin: 0 auto;}
+.file-edit .image, .file-edit .video{margin: 0 auto 20px; height: 200px; max-width: 300px; width: auto; object-fit: contain; background-size: contain;}
+.file-edit .remove-preload{position: absolute; right: 10px; top: 10px; font-size: 28px; font-weight: bold; color: red; cursor: pointer;}
+.file-upload{width: 100%; height: 80px; border: 1px solid #000; background: url(/admin/module/File/file/camera.png) no-repeat center 35px/80px; color: red; text-align: center; padding: 10px 0;}
+.file-upload input[type="file"]{width: 100%; padding: 0; height: 100%; border: 1px solid #000; opacity: 0;}
+.file-empty{background-size: contain; background-repeat: no-repeat; width: 150px; height: 150px;}
+.audio-preview{padding: 20px; background-size: cover;}

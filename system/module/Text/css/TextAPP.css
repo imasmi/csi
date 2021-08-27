@@ -1,0 +1,16 @@
+.color-wrapper{position:relative;display:inline-block}
+.color-wrapper .color-picker{position:absolute;right:0;top:20px;display:none;z-index:2}
+.color-wrapper .color-picker td,.color-wrapper .colorPicker th{padding:1px}
+.color-wrapper .settings-color{width:100px;height:20px;display:block;cursor:pointer}
+.color-wrapper .color-picker .hideColors{cursor:pointer}
+.color-wrapper .color-picker .color-field{width:10px;height:10px;border:none;padding:0;outline:0}
+#wysiwyg{border:1px solid #000;width:395px;margin:0 auto;position:fixed;top:0;right:0;z-index:999;background-color:#f0f0f0;padding:5px}
+#wysiwyg img{height:16px; width: auto; display: inline-block;}
+#wysiwyg .Htag{height:14px}
+#wysiwyg select{width: auto; padding: 0; margin: 0; border-radius: 3px;}
+.text-wrapper{position:relative;}
+.language-editor{position:absolute;border:1px solid #000;border-radius:2px;line-height:22px;font-size:18px;top:-23px;left:0;display:none; z-index: 778;}
+.language-editor span{padding:0 10px;cursor:pointer}
+.language-editor .selected-text-lang{background-color:#add8e6}
+.edit-title{border-bottom:1px solid #000}
+.text-wrapper .Text:empty::before{content: "Empty text"; color: #777777;}

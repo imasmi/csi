@@ -1,0 +1,2 @@
+.row-drag{display: block; position: fixed; cursor: move; z-index: 3; background-color: #ffffff; color: #000000;}
+.listing .File, .listing img{user-drag: none; user-select: none; -moz-user-select: none; -webkit-user-drag: none; -webkit-user-select: none; -ms-user-select: none;}

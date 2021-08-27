@@ -1,0 +1,14 @@
+/* Developer manual */
+.manual-menu{list-style-type: none;}
+.manual-menu ul{padding-left: 20px;}
+.manual-menu li{position: relative; width: 100%;}
+.manual-menu .menu-item a{padding: 20px; display: block; border-bottom: 1px solid #bbbbbb;}
+.manual-menu .menu-item .sub-menu{display: none;}
+.manual-menu .with-sub:after{content: "+"; position: absolute; right: 10px; top: 20px; font-size: 18px;}
+.manual-content h2{margin-left: 20px; color: red;}
+.manual-content h3{margin-left: 30px; color: blue;}
+.manual-content span{margin: 5px 0 0 40px; display: block;}
+.manual-content ul{margin-left: 40px;}
+.manual-content p{color: green; margin-left: 10px;}
+.manual-link{color: blue; text-decoration: underline; cursor: pointer;}
+.manual-hint{background-color: khaki; padding: 10px; border: 1px solid #ff8100;}
