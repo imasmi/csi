@@ -50,7 +50,8 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
       $mpdf->addPage();
       $mpdf->UseTemplate($tplId);
       if($i == 1){
-        $mpdf->Image('C:\wamp64\www\csi\temp\barcode.png', 150, 24, 50, 30, 'png', '', true, false);
+        $y = $_GET["type"] == 74 ? 17 : 24;
+        $mpdf->Image('C:\wamp64\www\csi\temp\barcode.png', 150, $y, 50, 30, 'png', '', true, false);
       }
   }
 
