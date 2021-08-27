@@ -2,7 +2,7 @@
 $list = $_POST["dir"];
 $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 ?>
-<form class="form" id="form" accept-charset="UTF-8" method="post" action="<?php echo $Core->this_path(0,-1);?>/rename-nap-files-to-reorder" target="_blank">
+<form class="form" id="form" accept-charset="UTF-8" method="post" action="<?php echo $Core->this_path(0,-1);?>/rename-NAP-74" target="_blank">
 <input type="hidden" name="dir" value="<?php echo $list;?>"/>
 <table class="listTable napReorder">
 	<tr>
@@ -28,9 +28,10 @@ $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 		foreach(scandir($listConv . '\\' . $f . '\\') as $doc_74){
 			$rtf = iconv ( "windows-1251" , "UTF-8", $doc_74 );
 			$extension = pathinfo($rtf)["extension"];
+
 			if($extension == "rtf" || $extension == "doc" || $extension == "docx"){
 				$text = file_get_contents("file://" . $listConv . '\\' . $f . '\\' . $doc_74);
-				
+
 				if($extension == "doc"){
 					$text = preg_replace("/[^a-zA-Z0-9\s\,\.\-\n\r\t@\/\_\(\)]/","",$text);
 				} elseif($extension == "docx"){
@@ -38,7 +39,7 @@ $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 					$text = $Ms_office->_();
 				}
 				foreach(explode(" ", $text) as $value){
-					if(strpos($value, "8820400") !== false){
+					if(strpos($value, "88204") !== false){
 						$case = $PDO->query("SELECT id, number FROM caser WHERE number='" . substr($value, 0, 14 ) . "'")->fetch();
 						break;
 					}
