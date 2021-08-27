@@ -3,13 +3,13 @@
 		<tr>
 			<td>НАП 191</td>
 			<td><input type="text" id="NAP_191" value="C:/Users/1/Downloads/NAP_191"/></td>
-			<td><button class="button" onclick="S.post('<?php echo $Core->query_path();?>/NAP-191', {dir: S('#NAP_191').value, type: 'NAP_191'}, '#naps')">Зареждане</button></td>
+			<td><button class="button" onclick="S.post('<?php echo $Core->query_path();?>/NAP', {dir: S('#NAP_191').value, type: '191'}, '#naps')">Зареждане</button></td>
 		</tr>
 
 		<tr>
 			<td>НАП 74</td>
 			<td><input type="text" id="NAP_74" value="C:/Users/1/Downloads/NAP_74"/></td>
-			<td><button class="button" onclick="S.post('<?php echo $Core->query_path();?>/NAP-74', {dir: S('#NAP_191').value, type: 'NAP_74'}, '#naps')">Зареждане</button></td>
+			<td><button class="button" onclick="S.post('<?php echo $Core->query_path();?>/NAP', {dir: S('#NAP_74').value, type: '74'}, '#naps')">Зареждане</button></td>
 		</tr>
 
 		<tr>

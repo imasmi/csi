@@ -1,12 +1,21 @@
 <?php
 require_once $Core->doc_root() . '/composer/vendor/autoload.php';
 $Barcode = new \plugin\Document\php\Barcode;
-echo __DIR__;
-
 //First, get the correct document size.
 
-
 for($a = 1; $a < $_POST["rows"]; ++$a){
+  if(!isset($_POST["file_" . $a])){continue;} //Check if the row is removed
+
+  if($_GET["type"] == 74){
+    foreach($Core->list_dir($_POST["dir"] . "/" . $_POST["file_" . $a], ["select" => "file"]) as $folder_file){
+        if(strpos($folder_file, "_1_") !== false){
+          $file = $folder_file;
+        }
+    }
+  } else {
+    $file = $_POST["dir"] . "/" . $_POST["file_" . $a];
+  }
+
   //echo $_POST["file_" . $a] . " -> " . $_POST["barcode_" . $a] . '<br>';
   $barcode = $Query->select($_POST["barcode_" . $a], "barcode", "document");
   $case = $Query->select($barcode["case_id"], "id", "caser");
@@ -16,14 +25,14 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
     "date" => $barcode["date"],
     "case" => $case["number"]
   );
-  $Barcode->imageToPdf($bar_data, $_GET["size"], $_GET["orientation"], $_GET["code_type"]);
+  $Barcode->imageToPdf($bar_data);
 
   $mpdf = new \Mpdf\Mpdf([
       'tempDir' => "temp",
       'orientation' => 'L'
   ]);
 
-  $pagecount = $mpdf->SetSourceFile('C:/Users/1/Downloads/NAP_191/' . $_POST["file_" . $a]);
+  $pagecount = $mpdf->SetSourceFile($file);
 
   $tplId = $mpdf->ImportPage(1);
   $size = $mpdf->getTemplateSize($tplId);
@@ -33,7 +42,7 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
       'tempDir' => "temp",
       'format' => [$size['width'], $size['height']]
   ]);
-  $mpdf->SetSourceFile('C:/Users/1/Downloads/NAP_191/' . $_POST["file_" . $a]);
+  $mpdf->SetSourceFile($file);
 
   //Write into the instance and output it
   for ($i=1; $i <= $pagecount; $i++) {
@@ -45,6 +54,7 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
       }
   }
 
-  $mpdf->output('C:/Users/1/Downloads/NAP_191/' . $_POST["file_" . $a], "F");
+  $mpdf->output($file, "F");
+  echo $file . '<br>';
 }
 ?>
