@@ -7,13 +7,18 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
   if(!isset($_POST["file_" . $a])){continue;} //Check if the row is removed
 
   if($_GET["type"] == 74){
-    foreach($Core->list_dir($_POST["dir"] . "/" . $_POST["file_" . $a], ["select" => "file"]) as $folder_file){
+    $folder_convert = iconv ( "UTF-8", "windows-1251" ,  $_POST["dir"] . "/" . $_POST["file_" . $a]);
+    foreach($Core->list_dir($folder_convert) as $folder_file){
         if(strpos($folder_file, "_1_") !== false){
           $file = $folder_file;
         }
     }
   } else {
     $file = $_POST["dir"] . "/" . $_POST["file_" . $a];
+  }
+  if(pathinfo($file)["extension"] != "pdf"){
+    echo $file . " is not PDF<br>";
+    continue;
   }
 
   //echo $_POST["file_" . $a] . " -> " . $_POST["barcode_" . $a] . '<br>';
@@ -56,6 +61,5 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
   }
 
   $mpdf->output($file, "F");
-  echo $file . '<br>';
 }
 ?>

@@ -3,7 +3,7 @@ $dir = $_POST["dir"] . '\\';
 
 $items = [];
 $cases = [];
-for($a = 1; $a < 3; ++$a){
+for($a = 1; $a < $_POST["rows"]; ++$a){
 	if(isset($_POST["file_" . $a])){
 		$items[$a] = [];
 		$folder_name = $_POST["dir"] . "/" . $_POST["file_" . $a]; //Assemble the folder name
@@ -17,7 +17,8 @@ for($a = 1; $a < 3; ++$a){
 			rename($name_convert, $new_convert);
 		}
 
-		foreach($Core->list_dir($folder_new, array("select" => "file")) as $file){
+
+		foreach($Core->list_dir($new_convert, ["select" => "file"]) as $file){
 			$file_name = iconv ( "windows-1251", "UTF-8" ,  $file );
 			$pathinfo = pathinfo($file_name);
 			$pathinfo["case"] = $case_number;
