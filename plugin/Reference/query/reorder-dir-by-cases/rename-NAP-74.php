@@ -1,42 +1,50 @@
 <?php
 $dir = $_POST["dir"] . '\\';
-if($_POST["dir"] != "C:/Users/1/Downloads/NAP_PRINT"){
-	echo '<div>FILE PRINTING WITH Print Coductor</div>';
 
-	#REMOVE EVERYTHING FROM PRINT FOLDER FIRST
-	array_map('unlink', glob("C:\\Users\\1\\Downloads\\print\\*.*"));
+$items = [];
+$cases = [];
+for($a = 1; $a < 3; ++$a){
+	if(isset($_POST["file_" . $a])){
+		$items[$a] = [];
+		$folder_name = $_POST["dir"] . "/" . $_POST["file_" . $a]; //Assemble the folder name
+		$name_convert = iconv ( "UTF-8", "windows-1251" ,  $folder_name ); //Convert the name to windows encoding format
+		$case_number = $Query->select($_POST["case_" . $a], "id", "caser", "number")["number"]; //Get the case number by id
+		$cases[] = $case_number;
+		$folder_new = $_POST["dir"] . "/" . $case_number . "_" . $_POST["file_" . $a]; //Assemble the new folder name
+		$new_convert = iconv ( "UTF-8", "windows-1251" ,  $folder_new ); //Convert the new windows name to windows format
 
-	#MAKE REORDERED COPIES IN C:/Users/1/Downloads/print
-	$cnt = 10;
-	$folders = iconv ( "UTF-8", "windows-1251" ,  $_POST["dir"] );
-	foreach($Core->list_dir($folders, "dir", false) as $folder){
-		$folderName = iconv ( "windows-1251", "UTF-8" ,  $folder );
-		$folderName = str_replace($_POST["dir"], "", $folderName);
-		$subfolder = $_POST["dir"] . '\\' . $folderName;
-		$files = iconv ( "UTF-8", "windows-1251" ,  $_POST["dir"] . '\\' . $folderName );
-		$a = 1;
-		foreach($Core->list_dir($files ) as $file){
-			$fileName = iconv ( "windows-1251", "UTF-8" ,  $file );
-			$fileName = str_replace($subfolder . "/", "", $fileName);
-			$filepath = $subfolder . '\\' . $fileName;
-			$ext = pathinfo($filepath, PATHINFO_EXTENSION);
-			if($ext == "rtf" || $ext == "doc" || $ext == "docx"){
-				$newName = $cnt . '_' .  $fileName;
-			} else {
-				$newName = ($a+$cnt) . '_' . '.' . $ext;
-				$a++;
-			}
-
-			$fileConv = iconv ( "UTF-8" , "windows-1251", $filepath );
-			$newConv = iconv ( "UTF-8" ,  "windows-1251", 'C:\Users\1\Downloads\print\\' . $newName );
-
-			if (!copy($fileConv, $newConv)) {
-				echo "failed to copy $filepath...\n";
-			}
-			$b = $a;
-			echo $filepath . '->' . $newName . '<br/>';
+		if(file_exists($name_convert) || is_dir($name_convert)){
+			rename($name_convert, $new_convert);
 		}
-		$cnt+= $b;
+
+		foreach($Core->list_dir($folder_new, array("select" => "file")) as $file){
+			$file_name = iconv ( "windows-1251", "UTF-8" ,  $file );
+			$pathinfo = pathinfo($file_name);
+			$pathinfo["case"] = $case_number;
+			$pathinfo["new_dir"] = $folder_new;
+			if($pathinfo["extension"] == "rtf" || $pathinfo["extension"] == "doc" || $pathinfo["extension"] == "docx"){
+				array_unshift($items[$a], $pathinfo);
+			} else {
+				$items[$a][] = $pathinfo;
+			}
+		}
 	}
+}
+
+foreach($items as $item){
+	foreach($item as $key => $file){
+		$old_file = $file["new_dir"] . "/" . $file["basename"];
+		$old_convert = iconv ( "UTF-8", "windows-1251" ,  $old_file );
+		$new_file = $file["new_dir"] . "/" . $file["case"] . "_" . ($key + 1) . "_" . $file["basename"];
+		$new_convert = iconv ( "UTF-8", "windows-1251" ,  $new_file );
+		if(file_exists($old_convert)){
+			rename($old_convert, $new_convert);
+		}
+	}
+}
+
+sort($cases);
+foreach($cases as $case){
+	echo $case . '<br>';
 }
 ?>
