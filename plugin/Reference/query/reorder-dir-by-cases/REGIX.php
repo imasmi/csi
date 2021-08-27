@@ -2,7 +2,7 @@
 $list = $_POST["dir"];
 $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 ?>
-<form class="form" id="form" accept-charset="UTF-8" method="post" action="<?php echo $Core->this_path(0,-1);?>/rename-nap-files-to-reorder" target="_blank">
+<form class="form" id="form" accept-charset="UTF-8" method="post" action="<?php echo $Core->this_path(0,-1);?>/rename-NAP-191" target="_blank">
 <input type="hidden" name="dir" value="<?php echo $list;?>"/>
 <table class="listTable napReorder">
 	<tr>
