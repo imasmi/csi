@@ -10,28 +10,9 @@ foreach($csv as $t){
 	$case_number = $case[0];
 	$case_year = $case[1];
 	#echo $a . '->' . $case_number . '<br/>';
-	//$caser[$case_year . (8820400000 + $case_number)][] = $case_sum;
-	if($case_sum == "6.00 лв." && strpos($t[4], "БНБ") === false){
-		//print_r($t); echo '<br>';
-		$caser_numb[] = $case_year . (8820400000 + $case_number);
-		++$cnt;
-	}
+	$caser[$case_year . (8820400000 + $case_number)][] = $case_sum;
 }
-sort($caser_numb);
-foreach($caser_numb as $case_id){
-	$caser[] = $Query->select($case_id, "number", "caser", "id")["id"];
-}
-//echo $cnt;
-# ФУНКЦИЯ ЗА СТАРТОВИ СПРАВКИ ПО ДЕЛАТА
-$Reference = new \plugin\Reference\php\Reference;
-?>
-<div class="admin">
-<?php
-$Reference->starters(array_unique($caser));
-?>
-</div>
-<?php
-exit;
+
 ksort($caser);
 $sums = array_unique($sums);
 sort($sums);
