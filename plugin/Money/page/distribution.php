@@ -1,4 +1,6 @@
 <div class="csi admin">
+	<input type="time" id="start-time" value="<?php echo isset($_GET["start_time"]) ? $_GET["start_time"] : date("H:i:s");?>"/>
+	<button type="button" class="button" onclick="window.open(location.href + (location.href.indexOf('?') === -1 ? '?' : '&') +'start_time=' + S('#start-time').value, '_self')">Промени начален час</button>
 <form method="post" action="<?php echo $Core->query_path();?>" onsubmit="return csi.checkLenght()" onkeypress="return event.keyCode != 13;" target="_blank">
 <table class="listTable" border="1px" cellpadding="0" cellspacing="0">
 	<tr>
@@ -17,14 +19,17 @@
 <?php
 $creditorsSum = 0;
 $csiSum = 0;
-$start = isset($_GET["start"]) ? $_GET["start"] : date("Y-m-d");
-$end = isset($_GET["end"]) ? $_GET["end"] : $start;
+$start = (isset($_GET["start"]) ? $_GET["start"] : date("Y-m-d"));
+$start_time = (isset($_GET["start_time"]) ? $_GET["start_time"] : "00:00:00");
+$end = isset($_GET["end"]) && $_GET["end"] != "" ? $_GET["end"] : $start;
+
 ?>
 <input type="hidden" name="start_date" value="<?php echo $start;?>"/>
+<input type="hidden" name="start_time" value="<?php echo $start_time;?>"/>
 <input type="hidden" name="end_date" value="<?php echo $end;?>"/>
 <?php
 $a = 1;
-foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id AND d.user='2' AND d.date >= '" . $start . " 00:00:00' AND d.date <= '" . $end . " 23:59:59' ORDER by d.id ASC") as $distribution){
+foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id AND d.user='2' AND d.date >= '" . $start . " " . $start_time . "' AND d.date <= '" . $end . " 23:59:59' ORDER by d.id ASC") as $distribution){
 // CASE DEBTORS
 	$Caser = new \plugin\Caser\php\Caser($distribution[0]);
 	$case_debtors = $Caser->debtor;

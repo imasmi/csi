@@ -104,6 +104,27 @@ class Core{
         return $this->url() . $this->path_slice($pre . "query/" . implode("/", $links), $start, $end);
     }
 	
+	public function get_extend($array){
+        $get = $_GET;
+        foreach($array as $key => $value){
+            $get[$key] = $value;
+        }
+        
+        $cnt = 0;
+        $output = $this->url();
+        foreach($get as $key => $value){
+            if($cnt == 0){
+                $output .= $value;
+            } elseif($cnt == 1){
+                $output .= "?" . $key . "=" . $value;
+            } else {
+                $output .= "&" . $key . "=" . $value;
+            }
+        $cnt++;
+        }
+        return $output;
+    }
+	
 	public function url(){
 	    return rtrim($_SERVER["PHP_SELF"], "index.php");
 	}

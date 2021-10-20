@@ -94,20 +94,20 @@ class ListingAPP{
             <?php
             if($p > 5){
                 for($a = 1; $a <= 3; $a++){
-                    echo "<li class='pagination-p'><a class='button' href='" . $this->replace_get(array("p" => $a)) . "'>" . $a . "</a></li>";
+                    echo "<li class='pagination-p'><a class='button' href='" . $this->Core->get_extend(array("p" => $a)) . "'>" . $a . "</a></li>";
                 }
                 echo ' ';
             }
             
             for($a = $start_page; $a <= $end_page; $a++){
                 $selected_page = ($a == $p) ? ' selectedPage' : "";
-                echo "<li class='pagination-p'><a class='button" . $selected_page . "' href='" . $this->replace_get(array("p" => $a)) . "'>" . $a . "</a></li>";
+                echo "<li class='pagination-p'><a class='button" . $selected_page . "' href='" . $this->Core->get_extend(array("p" => $a)) . "'>" . $a . "</a></li>";
             }
             
             if($p < ($pages - 5)){
                 echo ' ';
                 for($a = $pages - 2; $a <= $pages; $a++){
-                    echo "<li class='pagination-p'><a class='button' href='" . $this->replace_get(array("p" => $a)) . "'>" . $a . "</a></li>";
+                    echo "<li class='pagination-p'><a class='button' href='" . $this->Core->get_extend(array("p" => $a)) . "'>" . $a . "</a></li>";
                 }
             }
             
@@ -121,7 +121,7 @@ class ListingAPP{
                     <?php foreach($per_values as $perPage){
                     $selected = ($perPage == $pp) ? " selected" : "";
                     ?>
-                    <option value='<?php echo $this->replace_get(array("p" => 1, "pp" => $perPage));?>' <?php echo $selected;?>><?php echo $perPage;?></option>
+                    <option value='<?php echo $this->Core->get_extend(array("p" => 1, "pp" => $perPage));?>' <?php echo $selected;?>><?php echo $perPage;?></option>
                     <?php }?>
                 </select>
             </li>
@@ -247,28 +247,6 @@ class ListingAPP{
         </table>
         <?php
         $this->pagination($rows);
-    }
-    
-    
-    public function replace_get($array){
-        $get = $_GET;
-        foreach($array as $key => $value){
-            $get[$key] = $value;
-        }
-        
-        $cnt = 0;
-        $output = $this->Core->url();
-        foreach($get as $key => $value){
-            if($cnt == 0){
-                $output .= $value;
-            } elseif($cnt == 1){
-                $output .= "?" . $key . "=" . $value;
-            } else {
-                $output .= "&" . $key . "=" . $value;
-            }
-        $cnt++;
-        }
-        return $output;
     }
     
     private function listing_view($list, $value){

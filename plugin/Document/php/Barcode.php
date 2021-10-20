@@ -136,6 +136,17 @@ class Barcode{
 		<?php
 	}
 
+	public function html_return($doc){
+		$case = $this->Query->select($doc["case_id"], "id", "caser");
+		return '<div style="width: 180px;padding: 10px; position: fixed; top: -60px; right: -20px; text-align: center; font-weight: bold;font-family: arial, tahoma;line-height: 13px;font-size: 11px;">
+		<span style="font-weight: normal; font-size: 0.8em;">ЧСИ Георги Тарльовски Рег № 882</span>
+			<div>Входящ № ' . $doc["number"] . ' / ' . date("d.m.Y", strtotime($doc["date"])) . 'г</div>
+			<div>Изп.дело № ' . $case["number"] . '</div>
+			<img src="' . $this->Core->url() . 'Document/query/barcode/image_create?text=' . $doc["barcode"]. '&size=20&orientation=horizontal&code_type=code128a" style="width: 100%;height: 50px;margin: 4px auto;display: block;"/>
+			<div style="text-align: left;margin-left: 26px;font-size: 0.9em;">' . $doc["barcode"]. '</div>
+		</div>';
+}
+
 	public function imageToPdf($get){
 			//header ('Content-type: image/png');
 			$text = $get["barcode"];

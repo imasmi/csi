@@ -73,7 +73,7 @@ class Bnb{
 		if(isset($accounts)){?>
 		<h4>БАНКОВИ СМЕТКИ</h4>
 		<?php foreach($accounts as $bank){?>
-			<table border="1px" class="bnbTable">
+			<table border="1" style="border-collapse: collapse; margin-top: 30px; font-size: 12px;">
 				<tr><th colspan="10"><?php echo $bank[0]["unit_name"];?></th></tr>	
 				<tr>
 					<th>Име/ Наименование на лицето</th>
@@ -92,14 +92,14 @@ class Bnb{
 				<tr>
 					<td><?php echo $account["name"];?></td>
 					<td><?php echo $account["account_num"];?></td>
-					<td class="centerTD"><?php echo $account["type_name"];?></br><?php echo $account["group_name"];?></td>
-					<td class="centerTD"><?php echo $account["currency_code"];?></td>
-					<td class="centerTD"><?php echo $account["open_date"];?></td>
-					<td class="centerTD"><?php echo $account["close_date"];?></td>
-					<td class="centerTD"><?php echo $account["role_name"];?></td>
-					<td class="centerTD"><?php echo $account["entity_valid_from"];?></td>
-					<td class="centerTD"><?php echo $account["entity_valid_to"];?></td>
-					<td class="centerTD"><?php echo $account["bank_upd_date"];?></td>
+					<td><?php echo $account["type_name"];?></br><?php echo $account["group_name"];?></td>
+					<td><?php echo $account["currency_code"];?></td>
+					<td><?php echo $account["open_date"];?></td>
+					<td><?php echo $account["close_date"];?></td>
+					<td><?php echo $account["role_name"];?></td>
+					<td><?php echo $account["entity_valid_from"];?></td>
+					<td><?php echo $account["entity_valid_to"];?></td>
+					<td><?php echo $account["bank_upd_date"];?></td>
 				</tr>
 			
 				<?php if(isset($account["attachments"])){
@@ -114,9 +114,9 @@ class Bnb{
 				<?php foreach($account["attachments"] as $attachment){?>
 				<tr>
 					<td colspan="7"><?php echo $attachment["attachment_num"];?></td>
-					<td class="centerTD"><?php echo $attachment["attachment_valid_from"];?></td>
-					<td class="centerTD"><?php echo $attachment["attachment_valid_to"];?></td>
-					<td class="centerTD"><?php echo $attachment["attachment_upd_date"];?></td>
+					<td><?php echo $attachment["attachment_valid_from"];?></td>
+					<td><?php echo $attachment["attachment_valid_to"];?></td>
+					<td><?php echo $attachment["attachment_upd_date"];?></td>
 				</tr>
 				<?php } ?>
 				<?php } ?>
@@ -133,8 +133,8 @@ class Bnb{
 		if(isset($safes)){?>
 		<h4>ДОГОВОРИ ЗА НАЕМ НА БАНКОВИ СЕЙФОВЕ</h4>
 		<?php foreach($safes as $bsafe){?>
-			<table border="1px" class="bnbTable">	
-				<tr><th colspan="10"><?php echo $bsafe[0]["unit_name"];?></th></tr>	
+			<table border="1" style="border-collapse: collapse; margin-top: 30px; font-size: 12px;">	
+				<tr><th colspan="10"><?php echo $bsafe[0]["unit_name"];?></th></tr>
 				<tr>
 					<th>Име/ Наименование на лицето</th>
 					<th>Номер и дата на договора за наем</th>
@@ -151,13 +151,13 @@ class Bnb{
 				<tr>
 					<td><?php echo $safe["name"];?></td>
 					<td>№<?php echo $safe["contract_num"];?>/<?php echo $safe["contract_date"];?></td>
-					<td class="centerTD"><?php echo $safe["safe_count"];?></td>
-					<td class="centerTD"><?php echo $safe["safe_valid_from"];?></td>
-					<td class="centerTD"><?php echo $safe["safe_valid_to"];?></td>
-					<td class="centerTD"><?php echo $safe["role_name"];?></td>
-					<td class="centerTD"><?php echo $safe["entity_valid_from"];?></td>
-					<td class="centerTD"><?php echo $safe["entity_valid_to"];?></td>
-					<td class="centerTD"><?php echo $safe["bank_upd_date"];?></td>
+					<td><?php echo $safe["safe_count"];?></td>
+					<td><?php echo $safe["safe_valid_from"];?></td>
+					<td><?php echo $safe["safe_valid_to"];?></td>
+					<td><?php echo $safe["role_name"];?></td>
+					<td><?php echo $safe["entity_valid_from"];?></td>
+					<td><?php echo $safe["entity_valid_to"];?></td>
+					<td><?php echo $safe["bank_upd_date"];?></td>
 				</tr>
 			<?php }?>
 			</table>

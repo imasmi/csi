@@ -1,4 +1,5 @@
 <div class="admin paddingY-30">
+	<h3>Поставяне на баркод</h3>
 	<table class="listTable napReorder">
 		<tr>
 			<td>НАП 191</td>
@@ -15,7 +16,7 @@
 		<tr>
 			<td>ГРАО</td>
 			<td><input type="text" id="GRAO" value="C:/Users/1/Downloads/GRAO"/></td>
-			<td><button class="button" onclick="window.open('<?php echo $Core->query_path();?>/GRAO?dir=' + S('#GRAO').value)">Зареждане</button></td>
+			<td><button class="button" onclick="S.post('<?php echo $Core->query_path();?>/GRAO', {dir: S('#GRAO').value}, '#naps')">Зареждане</button></td>
 		</tr>
 
 		<tr>
@@ -24,6 +25,11 @@
 			<td><button class="button" onclick="window.open('<?php echo $Core->query_path();?>/REGIX?dir=' + S('#REGIX').value)">Зареждане</button></td>
 		</tr>
 
+		<tr>
+			<td>БНБ</td>
+			<td><input type="text" id="BNB" value="C:/Users/1/Downloads/BNB"/></td>
+			<td><button class="button" onclick="S.post('<?php echo $Core->query_path();?>/BNB', {dir: S('#BNB').value}, '#naps')">Зареждане</button></td>
+		</tr>
 	</table>
 </div>
 

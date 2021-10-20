@@ -9,8 +9,6 @@ if($_FILES["import"]["type"] == "text/xml"){
 	} elseif($xml->ArrayOfAPAccounts->APAccount->BankAccount->BankAccountID == "92ef455cd1174220a46bb262f3b5220f" || $xml->ArrayOfAPAccounts->APAccount->BankAccount->BankAccountID == "eb8485076d534f60ab0d652b1e3086f2"){
 		#PRINT PAYMENTS FROM POSTBANK XML
 		require_once("print-postbank-payments.php");
-	} else {
-		require_once("bnb.php");
 	}
 }
 

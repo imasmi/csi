@@ -15,11 +15,13 @@ class FileAPP extends \system\module\File\php\File{
     }
     
     public function delete_dir($path) {
-        $files = glob($path . '/*');
-    	foreach ($files as $file) {
-    		is_dir($file) ? $this->delete_dir($file) : unlink($file);
-    	}
-    	rmdir($path);
+        if(is_dir($path)){
+            $files = glob($path . '/*');
+            foreach ($files as $file) {
+                is_dir($file) ? $this->delete_dir($file) : unlink($file);
+            }
+            rmdir($path);
+        }
     	return;
     }
     

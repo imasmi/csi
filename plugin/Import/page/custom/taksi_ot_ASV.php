@@ -6,7 +6,7 @@ $cnt = 0;
 foreach($csv as $t){
 	$case_sum = $t[3];
 	$sums[] = $case_sum;
-	$case = explode("/",$t[2]);
+	$case = explode("/",$t[1]);
 	$case_number = $case[0];
 	$case_year = $case[1];
 	#echo $a . '->' . $case_number . '<br/>';

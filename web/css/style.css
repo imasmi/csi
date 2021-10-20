@@ -153,12 +153,12 @@ section.open .tag:before{content: "-";}
 .grao-content, .regix-content{page-break-after: always; position: relative; top: -150px; }
 .grao-content *{color: black!important;}
 .grao-content table:first-child td:first-child h5{display: none;}
-.grao-barcode .adminBarcode, .regix-barcode .adminBarcode{ position: relative; z-index: 2; width: 200px; font-size: 14px; line-height: 16px;}
+.grao-barcode .adminBarcode, .regix-barcode .adminBarcode{ position: relative; z-index: 2; width: 208px; font-size: 14px; line-height: 16px;}
 .grao-barcode .adminBarcode .barcode, .regix-barcode .adminBarcode .barcode{height: 70px;}
 
 .regix-print{position: relative;}
 .regix-barcode{ position: absolute; left: 0px; top: 0;}
-.regix-barcode .adminBarcode{padding: 0; width: 183px; font-size: 13px; line-height: 15px;}
+.regix-barcode .adminBarcode{padding: 0; width: 183px; font-size: 12px; line-height: 15px;}
 .regix-content{top: 0;}
 
 

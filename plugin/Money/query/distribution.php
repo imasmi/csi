@@ -117,7 +117,7 @@ fclose($f);
 
 echo '<br/>' . $_POST["start_date"] . '-' . $_POST["end_date"];
 echo '<br/><br/><table border="1px">';
-foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id AND d.user = '2' AND d.date >= '" . $_POST["start_date"] . " 00:00:00' AND d.date <= '" . $_POST["end_date"] . " 23:59:59' ORDER by c.number ASC") as $dis){
+foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id AND d.user = '2' AND d.date >= '" . $_POST["start_date"] . " " . $_POST["start_time"]. "' AND d.date <= '" . $_POST["end_date"] . " 23:59:59' ORDER by c.number ASC") as $dis){
 	echo '<tr><td>' . $dis["number"] . '</td></tr>';
 }
 echo '</table>';

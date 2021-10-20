@@ -44,3 +44,8 @@ foreach($listDir as $f){
 </div>
 </body>
 </html>
+<script>
+	window.addEventListener('load', function(){
+		csi.printBothSides(".person", 3000);
+	});
+</script>

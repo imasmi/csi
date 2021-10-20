@@ -14,7 +14,7 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
         }
     }
   } else {
-    $file = $_POST["dir"] . "/" . $_POST["file_" . $a];
+    $file = iconv ( "UTF-8", "windows-1251" , $_POST["dir"] . "/" . $_POST["file_" . $a]);
   }
   if(pathinfo($file)["extension"] != "pdf"){
     echo $file . " is not PDF<br>";
@@ -61,5 +61,6 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
   }
 
   $mpdf->output($file, "F");
+  echo $_POST["dir"] . "/" . $_POST["file_" . $a]  . '<br>';
 }
 ?>

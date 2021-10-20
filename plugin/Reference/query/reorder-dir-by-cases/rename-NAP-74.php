@@ -32,11 +32,13 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
 	}
 }
 
+$case_count = [];
 foreach($items as $item){
 	foreach($item as $key => $file){
+		if($key == 0){$case_count[$file["case"]][] = 0;}
 		$old_file = $file["new_dir"] . "/" . $file["basename"];
 		$old_convert = iconv ( "UTF-8", "windows-1251" ,  $old_file );
-		$new_file = $file["new_dir"] . "/" . $file["case"] . "_" . ($key + 1) . "_" . $file["basename"];
+		$new_file = $file["new_dir"] . "/" . $file["case"] . "-" . count($case_count[$file["case"]]) . "_" . ($key + 1) . "_" . $file["basename"];
 		$new_convert = iconv ( "UTF-8", "windows-1251" ,  $new_file );
 		if(file_exists($old_convert)){
 			rename($old_convert, $new_convert);
