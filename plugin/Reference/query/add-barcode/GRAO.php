@@ -36,7 +36,7 @@ $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 				$exclude .= " AND id != '" . $value . "'";
 			}
 		}
-		$barcode = $PDO->query("SELECT id, barcode FROM document WHERE case_id='" . $case_id . "' AND type='incoming'" . $exclude . " ORDER by id DESC")->fetch();
+		$barcode = $PDO->query("SELECT id, barcode FROM document WHERE case_id='" . $case_id . "' AND type='incoming' AND name='38'" . $exclude . " ORDER by id DESC")->fetch();
 		$bar_check[$case_id][] = $barcode["id"];
 
 	?>

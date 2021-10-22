@@ -36,10 +36,12 @@ $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 				$exclude .= " AND id != '" . $value . "'";
 			}
 		}
-		$barcode = $PDO->query("SELECT id, barcode FROM document WHERE case_id='" . $case_id . "' AND type='incoming'" . $exclude . " ORDER by id DESC")->fetch();
-		$bar_check[$case_id][] = $barcode["id"];
 
+		$doc_name = $_POST["type"] == "191" ? 14 : 15;
+		$barcode = $PDO->query("SELECT id, barcode FROM document WHERE case_id='" . $case_id . "'  AND type='incoming' AND name='" . $doc_name . "'" . $exclude . " ORDER by id DESC")->fetch();
+		$bar_check[$case_id][] = $barcode["id"];
 	?>
+
 		<td><?php echo $cnt;?></td>
 		<td><button type="button" class="button" onclick="S.remove('#row-<?php echo $cnt;?>')">X</button></td>
 		<td><input type="text" name="file_<?php echo $cnt;?>" value="<?php echo $name;?>"/></td>

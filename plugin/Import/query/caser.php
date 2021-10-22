@@ -84,23 +84,20 @@ foreach ($numbs as $a){ // SAVE PEOPLE AND CASES DATA
 		$inserts++;
 	}
 	
-	if($_POST["titul" . $a] == "Акт по чл.106/107 от ДОПК"){
-		$court_case = explode("/",$_POST["court_case" . $a]);
-		$date = date("Y-m-d", strtotime($court_case[1]));
-	} else {
-		$date = "0000-00-00";
-	}
-	
 // UPDATE caser_title
 	$title_array = array(
 		"case_id" => $case_id,
 		"type" => $_POST["titul" . $a],
 		"court" => $_POST["court" . $a],
 		"number" => $_POST["court_case" . $a],
-		"date" => $date,
 		"creditor" => json_encode($creditors),
 		"debtor" => json_encode($debtors),
 	);
+
+	if($_POST["titul" . $a] == "Акт по чл.106/107 от ДОПК"){
+		$court_case = explode("/",$_POST["court_case" . $a]);
+		$title_array["date"] = date("Y-m-d", strtotime($court_case[1]));
+	}
 
 	$title_check = $PDO->query("SELECT * FROM caser_title WHERE case_id='" . $case_id . "' ORDER by id ASC");
 	if($title_check->rowCount() > 0){
