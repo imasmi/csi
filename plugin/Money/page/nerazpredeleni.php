@@ -27,7 +27,7 @@ foreach($PDO->query("SELECT * FROM payment WHERE partitioned < allocate AND unpa
 	<tr>
 		<td><?php echo $cnt;?></td>
 		<td><?php echo $payment["id"];?></td>
-		<td><?php echo $date->_($payment["date"]);?></td>
+		<td><?php echo dates::_($payment["date"]);?></td>
 		<td><?php $Caser->open();?></td>
 		<td><?php echo $Query->select($payment["person"], "id", "person", "name")["name"];?></td>
 		<td><?php echo $Money->sum($payment["amount"]);?></td>

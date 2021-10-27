@@ -5,7 +5,7 @@
 		$type = ($invoice["type"] == "invoice") ? "Фактура" : "Сметка";
 		$number = ($invoice["type"] == "invoice") ? $invoice["invoice"] : $invoice["bill"];
 		?>
-			<input type="checkbox" name="invoicing_<?php echo $_POST["cnt"];?>_<?php echo $cnt;?>" value="<?php echo $invoice["id"];?>"><?php echo $type . " " . $number . "/" . $date->_($invoice["date"]) . " за " . $invoice["sum"];?> лева
+			<input type="checkbox" name="invoicing_<?php echo $_POST["cnt"];?>_<?php echo $cnt;?>" value="<?php echo $invoice["id"];?>"><?php echo $type . " " . $number . "/" . dates::_($invoice["date"]) . " за " . $invoice["sum"];?> лева
 			<br/>
 		<?php
 	}

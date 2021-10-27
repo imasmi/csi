@@ -11,7 +11,7 @@ $payment = $Query->select($select["page_id"], "id", "payment");
             </tr>
             
             <tr>
-                <td colspan="2" class="title"><?php echo $date->_($payment["date"]);?> за <?php echo $payment["amount"];?> лева</td>
+                <td colspan="2" class="title"><?php echo dates::_($payment["date"]);?> за <?php echo $payment["amount"];?> лева</td>
             </tr>
                 
             <tr>

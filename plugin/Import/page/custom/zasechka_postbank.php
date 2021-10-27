@@ -22,7 +22,7 @@
 		foreach($movements->BankAccountMovement as $movement){
 		$moveAmount = (float)$movement->AmountLocalCCY;
 		$total += $moveAmount;
-		$moveTime = $date->change($movement->ProcessTimestamp);
+		$moveTime = dates::change($movement->ProcessTimestamp);
 		
 		for($m = 1; $m < 13; $m++){
 			if(date("n", strtotime($moveTime)) == $m){$monthPays[$m] += $moveAmount;}

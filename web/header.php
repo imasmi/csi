@@ -4,7 +4,12 @@
 	<a href="<?php echo $Core->url();?>User/query/logout">Излез</a>
 </div>
 <ul id="csi-menu">
-	<li><a href="<?php echo $Core->url();?>Note/index">Събития</a></li>
+	<li>
+		<a href="<?php echo $Core->url();?>Note/index">Събития</a>
+		<ul class="sub-menu">
+			<li><a href="<?php echo $Core->url();?>Statistic/collected-money">Събрани суми</a></li>
+		</ul>
+	</li>
 	<li><a href="<?php echo $Core->url();?>Caser/index">Дела</a></li>
 	<li><a href="<?php echo $Core->url();?>Document/incoming">Входящи</a></li>
 	<li><a href="<?php echo $Core->url();?>Document/outgoing">Изходящи</a></li>

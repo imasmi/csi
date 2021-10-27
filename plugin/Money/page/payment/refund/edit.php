@@ -4,7 +4,7 @@ $payment = $Query->select($select["page_id"], "id", "payment");
 ?>
 
 <div class="admin">
-<div class="title">Плащане от <?php echo $date->_($payment["date"]);?> за <?php echo $payment["amount"];?> лева</div>
+<div class="title">Плащане от <?php echo dates::_($payment["date"]);?> за <?php echo $payment["amount"];?> лева</div>
 <div class="error-message" id="error-message"></div>
 <form class="form" id="form" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>', S.serialize('#form'), '#error-message')">
     <table class="table">

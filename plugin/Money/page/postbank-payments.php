@@ -71,7 +71,7 @@
 							foreach($payments as $sub_bill){
 								foreach($sub_bill as $sub_postbank_id => $sub_invoice){
 									if($bill_id != 0 && $sub_postbank_id == $postbank_id){
-										if($sub_invoice["type"] == "invoice"){echo $sub_invoice["invoice"] . "/" . $date->_($sub_invoice["date"]) . "<br>";}
+										if($sub_invoice["type"] == "invoice"){echo $sub_invoice["invoice"] . "/" . dates::_($sub_invoice["date"]) . "<br>";}
 									}
 								}
 							}
@@ -98,7 +98,7 @@
 							foreach($payments as $sub_bill){
 								foreach($sub_bill as $sub_postbank_id => $sub_invoice){
 									if($bill_id != 0 && $sub_postbank_id == $postbank_id){
-										if($sub_invoice["type"] == "bill"){echo $sub_invoice["bill"] . "/" . $date->_($sub_invoice["date"]) . "<br>";}
+										if($sub_invoice["type"] == "bill"){echo $sub_invoice["bill"] . "/" . dates::_($sub_invoice["date"]) . "<br>";}
 									}
 								}
 							}

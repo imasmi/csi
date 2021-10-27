@@ -1,5 +1,6 @@
 <?php
 namespace plugin\Note\php;
+use web\php\dates;
 
 class Note{
 	public function __construct(){
@@ -84,7 +85,7 @@ class Note{
 			global $date;
 			$cred_over = $check_creditor_over->fetch();
 			?>
-				<h3 class="incomingsDocs">Молба за приключване на делото от взискател: <?php echo $cred_over["number"];?>/<?php echo $date->_($cred_over["date"]);?> г.</h3>
+				<h3 class="incomingsDocs">Молба за приключване на делото от взискател: <?php echo $cred_over["number"];?>/<?php echo dates::_($cred_over["date"]);?> г.</h3>
 			<?php
 		}
 	}
@@ -149,8 +150,8 @@ class Note{
 						}
 					?>
 				</td>
-				<td><?php echo $date->_($note["date"]);?></td>
-				<td><?php if($date->set($note["period"])){echo $date->_($note["period"]);}?></td>
+				<td><?php echo dates::_($note["date"]);?></td>
+				<td><?php if(dates::set($note["period"])){echo dates::_($note["period"]);}?></td>
 				<td id="hide<?php echo $note["id"];?>"><?php if($note["hide"] != "0000-00-00 00:00:00"){echo $note["hide"];}?></td>
 				<td>
 					<?php foreach($this->places() as $key=>$value){

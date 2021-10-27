@@ -2,11 +2,13 @@
 namespace web\php;
 
 class dates{
-	public function change($str){
+	public static $months = ["Януари", "Февруари", "Март", "Април", "Май", "Юни", "Юли", "Август", "Септември", "Октомври", "Ноември", "Декември"];
+
+	public static function change($str){
 		return date("Y-m-d", strtotime($str));
 	}
 	
-	public function set($str){
+	public static function set($str){
 		if($str == "0000-00-00 00:00:00"){
 			return false;
 		} else {
@@ -14,7 +16,7 @@ class dates{
 		}
 	}
 	
-	public function _($str){
+	public static function _($str){
 		if(empty($str)){
 			return false;
 		} elseif(strlen($str) > 10){
@@ -23,7 +25,5 @@ class dates{
 			return date("d.m.Y", strtotime($str));
 		}
 	}
-}
-
-$date = new dates;	
+}	
 ?>
