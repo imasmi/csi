@@ -7,7 +7,9 @@ if(!isset($_GET["start"])){
     exit;
 }
 
-$months = ceil((strtotime($_GET["end"]) - strtotime($_GET["start"])) / (3600 * 24 * 30));
+$months_start = floor((strtotime(date('Y-m-01')) - strtotime($_GET["start"])) / (3600 * 24 * 30));
+$months_end = floor((strtotime(date('Y-m-01')) - strtotime($_GET["end"])) / (3600 * 24 * 30));
+
 $creditors = [];
 foreach($PDO->query("SELECT creditor, case_id FROM caser_title") as $caser_title){
     $creditor = json_decode($caser_title["creditor"], true);
@@ -20,11 +22,11 @@ arsort($creditors);
 
 $money = [];
 foreach($creditors as $creditor => $cases_count){
-    foreach($PDO->query("SELECT creditors, `date`, csiTotal FROM distribution WHERE date > '" . $_GET["start"] . " 00:00:00' AND  creditors LIKE '%\"" . $creditor . "\"%' ORDER by `date` ASC") as $distribution){
+    foreach($PDO->query("SELECT id, creditors, `date`, csiTotal FROM distribution WHERE date > '" . $_GET["start"] . " 00:00:00' AND creditors LIKE '%\"" . $creditor . "\"%' ORDER by `date` ASC") as $distribution){
         $payed = json_decode($distribution["creditors"], true);
         foreach($payed as $data){
             if(key($data) == $creditor){
-                $money[$creditor][$distribution["date"]] = ["creditor" => $data[$creditor], "tax" => $distribution["csiTotal"]];
+                $money[$creditor][$distribution["id"]] = ["creditor" => $data[$creditor], "tax" => $distribution["csiTotal"], "date" => $distribution["date"]];
             }
         }
     }
@@ -37,10 +39,10 @@ foreach($creditors as $creditor => $cases_count){
             <th>Взискател</th>
             <th>Активни дела</th>
             <th></th>
-            <?php for ($a = $months; $a > 0; $a--) {?>
+            <?php for ($a = $months_start; $a > $months_end; $a--) {?>
                 <th>
                     <div><?php echo date("Y", strtotime("-" . $a . " months"));?></div>
-                    <?php echo \web\php\dates::$months[date("n", strtotime("-" . $a . " months"))];?>
+                    <?php echo \web\php\dates::$months[date("n", strtotime("-" . $a . " months")) - 1];?>
                 </th>
             <?php } ?>
             <th>Общо</th>
@@ -53,6 +55,7 @@ foreach($creditors as $creditor => $cases_count){
         $total_cases = 0;
         $month_sums = [];
         $month_taxes = [];
+        $tax_use = [];
         foreach($creditors as $creditor => $cases_count){
             $creditor_sum = 0;
             $creditor_tax = 0;
@@ -63,17 +66,19 @@ foreach($creditors as $creditor => $cases_count){
                 <td rowspan="2" style="max-width: 200px; font-size: 15px;"><?php echo $name;?></td>
                 <td rowspan="2"><?php echo $cases_count;?></td>
                 <td class="color-1-bg">За взискател</td>
-                <?php for ($a = $months; $a >= 1; $a--) {
-                    $start = date("Y-m-01 00:00:00", strtotime("-" . ($a - 1) . " months"));
-                    $end = date("Y-m-31 23:59:59", strtotime("-" . ($a - 1) . " months"));
+                <?php for ($a = $months_start; $a > $months_end; $a--) {
+                    $start = date("Y-m-01 00:00:00", strtotime("-" . $a . " months"));
+                    $end = date("Y-m-01 00:00:00", strtotime("-" . ($a - 1) . " months"));
                     $month_sum = 0;
                     ?>
                     <td class="color-1-bg">
                         <?php 
                         if(isset($money[$creditor])){
-                            foreach($money[$creditor] as $date => $sum){
-                                if($date >= $start && $date < $end){
-                                    $month_sum += $sum["creditor"];
+                            foreach($money[$creditor] as $id => $sum){
+                                if($sum["date"] >= $start && $sum["date"] < $end){
+                                    if($sum["tax"] != 0 || $sum["creditor"] <= 40){
+                                        $month_sum += $sum["creditor"];
+                                    }
                                 }
                             }
                         }
@@ -90,17 +95,18 @@ foreach($creditors as $creditor => $cases_count){
 
             <tr>
                 <td>За ЧСИ</td>
-                <?php for ($a = $months; $a >= 1; $a--) {
-                    $start = date("Y-m-01 00:00:00", strtotime("-" . ($a - 1) . " months"));
-                    $end = date("Y-m-31 23:59:59", strtotime("-" . ($a - 1) . " months"));
+                <?php for ($a = $months_start; $a > $months_end; $a--) {
+                    $start = date("Y-m-01 00:00:00", strtotime("-" . $a . " months"));
+                    $end = date("Y-m-01 00:00:00", strtotime("-" . ($a - 1) . " months"));
                     $month_tax = 0;
                     ?>
                     <td>
                         <?php 
                         if(isset($money[$creditor])){
-                            foreach($money[$creditor] as $date => $sum){
-                                if($date >= $start && $date < $end){
+                            foreach($money[$creditor] as $id => $sum){
+                                if($sum["date"] >= $start && $sum["date"] < $end && !in_array($id, $tax_use)){
                                     $month_tax += $sum["tax"];
+                                    $tax_use[] = $id;
                                 }
                             }
                         }
@@ -126,7 +132,7 @@ foreach($creditors as $creditor => $cases_count){
             <th rowspan="2">ОБЩО</th>
             <th rowspan="2"><?php echo $total_cases;?></th>
             <td class="color-1-bg">За взискател</td>
-            <?php for ($a = $months; $a > 0; $a--) {?>
+            <?php for ($a = $months_start; $a > $months_end; $a--) {?>
                 <td class="color-1-bg"><?php echo $Money->sum($month_sums[$a]);?></td>
             <?php } ?>
             <th><?php echo $Money->sum($total_sum);?></th>
@@ -134,7 +140,7 @@ foreach($creditors as $creditor => $cases_count){
 
         <tr>
             <td>За ЧСИ</td>
-            <?php for ($a = $months; $a > 0; $a--) {?>
+            <?php for ($a = $months_start; $a > $months_end; $a--) {?>
                 <td><?php echo $Money->sum($month_taxes[$a]);?></td>
             <?php } ?>
             <td><?php echo $Money->sum($total_tax);?></td>
