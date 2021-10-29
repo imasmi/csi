@@ -32,7 +32,6 @@ $description_2 = ($doc["name"] == '104' || $doc["name"] == '123') ? "ЕГН " . 
 			<td>
 				Дата на документа *<br/>
 				<input type="text" name="Document.LiabilityDocumentDate" size="11" value="<?php echo date("d.m.Y", strtotime($doc["date"]));?>">
-				<b style="background-color: coral">Дата на документа да оправя</b>
 			</td>
 		</tr>
 	</table>

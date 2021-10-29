@@ -13,7 +13,7 @@
 					<input type="checkbox" id="add-payment-<?php echo $pay_cnt;?>" class="check-payment"/>
 					<button type="button" class="button hide" onclick="S.remove('#payment-<?php echo $pay_cnt;?>')">-</button>
 					<span><?php echo $payment["amount"];?> лева</span> -
-					<span><?php echo dates::_($payment["date"]);?></span>
+					<span><?php echo \web\php\dates::_($payment["date"]);?></span>
 					<span> (<?php echo $payment["description"];?>)</span>
 				</div>
 			<?php
