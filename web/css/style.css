@@ -88,8 +88,8 @@ section.open .tag:before{content: "-";}
 .report tr:hover td{background-color: lightcoral;}
 
 /*case*/
-.listTable .getNap{color: red;font-weight: bold;}
-.listTable .getNap:focus{color: blue;}
+.getNap{color: red;font-weight: bold;}
+.getNap:focus{color: blue;}
 .incomingsDocs{background-color: #6c1e1e; color: #ffffff; border-radius: 5px; background: linear-gradient(145deg, #3f1616, 45%, #c35353);  text-shadow: 0 0 7px #333;}
 .outgoingsDocs{background-color: lightblue;}
 .incomingSums{background-color: gold;}
@@ -157,7 +157,7 @@ section.open .tag:before{content: "-";}
 .grao-barcode .adminBarcode .barcode, .regix-barcode .adminBarcode .barcode{height: 70px;}
 
 .regix-print{position: relative;}
-.regix-barcode{ position: absolute; left: 0px; top: 0;}
+.regix-barcode{ position: relative; left: 100%; transform: translateX(-100%); display: inline-block;}
 .regix-barcode .adminBarcode{padding: 0; width: 183px; font-size: 12px; line-height: 15px;}
 .regix-content{top: 0;}
 

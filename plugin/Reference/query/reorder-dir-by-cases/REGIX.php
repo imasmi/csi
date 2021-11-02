@@ -26,11 +26,11 @@ $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 
     // НАП 191
 		$grao = file_get_contents("file://" . $listConv . '\\' . $f);
-		preg_match('/ЕГН: <\/span>(.*?)<br>/s', $grao, $matches);
+		preg_match('/ЕГН<\/span><\/td><td>(.*?)<\/td>/s', $grao, $matches);
 		if(count($matches) > 0) {
 			$egn = $matches[1];
 		} else {
-			preg_match('/ЕГН<\/span><span>:(.*?)<span style="font-weight:bold; ">(.*?)<\/span>/s', $grao, $matches);
+			preg_match('/ЕГН <\/span><\/div>(.*?)<div>/s', $grao, $matches);
 			$egn = $matches[2];
 		}
 

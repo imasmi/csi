@@ -1,6 +1,7 @@
 <?php
 $Object = $Plugin->object();
 $dir = $Core->this_path(0,-1);
+$Reference = new \plugin\Reference\php\Reference;
 
 $actions = array(
     "add" => $dir . "/add",
@@ -12,6 +13,7 @@ $actions = array(
 ?>
 
 <div class="admin">
+	<a class="button" href="<?php echo $dir;?>/choose-creditor">Избери взискател</a>
 	<h1 class="text-center">Изпълнителни дела</h2>
 	<table class="listing">
 		<tr>
@@ -21,11 +23,22 @@ $actions = array(
 			<th>Длъжници</th>
 			<th>Погасено</th>
 			<th></th>
+			<th></th>
 		</tr>
 		<?php
-		$cases = array();	
-		foreach($PDO->query("SELECT * FROM caser ORDER by number DESC") as $case){
-			$cases[] = $case;
+		$cases = array();
+		if (isset($_GET["creditor"])) {
+			foreach($PDO->query("SELECT case_id FROM caser_title WHERE creditor LIKE '%\"" . $_GET["creditor"] ."\"%'") as $caser_title){
+				$case = $Query->select($caser_title["case_id"], "id", "caser");
+				if($case["status"] == "ВИСЯЩО") {
+					$cases[$case["number"]] = $case;
+				}
+			}
+			ksort($cases);
+		} else {
+			foreach($PDO->query("SELECT * FROM caser ORDER by number DESC") as $case){
+				$cases[] = $case;
+			}
 		}
 		$ListingAPP = new \system\module\Listing\php\ListingAPP;
 		foreach($ListingAPP->page_slice($cases) as $case){
@@ -47,10 +60,14 @@ $actions = array(
 					foreach(json_decode($title["debtor"]) as $debtor){
 						$Person = new \plugin\Person\php\Person($debtor);
 						$Person->_();
+						$Reference->nap_link($debtor, $case["id"]);
+						?>
+						<div><a href="<?php echo $Core->url();?>Reference/noi?case=<?php echo $case["id"];?>&person=<?php echo $debtor;?>&type=0" class="getNap" target="_blank">Трудови договори</a></div>
+						<?php 
 					}
 				?>
 			</td>
-			<td></td>
+			<td><?php $Note->_(" WHERE case_id=" . $case["id"] . " AND spravki=1 AND hide is NULL", $case["id"], "spravki", "#notes" . $case["id"]);?></td>
 			<td><a class="button" href="<?php echo $Core->this_path(0,-1);?>/open?id=<?php echo $case["id"];?>"><?php echo $Text->item("open");?></a></td>
 		</tr>
 		<?php } ?>
