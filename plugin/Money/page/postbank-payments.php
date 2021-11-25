@@ -17,6 +17,7 @@
 		<th>Обща сума</th>
 	</tr>
 	<?php
+	$fast_match = [];
 	$cnt = 0;
 	$amm = 0;
 	$start = isset($_GET["start"]) ? $_GET["start"] : date("Y-m-01");
@@ -143,8 +144,11 @@
 						?>
 					</td>
 					<td rowspan="<?php echo $rowspan;?>"><?php echo $postbank["note"];?></td>
-					<td class="<?php if((string) $total_sum != (string) $postbank["amount"]){ echo 'color-2-bg';}?>" rowspan="<?php echo $rowspan;?>"><?php echo $total_sum;?></td>
-					<?php } ?>
+					<?php $check_match = (string) $total_sum == (string) $postbank["amount"];?>
+					<td class="<?php if(!$check_match){ echo 'color-2-bg';}?>" rowspan="<?php echo $rowspan;?>"><?php echo $total_sum;?></td>
+					<?php 
+					if(!$check_match){ $fast_match[] = $postbank;}
+				} ?>
 				</tr>
 		<?php
 			$amm+= $postbank["amount"];
@@ -161,3 +165,10 @@
 	</tr>
 </table>
 <?php if(!isset($_GET["print"])){?><button class="button" onclick="window.open('<?php echo $_SERVER["REQUEST_URI"];?>&print')">PRINT</button><?php } ?>
+
+<?php if (count($fast_match) > 0) {?>
+<form method="post" action="<?php echo $Core->url();?>Money/postbank-invoices-fast-match" class="marginY-20">
+	<input type="hidden" name="fast_match" value='<?php echo json_encode($fast_match);?>'/>
+	<button class="button">Fast match</button>
+</form>
+<?php } ?>

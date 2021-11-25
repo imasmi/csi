@@ -32,7 +32,7 @@ $ListingAPP = new \system\module\Listing\php\ListingAPP;
 	<select onchange="if(this.value){window.open(this.value, '_self');}">
 		<option value="">Банкова сметка</option>
 		<?php foreach($PDO->query("SELECT * FROM bank WHERE person_id=1") as $bank){?>
-			<option value="<?php echo $ListingAPP->replace_get(array("bank" => $bank["id"], "p" => 1));?>" <?php if(isset($_GET["bank"]) && $_GET["bank"] == $bank["id"]){ echo 'selected';}?>><?php echo $bank["IBAN"];?></option>
+			<option value="<?php echo $Core->get_extend(array("bank" => $bank["id"], "p" => 1));?>" <?php if(isset($_GET["bank"]) && $_GET["bank"] == $bank["id"]){ echo 'selected';}?>><?php echo $bank["IBAN"];?></option>
 		<?php } ?>
 	</select>
 	</div>
