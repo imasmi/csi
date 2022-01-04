@@ -6,9 +6,8 @@ $cnt = 0;
 foreach($csv as $t){
 	$case_sum = $t[3];
 	$sums[] = $case_sum;
-	$case = explode("/",$t[1]);
-	$case_number = $case[0];
-	$case_year = $case[1];
+	$case_number = $t[4];
+	$case_year = $t[5];
 	#echo $a . '->' . $case_number . '<br/>';
 	$caser[$case_year . (8820400000 + $case_number)][] = $case_sum;
 }

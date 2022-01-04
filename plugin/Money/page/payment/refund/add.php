@@ -1,6 +1,6 @@
 <?php $select = $Query->select($_GET["id"], "id", "payment");?>
 <div class="admin">
-<div class="title">Плащане от <?php echo dates::_($select["date"]);?> за <?php echo $select["amount"];?> лева</div>
+<div class="title">Плащане от <?php echo \web\php\dates::_($select["date"]);?> за <?php echo $select["amount"];?> лева</div>
 <div class="error-message" id="error-message"></div>
 <form class="form" id="form" action="<?php echo $Core->query_path();?>?id=<?php echo $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path();?>?id=<?php echo $_GET["id"];?>', S.serialize('#form'), '#error-message')">
     <table class="table">
