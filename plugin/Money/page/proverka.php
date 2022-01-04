@@ -78,7 +78,7 @@ $title = ($start === $end) ? $start : $start . " - " . $end;
 	<?php
 	$cnt = 1;
 	foreach($array as $key=>$data){
-	$Caser->item_data = $Query->select($Caser->item["id"], "id", "caser");
+	$Caser->item_data = $PDO->query("SELECT * FROM caser WHERE id='" . $Caser->item["id"] . "'")->fetch();
 	?>
 		<tr style="background-color: <?php echo $data["color"];?>">
 			<td><?php echo $cnt;?></td>

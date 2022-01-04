@@ -1,6 +1,6 @@
 <?php 
-$system = parse_ini_file($Core->doc_root() . "/system/ini/system.ini");
-$update_info = parse_ini_string(@file_get_contents("http://web.imasmi.com/plugin/Build/ini/version.ini"), true);
+$system = parse_ini_file(\system\Core::doc_root() . "/system/ini/system.ini");
+$update_info = parse_ini_string(@file_get_contents("http://web.imasmi.com/plugin/Build/version.info"), true);
 ?>
 <div class="admin">
     <?php if( !ini_get('allow_url_fopen') ) { ?> <div class="attention">Updates are disabled.<br>Set allow_url_fopen=1 in your php.ini file to enable. </div><?php } ?>
@@ -38,7 +38,7 @@ $update_info = parse_ini_string(@file_get_contents("http://web.imasmi.com/plugin
             </tr>
             
             <tr>
-                <td colspan="100%" class="text-center"><button class="button" onclick="S.popup('<?php echo $Core->query_path(0,-1);?>/update', {version: '<?php echo $update_info["stable"]["version"];?>'});">UPDATE</button></td>
+                <td colspan="100%" class="text-center"><button class="button" onclick="S.popup('<?php echo \system\Core::query_path(0,-1);?>/update', {version: '<?php echo $update_info["stable"]["version"];?>'});">UPDATE</button></td>
             </tr>
             
         </table>
@@ -63,7 +63,12 @@ $update_info = parse_ini_string(@file_get_contents("http://web.imasmi.com/plugin
     <?php }}?>
     
     <div>
+        <h1>Manuals</h1>
+        <a class="button" href="<?php echo \system\Core::url();?>System/admin/manual/developer/index" target="_blank">Developer</a>
+    </div>
+    
+    <div>
         <h2>Backup</h2>
-        <button onclick="window.open('<?php echo $Core->this_path(0, -1);?>/backup/index', '_self')" class="button">Backup</button>
+        <button onclick="window.open('<?php echo \system\Core::this_path(0, -1);?>/backup/index', '_self')" class="button">Backup</button>
     </div>
 </div>

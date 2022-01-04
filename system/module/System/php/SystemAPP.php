@@ -1,12 +1,10 @@
 <?php
-namespace system\module\System\php;
+namespace module\System;
 
 class SystemAPP{
     public function __construct(){
-        global $Core;
-        $this->Core = $Core;
-        $this->ini = parse_ini_file($this->Core->doc_root() . "/system/ini/system.ini");
-        $this->backup_dir = $this->Core->doc_root() . "/data/backup/";
+        $this->ini = parse_ini_file(\system\Core::doc_root() . "/system/ini/system.ini");
+        $this->backup_dir = \system\Core::doc_root() . "/data/backup/";
     }
 }
 ?>

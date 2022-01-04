@@ -1,18 +1,19 @@
 <?php
-$select = $Query->select($_GET["id"]);
-$PageAPP = new \system\module\Page\php\PageAPP;
+$select = $PDO->query("SELECT * FROM " . $Page->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
+require_once(\system\Core::doc_root() . "/system/module/Page/php/PageAPP.php");
+$PageAPP = new \module\Page\PageAPP;
 ?>
 
 <div class="admin">
 <div class="title"><?php echo ltrim($Page->url($_GET["id"]), "/");?></div>
 <div class="error-message" id="error-message"></div>
-<form class="form" id="form" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>', S.serialize('#form'), '#error-message')">
+<form class="form" id="form" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>', S.serialize('#form'), '#error-message')">
     <table class="table">
         <tr>
             <td>Tag</td>
-            <td><?php echo $Form->select("tag",array("theme" => "Theme") + $Query->column_group("type"), array("select" => $select["tag"], "required" => true, "addon" => true));?></td>
+            <td><?php echo \system\Form::select("tag",array("page" => "Page") + \system\Query::column_group("type"), array("select" => $select["tag"], "required" => true, "addon" => true));?></td>
         </tr>
-        
+
         <tr>
             <td>Filename</td>
             <td>
@@ -20,12 +21,12 @@ $PageAPP = new \system\module\Page\php\PageAPP;
                 <input type="text" name="filename" id="filename" value="<?php echo $select["filename"];?>"/>
             </td>
         </tr>
-        
+
         <tr>
             <td>Menu</td>
-            <td><?php echo $Form->select("menu", $Query->column_group("menu"), array("select" => $select["menu"], "addon" => true));?></td>
+            <td><?php echo \system\Form::select("menu", \system\Query::column_group("menu"), array("select" => $select["menu"], "addon" => true));?></td>
         </tr>
-        
+
         <?php foreach($Language->items as $key=>$value){?>
         <tr>
             <td><?php echo $key;?> link</td>
@@ -35,12 +36,12 @@ $PageAPP = new \system\module\Page\php\PageAPP;
             </td>
         </tr>
         <?php }?>
-        
+
         <tr>
             <td>Homepage</td>
             <td><input type="checkbox" name="homepage" id="homepage" <?php if($select["type"] == "homepage"){ echo "checked";};?>/></td>
         </tr>
-        
+
         <tr>
             <td colspan="2" class="text-center">
                 <button class="button"><?php echo $Text->item("Save");?></button>

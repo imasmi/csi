@@ -49,7 +49,7 @@
 					$exclude[] = $postbank_id;
 					$pay_prev = $postbank_id;
 					$total_sum = 0;
-					$postbank = $Query->select($postbank_id, "id", "payment");
+					$postbank = $PDO->query("SELECT * FROM payment WHERE id='" . $postbank_id . "'")->fetch();
 			?>
 				<tr>
 					<td>
@@ -134,7 +134,7 @@
 								echo $refund["bg"] . '<br>';
 							}
 						?>
-						<?php if(!isset($_GET["print"])){?><a href="<?php echo $Core->url();?>Money/payment/refund/index?id=<?php echo $postbank["id"];?>">Възстановявания</a></td><?php } ?>
+						<?php if(!isset($_GET["print"])){?><a href="<?php echo \system\Core::url();?>Money/payment/refund/index?id=<?php echo $postbank["id"];?>">Възстановявания</a></td><?php } ?>
 					<td rowspan="<?php echo $rowspan;?>">
 						<?php
 							foreach($refunds as $refund){
@@ -167,7 +167,7 @@
 <?php if(!isset($_GET["print"])){?><button class="button" onclick="window.open('<?php echo $_SERVER["REQUEST_URI"];?>&print')">PRINT</button><?php } ?>
 
 <?php if (count($fast_match) > 0) {?>
-<form method="post" action="<?php echo $Core->url();?>Money/postbank-invoices-fast-match" class="marginY-20">
+<form method="post" action="<?php echo \system\Core::url();?>Money/postbank-invoices-fast-match" class="marginY-20">
 	<input type="hidden" name="fast_match" value='<?php echo json_encode($fast_match);?>'/>
 	<button class="button">Fast match</button>
 </form>

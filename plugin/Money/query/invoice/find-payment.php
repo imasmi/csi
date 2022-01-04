@@ -9,7 +9,7 @@ foreach($PDO->query("SELECT * FROM payment WHERE amount='" . $_POST["data"] . "%
 				<button type="button" class="button hide" onclick="S.remove('#payment-<?php echo $pay_cnt;?>')">-</button>
 				<span><?php echo $payment["amount"];?> лева</span> -
 				<span><?php echo \web\php\dates::_($payment["date"]);?></span>
-				<span>Платени от <?php echo $Query->select($payment["person"], "id", "person")["name"];?></span>
+				<span>Платени от <?php echo $PDO->query("SELECT name FROM person WHERE id='" . $payment["person"] . "'")->fetch()["name"];?></span>
 				<span> (<?php echo $payment["description"];?>)</span>
 			</div>
 		</div>

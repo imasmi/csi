@@ -1,8 +1,9 @@
 <?php
-$FileAPP = new system\module\File\php\FileAPP;
-$select = $Query->select($_GET["id"]);
-foreach($PDO->query("SELECT id, path FROM " . $Query->table() . " WHERE link_id='" . $_GET["id"] . "'") as $file){
-    $Query->remove($file["id"]);
+require_once(\system\Core::doc_root() . "/system/module/File/php/FileAPP.php");
+$FileAPP = new \module\File\FileAPP($file["page_id"]);
+$select = $PDO->query("SELECT * FROM " . $File->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
+foreach($PDO->query("SELECT id, path FROM " . \system\Query::table() . " WHERE link_id='" . $_GET["id"] . "'") as $file){
+    $PDO->query("DELETE FROM " . $File->table . " WHERE id='" . $file["id"] . "'");
 }
 
 if($select["type"] == "gallery" && is_dir($FileAPP->files_dir($_GET["id"]))){
@@ -10,7 +11,7 @@ if($select["type"] == "gallery" && is_dir($FileAPP->files_dir($_GET["id"]))){
 }
 
 
-$Query->cleanup($_GET["id"]);
+\system\Query::cleanup(["query" => "SELECT * FROM " . $File->table . " WHERE id='" . $_GET["id"]  . "'"]);
 
 #GO TO HOMEPAGE
 ?><script>history.go(-2)</script><?php

@@ -11,10 +11,10 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		} elseif($key == "date"){
 			$array[$key] = date("Y-m-d", strtotime($_POST[$key . '-' . $a]));
 		} elseif($key == "case_id"){
-			$case = $Query->select($_POST[$key . '-' . $a], "number", "caser");
+			$case = $PDO->query("SELECT * FROM caser WHERE number='" . $_POST[$key . '-' . $a] . "'")->fetch();
 			$array[$key] = $case ? $case["id"] : "0";
 		} elseif($key == "payer"){
-			$array[$key] = $Query->select($_POST[$key . '-' . $a], "name", "person")["id"];
+			$array[$key] = $PDO->query("SELECT id FROM person WHERE name='" . $_POST[$key . '-' . $a] . "'")->fetch()["id"];
 		} else {
 			$array[$key] = $_POST[$key . '-' . $a];
 		}
@@ -24,10 +24,10 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		$checks = $PDO->query("SELECT * FROM invoice WHERE bill='" . $array["bill"] . "'");
 		if($checks->rowCount() > 0){
 			$check = $checks->fetch();
-			$Query->update($array, $check["id"], "id", "invoice");
+			\system\Query::update($array, $check["id"], "id", "invoice");
 			$updates++;
 		} else {
-			$Query->insert($array, "invoice");
+			\system\Query::insert($array, "invoice");
 			$inserts++;
 		}
 	} else {

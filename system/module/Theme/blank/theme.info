@@ -1,0 +1,6 @@
+name = Blank
+version = 1.0
+website = new.imasmi.com
+description = Blank theme template
+pages = [{"tag":"page","row":"1","menu":"header,footer","filename":"home","type":"homepage","en":"home"}]
+plugins = nul

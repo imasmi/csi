@@ -1,17 +1,15 @@
 <?php
-namespace system\module\File\php;
+namespace module\File;
 /**
  * Class to work with zip files (using ZipArchive)
  */
- 
+
 class ZipAPP{
     //Array possible values
     //include => string | array (single directory/file or array of directories/files)
     //exclude => string | array (single directory/file or array of directories/files)
     public function __construct($file, $path, $array=array())
     {
-        global $Core;
-        $this->Core = $Core;
         $this->zip = new \ZipArchive();
         $this->file = $file;
         $this->path = $path;
@@ -23,18 +21,18 @@ class ZipAPP{
         if ($res !== true){
             return false;
         }
-        
+
         $nodes = isset($this->arr["include"]) ? $this->arr["include"] : $this->path;
         $nodes = is_array($nodes) ? $nodes : array($nodes);
-        
+
         $exclude = isset($this->arr["exclude"]) ? (is_array($this->arr["exclude"]) ? $this->arr["exclude"] : array($this->arr["exclude"])) : false;
-        
+
         foreach($nodes as $node){
-            $node = is_dir($node) ? $this->Core->list_dir($node) : array($node);
+            $node = is_dir($node) ? \system\Core::list_dir($node) : array($node);
             foreach($node as $addon){
                 $add_to_archive = true;
                 if($exclude !== false){foreach($exclude as $check){if(strpos($addon, $check) !== false){$add_to_archive = false;}}}
-                
+
                 if($add_to_archive === true){
                     if(is_dir($addon)){
                         $this->zip->addEmptyDir(str_replace($this->path  . "/", "", $addon));
@@ -44,10 +42,10 @@ class ZipAPP{
                 }
             }
         }
-        
+
         return $this->zip->close();
     }
-    
+
     public function unzip()
     {
         $res = $this->zip->open($this->file);

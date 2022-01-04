@@ -6,9 +6,9 @@ $spravki = array("НАП" => "nap","ГРАО" => "grao","НОИ" => "noi","БН�
 
 for($a = 1; $a <= $_POST["redove"]; $a++){
 	if($_POST["case_" . $a] != ""){
-		if($Query->select($_POST["case_" . $a], "id", "caser") == true){
+		if($PDO->query("SELECT id FROM caser WHERE id='" . $_POST["case_" . $a] . "'")->rowCount() > 0){
 			foreach($spravki as $spravka){
-				if(isset($_POST[$spravka . "_" . $a]) || ($spravka == "nap" && $_POST["nap_type_" . $a] != "0")){ $caser[$spravka][$Query->select($_POST["case_" . $a], "id", "caser", "number")["number"]] = $_POST["case_" . $a]; }
+				if(isset($_POST[$spravka . "_" . $a]) || ($spravka == "nap" && $_POST["nap_type_" . $a] != "0")){ $caser[$spravka][$PDO->query("SELECT number FROM caser WHERE id='" . $_POST["case_" . $a] . "'")->fetch()["number"]] = $_POST["case_" . $a]; }
 			}
 			if($_POST["nap_type_" . $a] != "0"){ $_POST["nap_type_" . $_POST["case_" . $a]] = $_POST["nap_type_" . $a];}
 		} else {

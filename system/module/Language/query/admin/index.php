@@ -1,19 +1,18 @@
 <?php
-$FileAPP = new system\module\File\php\FileAPP;
+require_once(\system\Core::doc_root() . "/system/module/File/php/FileAPP.php");
+$FileAPP = new module\File\FileAPP;
 $array = array();
 $order = array();
-
-
 
 foreach($_POST as $key => $value){
     if(strpos($key, "_code") !== false){
         $name = rtrim($key, "code");
         $nm = rtrim($name, "_");
         $array[$nm] = array(
-            "on-off" => $_POST[$nm . "_on-off"],
+            "active" => $_POST[$nm . "_active"],
             "code" => $_POST[$nm . "_code"]
         );
-        
+
         $order[$_POST[$nm . "_position"]] = $nm;
     }
 }
@@ -28,6 +27,6 @@ foreach($order as $lang){
     }
 }
 
-file_put_contents($Core->doc_root() . "/web/ini/language.ini", $output);
+file_put_contents(\system\Core::doc_root() . "/web/ini/language.ini", $output);
 ?><script>history.go(-1)</script><?php
 ?>

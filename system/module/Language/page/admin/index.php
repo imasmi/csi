@@ -1,66 +1,68 @@
 <?php
+require_once(\system\Core::doc_root() . "/system/php/Form.php");
+$Form = new \system\Form;
 $ini = $Language->ini;
 ?>
 
 <div class="admin">
-    <div><button type="button" class="button" onclick="window.open('<?php echo $Core->this_path(0,-1);?>/add','_self')">Add new</button></div>
-    <form method="post" action="<?php echo $Core->query_path();?>">
-    
+    <div><button type="button" class="button" onclick="window.open('<?php echo \system\Core::this_path(0,-1);?>/add','_self')">Add new</button></div>
+    <form method="post" action="<?php echo \system\Core::query_path();?>">
+
         <table class="listing">
             <tr>
                 <th>Name</th>
             <?php foreach($ini[key($ini)] as $key=>$value){?>
-                <th><?php echo ($key === "on-off") ? "Turn on/off" : $key;?></th>
+                <th><?php echo $key;?></th>
             <?php } ?>
                 <th>Reposition</th>
                 <th>Delete</th>
             </tr>
-        
-        <?php 
+
+        <?php
         $fullCNT = 1;
-        foreach($ini as $key => $value){ 
+        foreach($ini as $key => $value){
         $fullCNT++;
         ?>
                 <tr class="moduler">
                    <td><?php echo $key;?></td>
                 <?php foreach($value as $key1=>$value1){
-                    if($key1 === "on-off"){
+                    if($key1 === "active"){
                 ?>
                    <td>
-                       <?php 
+                       <?php
                             if($value1 == "default"){
                                 echo $value1;
                                 echo '<input type="hidden" value="default" name="' . $key . '_' . $key1 . '"/>';
                             } else {
-                                echo $Form->on_off($key . '_' . $key1, $value1, true);
+                                echo \system\Form::on_off($key . '_' . $key1, $value1, true);
                             }
                         ?>
                    </td>
-                
-                <?php 
+
+                <?php
                     } else {
                 ?>
                     <td><input type="text" name="<?php echo $key . '_' .  $key1;?>" value="<?php echo $value1;?>"/></td>
-                
+
                 <?php }} ?>
-                
+
                     <td>
                         <select name="<?php echo $key . "_position";?>">
                             <?php
                             $cnt = 10;
                             foreach($ini as $key2=>$value2){
-                                if($key2 == $key){ 
+                                if($key2 == $key){
                             ?>
                             <option value="<?php echo $cnt;?>" selected>No reposition</option>
-                            <?php } else {?>    
+                            <?php } else {?>
                             <option value="<?php echo $cnt - $fullCNT;?>">Before <?php echo $key2;?></option>
                             <?php }
                             $cnt+=10;
                             }?>
                         </select>
                     </td>
-                    
-                    <td><button type="button" class="button" onclick="window.open('<?php echo $Core->this_path(0,-1) . '/delete?lang=' . $key;?>', '_self')">Delete</button></td>
+
+                    <td><button type="button" class="button" onclick="window.open('<?php echo \system\Core::this_path(0,-1) . '/delete?lang=' . $key;?>', '_self')">Delete</button></td>
                 </tr>
         <?php } ?>
         </table>

@@ -2,17 +2,17 @@
 
 $invoice = array();
 foreach($PDO->query("SELECT * FROM invoice WHERE type='invoice' AND payer='4936' AND date > '2019-01-01' AND date < '2020-12-31' ORDER by date ASC") as $invoice){
-	$case = $Query->select($invoice["case_id"], "id", "caser");
+	$case = $PDO->query("SELECT * FROM caser WHERE id='" . $invoice["case_id"] . "'")->fetch();
 	$invoice[$case["number"]][] = array("invoice" => $invoice["invoice"], "sum" => $invoice["sum"], "date" => $invoice["date"]);
 }
 
 
 
-$list = file_get_contents($Core->doc_root() . "/web/page/inkaso/list.csv");
+$list = file_get_contents(\system\Core::doc_root() . "/web/page/inkaso/list.csv");
 $rows = explode("\n", $list);
 unset($rows[0]);
 ?>
-<form method="post" id="kredit_invoice" action="<?php echo $Core->query_path();?>" onsubmit="return S.post('<?php echo $Core->query_path();?>', S.serialize('#kredit_invoice'))">
+<form method="post" id="kredit_invoice" action="<?php echo \system\Core::query_path();?>" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#kredit_invoice'))">
 <input type="hidden" name="row" id="row" value="0"/>
 <table border="1px" style="border-collapse: collapse;" cellpadding="3px">
 	<tr>

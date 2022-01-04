@@ -1,10 +1,10 @@
 <?php
 #SEND HOME IF USER OF ANY TYPE IS NOT LOGGED
-$profile = $Query->select($_GET["id"]);
+$profile = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 ?>
 
 <div class="admin">
-    <form method="post" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>">
+    <form method="post" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>">
         <table class="table">
             <tr>
                 <td colspan="2"><?php echo $Text->_("Are you sure you want to delete this user?");?></td>

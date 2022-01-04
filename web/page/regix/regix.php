@@ -30,7 +30,7 @@ $request = array(
 
 $request = json_decode(json_encode($request));
 // Initialize WS with the WSDL
-$wsdl = $Core->doc_root() . "/web/page/regix/RegiXEntryPoint.xml";
+$wsdl = \system\Core::doc_root() . "/web/page/regix/RegiXEntryPoint.xml";
 
 $client = new SoapClient($wsdl);
 

@@ -1,5 +1,5 @@
 <?php
-$select = $Query->select($_GET["id"], "id", "note");
+$select = $select = $PDO->query("SELECT * FROM note WHERE id='" . $_GET["id"] . "'")->fetch();
 
 $hide = ($select["hide"] === "0000-00-00 00:00:00") ? date("Y-m-d H:i:s") : "0000-00-00 00:00:00";
 
@@ -8,14 +8,14 @@ $array = array(
 		);
 
 
-$update = $Query->update($array, $_GET["id"], "id", "note");
-#$Query->update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
+$update = \system\Query::update($array, $_GET["id"], "id", "note");
+#\system\Query::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
 
 if($update){
 	if(isset($_GET["type"])){
 		echo $hide;
 	} else {
-		$Core->goBack(-2);
+		\system\Core::goBack(-2);
 	}
 } else {
 	 echo $Text->_("Something went wrong");

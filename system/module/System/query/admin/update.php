@@ -2,7 +2,7 @@
 $file = file_get_contents("https://web.imasmi.com/plugin/Build/page/update.txt");
 
 if($file !== false){
-    $code_file = $Core->doc_root() . "/system/module/System/query/admin/update_code.php";
+    $code_file = \system\Core::doc_root() . "/system/module/System/query/admin/update_code.php";
     file_put_contents($code_file, $file);
     include($code_file);
 } else {

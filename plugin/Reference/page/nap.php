@@ -1,6 +1,9 @@
-<?php $Caser = new \plugin\Caser\php\Caser($_GET["case"]);?>
+<?php 
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
+$Caser = new \plugin\Caser\Caser($_GET["case"]);
+?>
 	
-	<form name="decFrm" method="post" action="<?php echo $Core->query_path() . '?case=' . $_GET["case"] . '&person=' . $_GET["person"];?>">
+	<form name="decFrm" method="post" action="<?php echo \system\Core::query_path() . '?case=' . $_GET["case"] . '&person=' . $_GET["person"];?>">
 		<table cellspacing="1" cellpadding="1" border="0" width="95%" class="form noborder" align="center">
 		<tbody>
 		<tr><td colspan="2">
@@ -52,8 +55,8 @@
 			</tr>
 			<tr>
 		<?php	
-				$main_vzisk = $Caser->creditor;
-				$creditor = $Query->select($main_vzisk[0], "id", "person");				
+				$main_vzisk = $Caser->creditor;	
+				$creditor = $PDO->query("SELECT * FROM person WHERE id='" . $main_vzisk[0] . "'")->fetch();				
 				
 				if($creditor["type"] == "person"){
 					$egn = $creditor["EGN_EIK"];
@@ -119,7 +122,7 @@
 				<td><input type="text" name="DocRequestPe_requester_bulstat" value="<?php echo $eik;?>" class="cell" id="P2_bulstat" lang="vb" style="width:160px" maxlength="13"></td>
 			</tr>
 			<?php
-				$debtor = $Query->select($_GET["person"], "id", "person");
+				$debtor = $PDO->query("SELECT * FROM person WHERE id='" . $_GET["person"] . "'")->fetch();
 				if($debtor["type"] == "person"){
 					$egn = $debtor["EGN_EIK"];
 					$selected = "selected";

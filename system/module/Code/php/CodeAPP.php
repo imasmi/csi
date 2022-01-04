@@ -1,33 +1,27 @@
 <?php
-namespace system\module\Code\php;
+namespace module\Code;
 
 class CodeAPP{
-    
-    public function __construct(){
-        global $Core;
-        $this->Core = $Core;
-        $this->FileAPP = new \system\module\File\php\FileAPP;
-    }
-    
-    
-    public function find($code, $path, $file_type = "*"){
+    public static function find($code, $path, $file_type = "*"){
         $output = array();
-        foreach($this->Core->list_dir($path) as $file){
+        foreach(\system\Core::list_dir($path) as $file){
             $file_info = pathinfo($file);
-            if($file_type == "*" || $file_type == $file_info["extension"]){
-                $finded = substr_count(file_get_contents($file), $code);
-                if($finded > 0){
-                    $output[$file] = $finded;
+            if(is_file($file)){
+                if($file_type == "*" || (isset($file_info["extension"]) && $file_type == $file_info["extension"])){
+                    $finded = substr_count(file_get_contents($file), $code);
+                    if($finded > 0){
+                        $output[$file] = $finded;
+                    }
                 }
             }
         }
         return $output;
     }
-    
-    public function replace($code, $replacer, $path, $file_type = "*"){
+
+    public static function replace($code, $replacer, $path, $file_type = "*"){
         $output = array();
-        foreach($this->find($code, $path, $file_type) as $file=>$count){
-            if(!file_put_contents($file, str_replace($code, $replacer, file_get_contents($file)))){ 
+        foreach(static::find($code, $path, $file_type) as $file=>$count){
+            if(!file_put_contents($file, str_replace($code, $replacer, file_get_contents($file)))){
                 $output[] = 'Operation failed in ' . $file . ' where ' . $count . ' occurences was found.';
             } else {
                 $output[] = 'Operation succeeded in ' . $file . ' where ' . $count . ' occurences was found.';
@@ -35,10 +29,10 @@ class CodeAPP{
         }
         return $output;
     }
-    
-    public function find_between($start, $end, $path, $file_type = "*"){
+
+    public static function find_between($start, $end, $path, $file_type = "*"){
         $output = array();
-        foreach($this->Core->list_dir($path) as $file){
+        foreach(\system\Core::list_dir($path) as $file){
             $file_info = pathinfo($file);
             if($file_type == "*" || $file_info["extension"] == $file_type){
                 $str = file_get_contents($file);
@@ -52,9 +46,9 @@ class CodeAPP{
         }
         return $output;
     }
-    
-    public function edit_css($selector, $arr, $source=false){
-        $file = ($source === false) ? $this->Core->doc_root() . '/web/css/custom.css' : $source;
+
+    public static function edit_css($selector, $arr, $source=false){
+        $file = ($source === false) ? \system\Core::doc_root() . '/web/css/custom.css' : $source;
         touch($file);
         $css = file_get_contents($file);
         foreach($arr as $key=>$value){
@@ -73,19 +67,19 @@ class CodeAPP{
     		    $css = $cutCSS[0] . $selector . "{" . $outline . "}" . implode("}", $between);
     		}
         }
-		
+
 		file_put_contents($file, $css);
 	}
-	
-	
-    
-    public function special_characters_check($string){
+
+
+
+    public static function special_characters_check($string){
         return (preg_match('/[\'^£$%&*()}{@#~?><>,|=¬]/', $string)) ? true : false;
     }
-    
-    public function special_characters_remove($string){
+
+    public static function special_characters_remove($string){
         $search = array('/','\\',':',';','!','@','#','$','%','^','*','(',')','=','|','{','}','[',']','"',"'",'<','>',',','?','~','`','&',' ','.');
         return str_replace($search, "", $string); // Removes special chars.
     }
-}    
+}
 ?>

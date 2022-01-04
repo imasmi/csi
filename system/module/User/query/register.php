@@ -1,13 +1,14 @@
 <?php
 $check = array();
-
+include_once(\system\Core::doc_root() . "/system/php/Mail.php");
+$Mail = new \system\Mail;
 
 #CHECK IF USERNAME IS FREE
 $check_for_user = $PDO->query("SELECT id FROM " . $User->table . " WHERE username='" . $_POST["username"]. "'AND deleted IS NULL");
 if($check_for_user->rowCount()  > 0){ $check["#username"] = $Text->_("This username is already in use");}
 
 #CHECK IF EMAIL IS VALID
-if($Mail->validate($_POST["email"]) === false){$check["#email"] = $Text->_("Invalid email format");}
+if(\system\Mail::validate($_POST["email"]) === false){$check["#email"] = $Text->_("Invalid email format");}
 
 #CHECK IF EMAIL IS NOT USED ALREADY
 $check_for_mail = $PDO->query("SELECT id FROM " . $User->table . " WHERE email='" . $_POST["email"]. "'AND deleted IS NULL");
@@ -31,20 +32,20 @@ $array = array(
             "status" => $activate_code,
             "created" => date("Y-m-d H:i:s")
         );
-$newUser = $Query->insert($array, $Query->table());
+$newUser = \system\Query::insert($array, \system\Query::table());
 
 if($newUser){
     $subject = $Text->item("Successful registration");
     $message = $Text->item("Your new registration is successful. Please visit the link below to activate your new profile.");
     $message .= $User->activation_link($activate_code, $_POST["email"]);
-    $Mail->send($_POST["email"], $subject, $message);
-    ?><script>location.href = '<?php echo $Core->url();?>User/message/successful-registration';</script><?php
+    \system\Mail::send($_POST["email"], $subject, $message);
+    ?><script>location.href = '<?php echo \system\Core::url();?>User/message/successful-registration';</script><?php
 } else {
     echo $Text->item("Something went wrong");
 }
 
 } else {
-    $Form->validate($check);    
+    \system\Form::validate($check);    
 }
 
 exit

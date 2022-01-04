@@ -1,6 +1,6 @@
 <?php 
-$case = $Query->select($_GET["case"], "id", "caser");
-$person = $Query->select($_GET["person"], "id", "person");
+$case = $PDO->query("SELECT * FROM caser WHERE id='" . $_GET["case"] . "'")->fetch();
+$person = $PDO->query("SELECT * FROM person WHERE id='" . $_GET["person"] . "'")->fetch();
 ?>
 <div class="admin">
 	<h2 class="text-center">СПРАВКА ТРУДОВИ ДОГОВОРИ</h2>

@@ -3,32 +3,58 @@ var TextAPP = function(){};
 /* WYSIWYG */
 
 TextAPP.insertPaste = function(writePosition){
-    range = window.getSelection().getRangeAt(0);
-    range.insertNode(range.createContextualFragment((document.getElementsByName("paste-text")[0].checked === true ? S("#text-plain").innerHTML : S("#text-html").innerHTML )));
+    let selection = window.getSelection();
+    let selectElement = document.getElementById("text-edit-" + document.getElementById("selected-content").value);
+    let range = selection.getRangeAt(0);
+    let newRange = document.createRange();
+    let insertText = "";
+    
+    if(document.getElementsByName("paste-text")[0].checked === true){
+        insertText = S("#text-plain").innerHTML;
+    } else if(document.getElementsByName("paste-text")[1].checked){
+        S.all("#text-html *", function(el){el.removeAttribute("style");});
+        insertText = S("#text-html").innerHTML;
+    } else if(document.getElementsByName("paste-text")[2].checked){
+        insertText = S("#text-html").innerHTML;
+    }
+    
+    range.insertNode(range.createContextualFragment(insertText));
+    newRange.setStart(selectElement, range.endOffset);
+    newRange.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(newRange);
     S.popupExit();
-    TextAPP.hideWysiwyg(event);
+}
+
+TextAPP.keyControl = function(event){
+    if(event.keyCode == 9){
+        document.execCommand('insertHTML',false,'&emsp;');
+        event.preventDefault();
+    }
 }
 
 TextAPP.pasteText = function(event){
     event.preventDefault();
-    var id = document.getElementById("selected-content").value;
-    var elem = document.getElementById("text-edit-" + id);
+    let id = document.getElementById("selected-content").value;
+    let elem = document.getElementById("text-edit-" + id);
     let textPlain = event.clipboardData.getData( 'text/plain' );
     let textHtml = event.clipboardData.getData( 'text/html' );
     
     let writePosition = elem.innerHTML.indexOf(window.getSelection().anchorNode.parentElement.innerHTML);
-    let output = '<div class="popup-content select-none">';
+    let output = '<div class="popup-content select-none TextAPP">';
     output += '<h2>Text paste</h2>';
     output += '<div class="hide" id="text-plain">' + textPlain + '</div>';
     output += '<div class="hide" id="text-html">' + textHtml + '</div>';
-    output += '<div><input type="radio" name="paste-text" value="plain-text" checked> Paste as plain text (recommended)</div>';
+    output += '<div><input type="radio" name="paste-text" value="plain-text"> Paste as plain text (remove all formatting and styles)</div>';
+    output += '<div><input type="radio" name="paste-text" value="formatted-text" checked> Paste with formatting (the pasted content will be pasted with formatting, but will preserve current styles. Recommended)</div>';
     output += '<div><input type="radio" name="paste-text" value="html-text"> Paste with styles (the pasted content will be pasted with styles)</div>';
     output += '<div class="padding-20">';
-        output += '<button class="button" type="button" onclick="TextAPP.insertPaste(' + writePosition + ')">Save</button>';
-        output += '<button class="button" onclick="S.popupExit()">Close</button>';
+        output += '<button class="button paste-text" type="button" onclick="TextAPP.insertPaste(' + writePosition + ')">Save</button>';
+        output += '<button class="button paste-text" onclick="S.popupExit()">Close</button>';
     output += '</div>';
     output += '</div>';
     S.popup(output);
+    S(".popup-close").classList.add("TextAPP");
     return false;
 }
 
@@ -46,21 +72,28 @@ TextAPP.showWysiwyg = function (event, id){
 }
 
 TextAPP.hideWysiwyg = function (event){
-		var id = document.getElementById("selected-content").value;
-		var hide = true;
+		let id = document.getElementById("selected-content").value;
+		let hide = true;
 		for(a = 0; a < event.path.length; a++){
-		    if(event.path[a].id == "text-edit-" + id || event.path[a].id == "wysiwyg" || event.path[a].className == "language-editor"){ hide = false;}
+		    if(event.path[a].id == "text-edit-" + id || (event.path[a].className && event.path[a].classList.contains("TextAPP"))){ hide = false;}
 		}
-		
-        if(hide == true){
+        
+        if(hide === true){
     //UPDATE TEXT AFTER LOOSING THE TEXT FIELD FOCUS
 			TextAPP.updateText("close");
-			document.getElementById("color-selector-backcolor").style.display = 'none';
-			document.getElementById("color-selector-forecolor").style.display = 'none';
+			document.getElementById("color-picker-backcolor").style.display = 'none';
+			document.getElementById("color-picker-forecolor").style.display = 'none';
 			document.getElementById("wysiwyg").style.display = 'none';
 			document.getElementById("text-edit-" + id).removeEventListener("focus", TextAPP.pasteText);
 			document.removeEventListener("mousedown", TextAPP.hideWysiwyg);
         }
+}
+
+TextAPP.changeFont = function (size){
+    document.execCommand("fontSize", false, "7");
+    var fontElements = window.getSelection().anchorNode.parentNode
+    fontElements.removeAttribute("size");
+    fontElements.style.fontSize = size + "px";
 }
 
 //Drop images in wysiwyg area and save them as base64 string
@@ -141,6 +174,7 @@ TextAPP.updateText = function (close=false){
 	if(optionsObject["url"] && optionsObject["url"] == true){
 	    S.post(S.url() + "Text/query/admin/update-text", { text: content, id: id, lang: lang, options: options}, function(data){
 	        var output = JSON.parse(data);
+	        if(output.text == null){S("#text-edit-" + id).innerHTML = "";}
 	        S.urlChange(output.url, (output.Title) ? output.Title : false);
 	        if(close == "close" && document.getElementById("language-editor-" + id)){
         		document.getElementById("language-editor-" + id).style.display = 'none';
@@ -149,6 +183,8 @@ TextAPP.updateText = function (close=false){
 	    });
 	} else {
 	    S.post(S.url() + "Text/query/admin/update-text", { text: content, id: id, lang: lang, options: options}, function(data){
+	        var output = JSON.parse(data);
+	        if(output.text == null){S("#text-edit-" + id).innerHTML = "";}
 			//SET TEXT LANGUAGE TO CHOOSEN LANGUAGE AND RETURN CURRENT LANGUAGE DATA IN THE FIELD (ONLY IF SITE IS MULTILANGUAGE)
             if(close == "close" && document.getElementById("language-editor-" + id)){
         		document.getElementById("language-editor-" + id).style.display = 'none';
@@ -198,16 +234,4 @@ TextAPP.wysiwyg = function(com,val=false){
     } else {
         document.execCommand(com,false,val);
     }
-}
-
-/* COLOR SELECTOR */
-
-TextAPP.selectColor = function(id, cnt, type=false){
-	if(type == "wysiwyg"){
-		document.execCommand(id, false, document.getElementById("colorField" + cnt).value);
-	} else{
-		document.getElementById("settings-color" + id).style.backgroundColor = document.getElementById("colorField" + cnt).value;
-		document.getElementById("color-val-" + id).value = document.getElementById("colorField" + cnt).value;
-	}
-	document.getElementById("color-selector-" + id).style.display = "none";
 }

@@ -1,14 +1,14 @@
 <?php
 $Object = $Plugin->object();
-$dir = $Core->this_path(0,-1);
+$dir = \system\Core::this_path(0,-1);
 
 $actions = array(
     "add" => $dir . "/add",
     "admin" => $dir . "/view",
     "open" => "url",
     "edit" => $dir . "/edit",
-    "settings" => $Core->url() . "Page/admin/settings",
-    "delete" => $Core->url() . "Page/admin/delete"
+    "settings" => \system\Core::url() . "Page/admin/settings",
+    "delete" => \system\Core::url() . "Page/admin/delete"
 );
 ?>
 

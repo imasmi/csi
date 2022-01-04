@@ -2,20 +2,20 @@
 <?php 
 
 if($_POST["type"] == "full"){
-    $location = $Core->doc_root();
+    $location = \system\Core::doc_root();
 } elseif($_POST["type"] == "plugin"){
-    $location = $Core->doc_root() . "/plugin/" . $_POST["plugin"];
+    $location = \system\Core::doc_root() . "/plugin/" . $_POST["plugin"];
 } elseif($_POST["type"] == "web") {
-    $location = $Core->doc_root() . "/web";
+    $location = \system\Core::doc_root() . "/web";
 }
 
 // restore files
 if(file_exists( $_GET["path"] . "/files.zip")){
-$FileAPP = new \system\module\File\php\FileAPP(0);
-$fileZIP = new system\module\File\php\ZipAPP($_GET["path"] . "/files.zip", $location);
-    foreach($Core->list_dir($location, array("recursive" => false)) as $delete){
+$FileAPP = new \module\File\FileAPP(0);
+$fileZIP = new system\module\File\ZipAPP($_GET["path"] . "/files.zip", $location);
+    foreach(\system\Core::list_dir($location, array("recursive" => false)) as $delete){
         if(is_dir($delete)){
-            if($delete != $Core->doc_root() . "/data"){$FileAPP->delete_dir($delete);}
+            if($delete != \system\Core::doc_root() . "/data"){$FileAPP->delete_dir($delete);}
         } else {
             unlink($delete);
         }
@@ -47,9 +47,9 @@ if(file_exists( $_GET["path"] . "/database.sql")){
 if(file_exists($_GET["path"] . "/database.json")){
     
     if($_POST["type"] == "web"){
-        foreach($Query->loop("SELECT * FROM " . $Page->table . " WHERE type='theme' OR filename!=''") as $table => $values){
+        foreach(\system\Query::loop("SELECT * FROM " . $Page->table . " WHERE type='theme' OR filename!=''") as $table => $values){
 	        foreach($values as $id => $field){
-                $Query->remove($field["id"], "id", $table);
+                $PDO->query("DELETE FROM " . $table . " WHERE id='" . $field["id"] . "'");
 	        }
 	    }
         ?>
@@ -71,19 +71,19 @@ if(file_exists($_GET["path"] . "/database.json")){
                 $row["page_id"] = $json[$fortable][$row["page_id"]]["id"];
             }
             
-            $Query->insert($row, $database);
+            \system\Query::insert($row, $database);
             $json[$database][$id]["id"] = $PDO->lastInsertId();
             
             //if file table, rename file directory and update database to correspond to the new id
             if($database == $database["prefix"] . "_file" && isset($row["path"])){
-                if(is_dir($Core->doc_root() . "/" . dirname($row["path"]))){
+                if(is_dir(\system\Core::doc_root() . "/" . dirname($row["path"]))){
                     $path = explode("/", dirname($row["path"]));
                     $last_path = $path[count($path) - 1];
                     if($last_path == $id){$path[count($path) - 1] = $json[$database][$id]["id"];}
                 }
                 $new_path = implode("/", $path);
-                if(rename($Core->doc_root() . "/" . dirname($row["path"]) ,$new_path)){
-                    $Query->update(array("path" => $new_path . "/" . basename($row["path"])), $json[$database][$id]["id"], "id",  $database);
+                if(rename(\system\Core::doc_root() . "/" . dirname($row["path"]) ,$new_path)){
+                    \system\Query::update(array("path" => $new_path . "/" . basename($row["path"])), $json[$database][$id]["id"], "id",  $database);
                 }
             }
         }

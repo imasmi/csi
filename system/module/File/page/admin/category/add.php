@@ -1,7 +1,7 @@
-<div class="title">Add category to <?php echo $Query->select($_GET["gallery"])[$Language->_()];?></div>
+<div class="title">Add category to <?php echo $PDO->query("SELECT " . $Language->_() . " FROM " . $File->table . " WHERE id='" . $_GET["gallery"] . "'")->fetch()[$Language->_()];?></div>
 <div class="admin">
 <div id="error-message"></div>
-    <form class="form" id="add_gallery" method="post" action="<?php echo $Core->query_path();?>" >
+    <form class="form" id="add_gallery" method="post" action="<?php echo \system\Core::query_path();?>" >
         <input type="hidden" name="type" value="gallery"/>
         <input type="hidden" name="link_id" value="<?php echo $_GET["gallery"];?>"/>
         <table class="table">

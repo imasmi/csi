@@ -1,5 +1,5 @@
 <?php
-namespace web\php;
+namespace web;
 
 class dates{
 	public static $months = ["Януари", "Февруари", "Март", "Април", "Май", "Юни", "Юли", "Август", "Септември", "Октомври", "Ноември", "Декември"];

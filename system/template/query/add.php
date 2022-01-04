@@ -5,8 +5,8 @@ if(empty($check)){
 
 #INSERT IF ALL EVERYTHING IS FINE
 
-$insert = $Query->insert($_POST);
-#$Query->insert($array, $table="module")
+$insert = \system\Query::insert($_POST);
+#\system\Query::insert($array, $table="module")
 
 if($insert){
     ?><script>history.go(-1)</script><?php
@@ -15,7 +15,8 @@ if($insert){
 }
 
 } else {
-    $Form->validate($check);    
+    require_once(\system\Core::doc_root() . "/system/php/Form.php");
+    \system\Form::validate($check);    
 }
 exit;
 ?>

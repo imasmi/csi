@@ -1,3 +1,7 @@
+<?php 
+include_once(\system\Core::doc_root() . '/plugin/Import/php/Import.php');
+$Import = new \plugin\Import\Import;
+?>
 <div class="text-center margin-60"><?php echo $Import->button("top");?></div>
 
 <div class="admin">

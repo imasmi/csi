@@ -1,4 +1,8 @@
 <?php
+require_once(\system\Core::doc_root() . "/system/module/Setting/php/SettingAPP.php");
+$SettingAPP = new \module\Setting\SettingAPP($_GET["id"]);
+require_once(\system\Core::doc_root() . "/system/module/File/php/FileAPP.php");
+$FileAPP = new \module\File\FileAPP($_GET["id"]);
 // THIS VARIANT IS DEPRECATED AND WILL BE REMOVED IN FUTURE EDITIONS
 $posts = $_POST;
 foreach($posts as $key => $value){
@@ -6,8 +10,6 @@ foreach($posts as $key => $value){
         unset($posts[$key]);
     }
 }
-$FileAPP = new system\module\File\php\FileAPP;
-$SettingAPP = new \system\module\Setting\php\SettingAPP($_GET["id"]);
 $SettingAPP->save($posts);
 $FileAPP->upload(array("page_id" => $_GET["id"]));
 $FileAPP->upload_edit();

@@ -1,5 +1,5 @@
 <?php
-$dir = $Core->this_path(0,-2);
+$dir = \system\Core::this_path(0,-2);
 $actions = array(
 	"add" => $dir . "/add",
 	"admin" => $dir . "/view",
@@ -12,7 +12,7 @@ $actions = array(
 <div class="admin">
 <div class="title">Бележки</div>
 <?php
-echo $Query->listing("*", $actions, "note", "");
-#$Query->listing($array="*", $actions="*", $table="module", $where="")
+echo \system\Query::listing("*", $actions, "note", "");
+#\system\Query::listing($array="*", $actions="*", $table="module", $where="")
 ?>
 </div>

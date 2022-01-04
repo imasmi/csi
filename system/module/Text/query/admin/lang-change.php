@@ -1,5 +1,3 @@
 <?php
-$textField = $Query->select($_POST["id"], "id", $Text->table, $_POST["lang"]);
-
-echo $textField[$_POST["lang"]];
+echo $PDO->query("SELECT " . $_POST["lang"] . " FROM " . $Text->table . " WHERE id='" . $_POST["id"] . "'")->fetch()[$_POST["lang"]];
 ?>

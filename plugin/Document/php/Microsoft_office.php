@@ -1,5 +1,5 @@
 <?php
-namespace plugin\Document\php;
+namespace plugin\Document;
 class Microsoft_office{
     private $filename;
 

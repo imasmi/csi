@@ -1,14 +1,14 @@
 <?php
-$select = $Query->select($_GET["person"], "id", "person");
+$select = $PDO->query("SELECT * FROM person WHERE id='" . $_GET["person"] . "'")->fetch();
 
 $fields = array(
 	"id" => "id",
-	"bank" => array("bank_unit" => '$bank = $this->Query->select($list["bank_unit"], "id", "bank_units"); echo $bank["name"];'),
+	"bank" => array("bank_unit" => '$bank = \system\Query::select($list["bank_unit"], "id", "bank_units"); echo $bank["name"];'),
 	"IBAN" => "IBAN",
 	"budget" => "budget"
 );
 
-$dir = $Core->this_path(0,-1);
+$dir = \system\Core::this_path(0,-1);
 $actions = array(
 	"add" => $dir . '/add?person=' . $_GET["person"],
 	"edit" => $dir . '/edit',
@@ -20,7 +20,7 @@ $actions = array(
 <div class="admin">
 <div class="title">Банкови сметки: <?php echo $select["name"];?></div>
 <?php
-if($User->_() != "admin"){require_once($Core->doc_root() . "/system/module/Listing/php/ListingAPP.php");}
+if($User->_() != "admin"){require_once(\system\Core::doc_root() . "/system/module/Listing/php/ListingAPP.php");}
 $ListingAPP = new \system\module\Listing\php\ListingAPP;
 $where = isset($_GET["person"]) ? "WHERE person_id='" . $_GET["person"] . "'" : "";
 echo $ListingAPP->_($fields, $actions, "bank", $where);

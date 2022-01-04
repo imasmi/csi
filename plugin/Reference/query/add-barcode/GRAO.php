@@ -2,7 +2,7 @@
 $list = $_POST["dir"];
 $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 ?>
-<form class="form admin" id="form" accept-charset="UTF-8" method="post" action="<?php echo $Core->this_path(0,-1);?>/place-GRAO" target="_blank">
+<form class="form admin" id="form" accept-charset="UTF-8" method="post" action="<?php echo \system\Core::this_path(0,-1);?>/place-GRAO" target="_blank">
 <input type="hidden" name="dir" value="<?php echo $list;?>"/>
 <table class="listTable napReorder">
 	<tr>
@@ -28,7 +28,7 @@ $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 
 		// НАП 74
 		$case_numb = explode("_", $name)[0];
-		$case_id = $Query->select($case_numb, "number", $Caser->table, "id")["id"];
+		$case_id = $PDO->query("SELECT id FROM " . $Caser->table . " WHERE number='" . $case_numb . "'")->fetch()["id"];
 
 		$exclude = "";
 		if(isset($bar_check[$case_id])){

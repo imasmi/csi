@@ -17,8 +17,8 @@ for($a = 1; $a <= $_POST["cnt"]; ++$a){
 			"description" => $_POST["description_" . $a]
 		);
 		
-		$Query->insert($array, "payment");
+		\system\Query::insert($array, "payment");
 	}
 }
 ?>
-<script>window.open('<?php echo $Core->url();?>Money/postbank-payments', '_self');</script>
+<script>window.open('<?php echo \system\Core::url();?>Money/postbank-payments', '_self');</script>

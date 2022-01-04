@@ -5,7 +5,7 @@ $User->control();
 
 <div class="admin">
 <div class="error-message" id="error-message"></div>
-<form class="form" id="change-password" action="<?php echo $Core->query_path();?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path();?>', S.serialize('#change-password'), '#error-message')">
+<form class="form" id="change-password" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#change-password'), '#error-message')">
     <table class="table">
         <tr>
             <td><?php echo $Text->_("Password");?></td>

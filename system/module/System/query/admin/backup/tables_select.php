@@ -6,7 +6,7 @@ $defaults = array($Page->table, $File->table, $Text->table, $Setting->table, $Us
     if($_POST["type"] == "web"){
         $default_table = $Page->table;
     } elseif($_POST["type"] == "plugin") {
-        $namespace = "\plugin\\" . $_POST["plugin"] . "\php\\" . $_POST["plugin"];
+        $namespace = "\plugin\\" . $_POST["plugin"] . "\\" . $_POST["plugin"];
         $Object = new $namespace;
         $default_table = isset($Object->table) && in_array($Object->table, $defaults) ? $Object->table : false;
     }
@@ -22,7 +22,7 @@ $defaults = array($Page->table, $File->table, $Text->table, $Setting->table, $Us
     <?php 
         $tables = $PDO->query("SHOW TABLES");
         if($_POST["type"] == "plugin"){
-            $plugin_ini = @parse_ini_file($Core->doc_root() . "/plugin/" . $_POST["plugin"] . "/ini/plugin.ini");
+            $plugin_ini = @parse_ini_file(\system\Core::doc_root() . "/plugin/" . $_POST["plugin"] . "/ini/plugin.ini");
             $plugin_tables = $plugin_ini !== false && isset($plugin_ini["table"]) ? array_map('trim', explode(",",$plugin_ini["table"])) : false;
         }
         foreach($tables as $table){

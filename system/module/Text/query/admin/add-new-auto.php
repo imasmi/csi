@@ -13,7 +13,7 @@ for($cnt = 1; $cnt <= $_POST["new"]; ++$cnt){
         $array[$abbrev] = $_POST[$abbrev . "_" . $cnt];
     }
     
-    $insert = $Query->insert($array);
+    $insert = \system\Query::insert($array);
 }
 
 if($insert){
@@ -23,7 +23,7 @@ if($insert){
 }
 
 } else {
-    $Form->validate($check);    
+    \system\Form::validate($check);    
 }
 
 exit;

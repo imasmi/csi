@@ -30,7 +30,7 @@ if($_POST["wait_nap"]){
 		"payment" => 1
 	);
 
-	$insert = $Query->insert($array, "note");
+	$insert = \system\Query::insert($array, "note");
 }
 
 echo '<script>close()</script>';

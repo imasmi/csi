@@ -1,17 +1,15 @@
 <?php
-namespace system\php;
+namespace system;
 
 class Module{
-    public function __construct($modules){
-        global $Core;
-        $this->Core = $Core;
-        global $Ini;
-        $this->modules = $modules;
+    public static function items() {
+        return parse_ini_file(\system\Core::doc_root() . "/system/ini/module.ini");
     }
     
-    public function _(){
-        $link = $this->Core->links();
-        foreach($this->modules as $key => $module){
+    public static function _() {
+        $link = \system\Core::links();
+        $items = static::items();
+        foreach($items as $key => $module){
             if(mb_strtolower($key) == mb_strtolower($link[0])){
                 return $key;
             }
@@ -19,6 +17,4 @@ class Module{
         return false;
     }
 }
-
-$Module = new Module($modules);
 ?>

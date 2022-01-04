@@ -13,12 +13,12 @@ foreach($PDO->query("SELECT id FROM " . $Page->table . " ORDER by id ASC") as $i
     $abbreviations = $Language->items;
 ?>
     <url>
-        <loc><?php echo $Core->domain() . $Page->url($page["id"], $abbreviations[key($abbreviations)]);?></loc>
+        <loc><?php echo \system\Core::domain() . $Page->url($page["id"], $abbreviations[key($abbreviations)]);?></loc>
         <?php 
             if(count($abbreviations) > 1){
                 foreach ($abbreviations as $lang => $abbrev){
             ?>
-                <xhtml:link rel="alternate" hreflang="<?php echo $abbrev;?>" href="<?php echo $Core->domain() . $Page->url($page["id"], $abbrev);?>"/>
+                <xhtml:link rel="alternate" hreflang="<?php echo $abbrev;?>" href="<?php echo \system\Core::domain() . $Page->url($page["id"], $abbrev);?>"/>
         <?php
                 }
             }

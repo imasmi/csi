@@ -1,9 +1,12 @@
 <?php
-$PageAPP = new \system\module\Page\php\PageAPP($_GET["id"]);
-$FileAPP = new system\module\File\php\FileAPP($_GET["id"]);
-$CodeAPP = new \system\module\Code\php\CodeAPP;
+require_once(\system\Core::doc_root() . "/system/module/Page/php/PageAPP.php");
+$PageAPP = new \module\Page\PageAPP($_GET["id"]);
+require_once(\system\Core::doc_root() . "/system/module/File/php/FileAPP.php");
+$FileAPP = new \module\File\FileAPP($_GET["id"]);
+require_once(\system\Core::doc_root() . "/system/module/Code/php/CodeAPP.php");
+$CodeAPP = new \module\Code\CodeAPP;
 $check = array();
-$select = $Query->select($_GET["id"]);
+$select = $PDO->query("SELECT * FROM " . $Page->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 $page_path = $Page->path($_GET["id"]);
 if($CodeAPP->special_characters_check($_POST["filename"]) === true){$check["#filename"] = "Special characters are not allowed.";}
 
@@ -22,10 +25,10 @@ if(empty($check)){
             "filename" => $PageAPP->url_format($_POST["filename"])
     );
     
-    if($select["menu"] != $_POST["menu"]){ $array["row"] = $Query->new_id($Page->table, "row", " WHERE menu='" . $_POST["menu"] . "'");}
+    if($select["menu"] != $_POST["menu"]){ $array["row"] = \system\Query::new_id($Page->table, "row", " WHERE menu='" . $_POST["menu"] . "'");}
     
-    if($_POST["homepage"] == "on"){
-        $PDO->query("UPDATE " . $Query->table() . " SET `type`='' WHERE `type`='homepage'");
+    if(isset($_POST["homepage"]) && $_POST["homepage"] == "on"){
+        $PDO->query("UPDATE " . \system\Query::table() . " SET `type`='' WHERE `type`='homepage'");
         $array["type"] = "homepage";
     }
     
@@ -33,7 +36,7 @@ if(empty($check)){
         $array[$value] = (strpos($_POST[$value], "http") !== false) ? $_POST[$value] : $PageAPP->url_format($_POST[$value]);
     }
     
-    $update = $Query->update($array, $_GET["id"]);
+    $update = \system\Query::update($array, $_GET["id"]);
     
     if($update){
         #ADD FILE IF NOT EXISTS
@@ -62,7 +65,8 @@ if(empty($check)){
             $posts["Menu_" . $value] = $_POST["Menu_" . $value]; 
             $posts["Description_" . $value] = $_POST["Description_" . $value]; 
         }
-        $SettingAPP = new \system\module\Setting\php\SettingAPP($_GET["id"]);
+        require_once(\system\Core::doc_root() . "/system/module/Setting/php/SettingAPP.php");
+        $SettingAPP = new \module\Setting\SettingAPP($_GET["id"]);
         $SettingAPP->save($posts);
         $FileAPP->upload();
         $FileAPP->upload_edit();
@@ -71,7 +75,7 @@ if(empty($check)){
         echo $Text->_("Something went wrong");
     }
 } else {
-    $Form->validate($check);
+    \system\Form::validate($check);
 }
 exit;
 ?>

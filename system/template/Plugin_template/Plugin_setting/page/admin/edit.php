@@ -1,11 +1,11 @@
 <?php 
 $Object = $Plugin->object();
-$select = $Query->select($_GET["id"], "id", $Object->table);
+$select = $PDO->query("SELECT * FROM " . $Setting->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 ?>
 <div class="admin">
 <div class="title">Edit <?php echo $Object->plugin;?> item</div>
 <div class="error-message" id="error-message"></div>
-<form class="form" id="form" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];;?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path() .  '?id=' . $_GET["id"];?>', S.serialize('#form'), '#error-message')">
+<form class="form" id="form" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];;?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path() .  '?id=' . $_GET["id"];?>', S.serialize('#form'), '#error-message')">
     <table class="table">
         <?php foreach($Language->items as $key=>$value){?>
         <tr>

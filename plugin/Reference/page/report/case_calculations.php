@@ -14,7 +14,7 @@ foreach($document as $key => $value){
 
 	foreach($PDO->query("SELECT * FROM document WHERE name='" . $key . "' AND date >= '" . $_GET["year"] . "-01-01' AND date <='" . $end_date . "'") as $document){
 		if($document["case_id"] != 0){
-			$case = $Query->select($document["case_id"], "id", "caser");
+			$case = $PDO->query("SELECT * FROM caser WHERE id='" . $document["case_id"] . "'")->fetch();
 			$array[$case["statistic"]][] = array("number" => $case["number"], "protocol" => $document["number"], "date" => $document["date"], "charger" => $case["charger"]);
 		}
 	}
@@ -44,7 +44,7 @@ foreach($document as $key => $value){
 	$complaint_select = substr($complaint_select, 0, -3);
 	foreach($PDO->query("SELECT * FROM document WHERE (" . $complaint_select . ") AND type='incoming' AND date >= '" . $_GET["year"] . "-01-01' AND date <='" . $end_date . "'") as $document){
 		if($document["case_id"] != 0){
-			$case = $Query->select($document["case_id"], "id", "caser");
+			$case = $PDO->query("SELECT * FROM caser WHERE id='" . $document["case_id"] . "'")->fetch();;
 			$array[$case["statistic"]][] = array("number" => $case["number"], "document-number" => $document["number"], "document-date" => $document["date"], "charger" => $case["charger"]);
 		}
 	}
@@ -60,7 +60,7 @@ foreach($document as $key => $value){
 				<?php
 				foreach($case as $key => $value){
 				?>
-					<div><?php echo $value["number"];?> - <?php echo $Query->select($value["charger"], "id", $User->table)["email"];?> (Документ <?php echo $value["document-number"];?>/<?php echo date("d.m.Y", strtotime($value["document-date"]));?> год.)</div>
+					<div><?php echo $value["number"];?> - <?php echo $PDO->query("SELECT email FROM " . $User->table . " WHERE id='" . $value["charger"] . "'")->fetch()["email"];?> (Документ <?php echo $value["document-number"];?>/<?php echo date("d.m.Y", strtotime($value["document-date"]));?> год.)</div>
 				<?php
 				}
 			}

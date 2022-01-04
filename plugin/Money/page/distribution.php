@@ -1,7 +1,7 @@
 <div class="csi admin">
 	<input type="time" id="start-time" value="<?php echo isset($_GET["start_time"]) ? $_GET["start_time"] : date("H:i:s");?>"/>
 	<button type="button" class="button" onclick="window.open(location.href + (location.href.indexOf('?') === -1 ? '?' : '&') +'start_time=' + S('#start-time').value, '_self')">Промени начален час</button>
-<form method="post" action="<?php echo $Core->query_path();?>" onsubmit="return csi.checkLenght()" onkeypress="return event.keyCode != 13;" target="_blank">
+<form method="post" action="<?php echo \system\Core::query_path();?>" onsubmit="return csi.checkLenght()" onkeypress="return event.keyCode != 13;" target="_blank">
 <table class="listTable" border="1px" cellpadding="0" cellspacing="0">
 	<tr>
 		<th><input type="checkbox" onclick="S.checkAll(this, '.distribution')" checked/></th>
@@ -42,7 +42,7 @@ foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id 
 		if($pay_invoice->rowCount() > 0){
 			$deb_invoice = $pay_invoice->fetch();
 			foreach($case_debtors as $debt){
-				$deb_data = $Query->select($debt, "id", "person");
+				$deb_data = $PDO->query("SELECT * FROM person WHERE id='" . $debt . "'")->fetch();
 				if($deb_data["id"] == $deb_invoice["payer"]){ $debtor = $deb_data;}
 			}
 			$debtor_color = "color-1-bg";
@@ -87,7 +87,7 @@ foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id 
 			<td id="notes<?php echo $case["id"];?>"><?php $Note->_(" WHERE (case_id=" . $distribution["case_id"] . " OR person_id='" . $creditorID . "') AND payment=1 AND hide is NULL", $distribution["case_id"], "payment", "#notes" . $distribution["case_id"]);?></td>
 			<td>
 				<?php echo $Caser->open();?>
-				<?php if($distribution["user"] != 2){?><div style="color: red"><?php echo $Query->select($distribution["user"], "id", $User->table, "email")["email"];?></div><?php } ?>
+				<?php if($distribution["user"] != 2){?><div style="color: red"><?php echo $PDO->query("SELECT email FROM " . $User->table . " WHERE id='" . $distribution["user"] . "'")->fetch()["email"];?></div><?php } ?>
 			</td>
 			
 			<?php

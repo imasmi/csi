@@ -1,7 +1,7 @@
 <!doctype HTML>
 <head>
-  <link rel="stylesheet" href="<?php echo $Core->url();?>web/css/style.css">
-  <script src="<?php echo $Core->url();?>system/js/System.js"></script>
+  <link rel="stylesheet" href="<?php echo \system\Core::url();?>web/css/style.css">
+  <script src="<?php echo \system\Core::url();?>system/js/System.js"></script>
 </head>
 <body>
 
@@ -20,7 +20,7 @@ foreach($listDir as $f){
   $folder = iconv ( "windows-1251" , "UTF-8", $f );
   $name = str_replace($list, "", $folder);
   $case_numb = explode("_", $name)[0];
-  $case_id = $Query->select($case_numb, "number", $Caser->table, "id")["id"];
+  $case_id = $PDO->query("SELECT id FROM " . $Caser->table . " WHERE number='" . $case_numb . "'")->fetch();
 
   $exclude = "";
   if(isset($bar_check[$case_id])){

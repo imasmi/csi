@@ -1,29 +1,23 @@
 <?php
-namespace plugin\Caser\php;
-use \system\module\Setting\php\Setting as Setting;
+namespace plugin\Caser;
+use \module\Setting\Setting as Setting;
 
 class Caser{
     public function __construct($id=0, $array=array()){
         global $PDO;
         $this->PDO = $PDO;
-        global $Core;
-        $this->Core = $Core;
-        global $Query;
-        $this->Query = $Query;
         global $Page;
         $this->Page = $Page;
         global $User;
         $this->User = $User;
         global $Setting;
         $this->Setting = $Setting;
-		if($User->_() != "admin"){require_once($Core->doc_root() . "/system/module/Listing/php/ListingAPP.php");}
-        $this->ListingAPP = new \system\module\Listing\php\ListingAPP;
         $this->table = "caser";
         $this->plugin = "Caser"; //Full name of the plugin
         $this->link_id = 0;
 		$this->id = $id;
 		if($this->id != 0){
-		$this->item = $Query->select($id, "id", $this->table);
+		$this->item = $PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $id ."'")->fetch();
 		$this->number = $this->item["number"];
 		$this->title_main = false; // this is also set up in $this->title() function
 		$this->title = $this->title();
@@ -86,7 +80,7 @@ class Caser{
 	?>
 		<div class="selector">
 			<input type="hidden" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php if(isset($caser)){ echo $caser["id"];}?>"/>
-			<input type="text" autocomplete="off" id="<?php echo $name;?>-data" onkeyup="csi.trim(this);S.post('<?php echo $this->Core->url() . $this->plugin;?>/query/selector', {data: this.value, id: '<?php echo $name;?>'}, '#<?php echo $name;?>-list', true)" value="<?php if(isset($caser)){ echo $caser["number"];}?>"/>
+			<input type="text" autocomplete="off" id="<?php echo $name;?>-data" onkeyup="csi.trim(this);S.post('<?php echo \system\Core::url() . $this->plugin;?>/query/selector', {data: this.value, id: '<?php echo $name;?>'}, '#<?php echo $name;?>-list', true)" value="<?php if(isset($caser)){ echo $caser["number"];}?>"/>
 			<div id="<?php echo $name;?>-list" class="select-list"></div>
 		</div>
 	<?php
@@ -94,7 +88,7 @@ class Caser{
 
 	public function open(){
 		?>
-		<a href="<?php echo $this->Core->url() . "Caser/open?id=" . $this->id;?>"  class="caser-number <?php echo $this->color;?>" target="_blank"><?php echo $this->number;?></a>
+		<a href="<?php echo \system\Core::url() . "Caser/open?id=" . $this->id;?>"  class="caser-number <?php echo $this->color;?>" target="_blank"><?php echo $this->number;?></a>
 		<?php
 	}
 	
@@ -175,31 +169,5 @@ class Caser{
 		}
 		return $creditors;
 	}
-    /*
-    public function listing(){
-        ?>
-        <div class="caser">
-            <div class="caser-listing">
-                <?php 
-                    foreach($this->ListingAPP->page_slice($this->items) as $id=>$page){
-                        print_r($page);
-                    }
-                ?>
-            </div>
-            <div class="caser-pagination"><?php $this->ListingAPP->pagination(count($this->items));?></div>
-        </div>
-        <?php
-    }
-
-    public function _(){
-        if($this->Page->tag == "caser"){
-            echo $this->item($this->Page->_("*"));
-        } else { 
-            echo $this->listing();
-        }
-    }
-	*/
 }
-
-$Caser = new Caser;
 ?>

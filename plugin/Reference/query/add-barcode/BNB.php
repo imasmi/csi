@@ -1,4 +1,4 @@
-<form class="form admin" id="form" accept-charset="UTF-8" method="post" action="<?php echo $Core->this_path(0, -1);?>/place-BNB" target="_blank">
+<form class="form admin" id="form" accept-charset="UTF-8" method="post" action="<?php echo \system\Core::this_path(0, -1);?>/place-BNB" target="_blank">
 <table class="listTable napReorder">
 	<tr>
 		<td>№</td>
@@ -14,7 +14,7 @@ $cnt = 1;
 $used_docs = array();
 $Bnb = new \plugin\Reference\php\Bnb;
 
-foreach($Core->list_dir($_POST["dir"]) as $files){
+foreach(\system\Core::list_dir($_POST["dir"]) as $files){
 	if(pathinfo($files)["extension"] === "xml"){
 		$xml = $Import->xml($files);
 		break;
@@ -27,7 +27,7 @@ foreach($Bnb->_($xml) as $egn => $value){
 ?>
 	<tr id="row-<?php echo $cnt;?>">
 	<?php
-		$person = $Query->select($egn, "EGN_EIK", "person", "id");
+		$person = $PDO->query("SELECT id FROM person WHERE EGN_EIK='" . $egn . "'")->fetch();
 		$document = null;
 		foreach($PDO->query("SELECT c.id, c.number FROM caser_title t, caser c WHERE c.id=t.case_id AND t.debtor LIKE '%\"" . $person["id"] . "\"%' ORDER by c.number DESC") as $case){
 			foreach($PDO->query("SELECT * FROM document WHERE case_id='" . $case["id"] . "' AND type='incoming' AND (name='222' || name='346') ORDER by date ASC, number ASC") as $cur_document){

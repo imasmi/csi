@@ -1,7 +1,11 @@
+<?php
+require_once(\system\Core::doc_root() . "/system/php/Form.php");
+$Form = new \system\Form;
+?>
 <div class="admin">
 <div class="title">CREATE PLUGIN</div>
 <div class="error-message" id="error-message"></div>
-<form class="form" id="form" action="<?php echo $Core->query_path();?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path();?>', S.serialize('#form'), '#error-message')">
+<form class="form" id="form" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#form'), '#error-message')">
     <table class="table">
         <tr>
             <td>Name</td>
@@ -13,7 +17,7 @@
             <td>
                 <?php 
                     $types = array("page" => "Page", "setting" => "Setting", "file" => "File");
-                    $Form->select("type", $types, array("required" => true, "select" => "page"));
+                    \system\Form::select("type", $types, array("required" => true, "select" => "page"));
                 ?>
             </td>
         </tr>
@@ -21,6 +25,11 @@
         <tr>
             <td>Show in admin panel</td>
             <td><input type="checkbox" name="admin-panel" id="admin-panel"/></td>
+        </tr>
+        
+        <tr>
+            <td>Theme plugin</td>
+            <td><input type="checkbox" name="theme" id="theme"/></td>
         </tr>
 
         <tr>

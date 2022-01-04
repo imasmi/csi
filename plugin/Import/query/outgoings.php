@@ -9,13 +9,13 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		if($key == "date"){
 			$array[$key] = date("Y-m-d", strtotime($_POST[$key . '-' . $a]));
 		} elseif($key == "case_id"){
-			$array[$key] = $Query->select($_POST[$key . '-' . $a], "number", "caser")["id"];
+			$array[$key] = $PDO->query("SELECT id FROM caser WHERE number='" . $_POST[$key . '-' . $a] . "'")->fetch()["id"];
 		} elseif($key == "sender_receiver"){
 			$array[$key] = $Import->person($_POST[$key . '-' . $a]);
 		} elseif($key == "name"){
 			$array[$key] = $Import->doc($_POST[$key . '-' . $a], 'outgoing');
 		} elseif($key == "user"){
-			$array[$key] = $Query->select($_POST[$key . '-' . $a], "email", $User->table, "id")["id"];
+			$array[$key] = $PDO->query("SELECT id FROM " . $User->table . " WHERE email='" . $_POST[$key . '-' . $a] . "'")->fetch()["id"];
 		} elseif(!isset($_POST[$key . '-' . $a])){
 			unset($array[$key]);
 		} else {
@@ -27,10 +27,10 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		if($checks->rowCount() > 0){
 			$check = $checks->fetch();
 			if($array["name"] == 4 || $array["name"] == 5){$array["note"] = $check["note"];}
-			$Query->update($array, $check["id"], "id", "document");
+			\system\Query::update($array, $check["id"], "id", "document");
 			$updates++;
 		} else {
-			$Query->insert($array, "document");
+			\system\Query::insert($array, "document");
 			$inserts++;
 		}
 	} else {

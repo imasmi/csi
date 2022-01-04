@@ -1,11 +1,13 @@
 <?php
-$PageAPP = new \system\module\Page\php\PageAPP;
-$CodeAPP = new \system\module\Code\php\CodeAPP;
+require_once(\system\Core::doc_root() . "/system/module/Page/php/PageAPP.php");
+$PageAPP = new \module\Page\PageAPP;
+require_once(\system\Core::doc_root() . "/system/module/Code/php/CodeAPP.php");
+$CodeAPP = new \module\Code\CodeAPP;
 $check = array();
 
 #CHECK IF FILE ALREADY EXISTS IN THIS FOLDER
 if(isset($_POST["filename"]) && $_POST["filename"] != ""){
-    $check_file = $PDO->query("SELECT * FROM " . $Query->table() . " WHERE link_id='" . $_POST["link_id"]. "' AND filename='" . $_POST["filename"] . "'");
+    $check_file = $PDO->query("SELECT * FROM " . \system\Query::table() . " WHERE link_id='" . $_POST["link_id"]. "' AND filename='" . $_POST["filename"] . "'");
     if($check_file->rowCount() > 0){ $check["#filename"] = "There is a file with the same nema already.";}
 }
 
@@ -22,16 +24,17 @@ if(empty($check)){
 #ADD NEW PAGE
 $array = array(
         "link_id" => $_POST["link_id"],
-        "user_id" => $User->id,
-        "row" => $Query->new_id($Page->table, "row", " WHERE link_id='" . $_POST["link_id"] . "'" . (isset($_POST["menu"]) ? " AND menu='" . $_POST["menu"] . "'" : "")),
-        "menu" => $_POST["menu"],
-        "filename" => $PageAPP->url_format($_POST["filename"]), 
+        "user_id" => $User->id, 
+        "theme" => $Theme->active, 
         "tag" => $_POST["tag"],
-        "created" => date("Y-m-d H:i:s")
+        "row" => \system\Query::new_id($Page->table, "row", " WHERE link_id='" . $_POST["link_id"] . "'" . (isset($_POST["menu"]) ? " AND menu='" . $_POST["menu"] . "'" : "")),
+        "menu" => $_POST["menu"],
+        "created" => date("Y-m-d H:i:s"),
+        "filename" => $PageAPP->url_format($_POST["filename"]),
 );
 
-if($_POST["homepage"] == "on"){
-    $PDO->query("UPDATE " . $Query->table() . " SET `type`='' WHERE `type`='homepage'");
+if(isset($_POST["homepage"]) && $_POST["homepage"] == "on"){
+    $PDO->query("UPDATE " . \system\Query::table() . " SET `type`='' WHERE `type`='homepage'");
     $array["type"] = "homepage";
 }
 
@@ -39,7 +42,7 @@ foreach($Language->items as $key=>$value){
     $array[$value] = (strpos($_POST[$value], "http") !== false) ? $_POST[$value] : $PageAPP->url_format($_POST[$value]);
 }
 
-$new_page = $Query->insert($array);
+$new_page = \system\Query::insert($array);
 
 if($new_page){
     $id = $PDO->lastInsertId();
@@ -57,8 +60,10 @@ if($new_page){
         $posts["Menu_" . $value] = $_POST["Menu_" . $value]; 
         $posts["Description_" . $value] = $_POST["Description_" . $value]; 
     }
-    $FileAPP = new system\module\File\php\FileAPP($id);
-    $SettingAPP = new \system\module\Setting\php\SettingAPP($id);
+    require_once(\system\Core::doc_root() . "/system/module/File/php/FileAPP.php");
+    $FileAPP = new \module\File\FileAPP($id);
+    require_once(\system\Core::doc_root() . "/system/module/Setting/php/SettingAPP.php");
+    $SettingAPP = new \module\Setting\SettingAPP($id);
     $SettingAPP->save($posts);
     $FileAPP->upload(array("page_id" => $id));
     ?>
@@ -69,7 +74,9 @@ if($new_page){
 }
 
 } else {
-    $Form->validate($check);    
+    require_once(\system\Core::doc_root() . "/system/php/Form.php");
+    $Form = new \system\Form;
+    \system\Form::validate($check);    
 }
 
 exit;

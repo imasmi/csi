@@ -1,11 +1,11 @@
 <?php 
-$select = $Query->select($_GET["id"], "id", "note");
+$select = $PDO->query("SELECT * FROM note WHERE id='" . $_GET["id"] . "'")->fetch();
 $Caser = new \plugin\Caser\php\Caser($select["case_id"]);
 ?>
 <div class="admin">
 <div class="title">Редакция на бележка</div>
 <div class="errorMessage" id="errorMessage"></div>
-<form class="form" id="form" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>', S.serialize('#form'), '#errorMessage')">
+<form class="form" id="form" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>', S.serialize('#form'), '#errorMessage')">
     <table class="table">
         <tr>
             <td>Бележка</td>
@@ -20,7 +20,7 @@ $Caser = new \plugin\Caser\php\Caser($select["case_id"]);
 				<script>
 					document.getElementById("case_selector").addEventListener("click", function(){
 						setTimeout(function(){
-							S.post('<?php echo $Core->query_path(0, -1);?>/case_debtors', {'case_id' : S('#case_id').value}, '#debtors');
+							S.post('<?php echo \system\Core::query_path(0, -1);?>/case_debtors', {'case_id' : S('#case_id').value}, '#debtors');
 						}, 100);
 					});
 				</script>
@@ -44,7 +44,7 @@ $Caser = new \plugin\Caser\php\Caser($select["case_id"]);
 				<?php
 					if($select["case_id"] != "0"){
 						foreach($Caser->debtor as $id){
-							$debtors[$id] = $Query->select($id, "id", "person", "name")["name"];
+							$debtors[$id] = $PDO->query("SELECT name FROM person WHERE id='" . $id . "'")->fetch()["name"];
 						}	
 						$Form->select("debtor_id", $debtors, array("select" => $select["debtor_id"]));
 					}

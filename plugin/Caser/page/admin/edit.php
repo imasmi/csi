@@ -1,20 +1,20 @@
 <?php 
 $Object = $Plugin->object();
-$select = $Query->select($_GET["id"], "id", $Page->table);
+$select = $PDO->query("SELECT * FROM " . $Page->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 ?>
 <div class="admin">
 <h2 class="text-center">Edit <?php echo $Object->plugin;?> item</h2>
 <div class="error-message" id="error-message"></div>
-<form class="form" id="form" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];;?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path() .  '?id=' . $_GET["id"];?>', S.serialize('#form'), '#error-message')">
+<form class="form" id="form" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];;?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path() .  '?id=' . $_GET["id"];?>', S.serialize('#form'), '#error-message')">
     <table class="table">
         <tr>
             <td>Type</td>
-            <td><?php echo $Form->select("type", $Query->column_group("type", $Object->table), array("addon" => true, "select" => $select["type"]));?></td>
+            <td><?php echo $Form->select("type", \system\Query::column_group("type", $Object->table), array("addon" => true, "select" => $select["type"]));?></td>
         </tr>
         
         <tr>
             <td>Menu</td>
-            <td><?php echo $Form->select("menu", $Query->column_group("menu", $Object->table), array("addon" => true, "select" => $select["menu"]));?></td>
+            <td><?php echo $Form->select("menu", \system\Query::column_group("menu", $Object->table), array("addon" => true, "select" => $select["menu"]));?></td>
         </tr>
         
         <?php foreach($Language->items as $key=>$value){?>

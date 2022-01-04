@@ -4,8 +4,8 @@ $check = array();
 #UPDATE USER DATA IF ALL EVERYTHING IS FINE
 if(empty($check)){
     
-    $update = $Query->update($_POST, $_GET["id"]);
-    #$Query->update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
+    $update = \system\Query::update($_POST, $_GET["id"]);
+    #\system\Query::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
     
     if($update){
         ?><script>history.go(-1)</script><?php
@@ -13,6 +13,7 @@ if(empty($check)){
          echo $Text->_("Something went wrong");
     }
 } else {
-    $Form->validate($check);
+    require_once(\system\Core::doc_root() . "/system/php/Form.php");
+    \system\Form::validate($check);
 }
 ?>

@@ -1,6 +1,6 @@
 <div class="admin">
 <div class="error-message" id="error-message"></div>
-<form class="form" id="register" action="<?php echo $Core->query_path();?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path();?>', S.serialize('#register'), '#error-message')">
+<form class="form" id="register" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#register'), '#error-message')">
     <table class="table">
         <tr>
             <td><?php echo $Text->_("Username");?></td>

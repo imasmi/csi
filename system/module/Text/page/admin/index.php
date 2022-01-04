@@ -1,3 +1,7 @@
+<?php
+require_once(\system\Core::doc_root() . "/system/module/Listing/php/ListingAPP.php");
+$ListingAPP = new \module\Listing\ListingAPP;
+?>
 <div class="admin">
 <?php
 $array = array(
@@ -9,8 +13,6 @@ $array = array(
 foreach($Language->items as $key => $value){
     $array[$value] = $value;
 }
-
-    $ListingAPP = new \system\module\Listing\php\ListingAPP; 
     $ListingAPP->_($array, "*", "module", " ORDER by page_id");
 ?>
 </div>

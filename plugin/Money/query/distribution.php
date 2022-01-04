@@ -39,7 +39,7 @@ if($_POST["type"] == "directPay"){
 		
 			$check_direct = $PDO->query("SELECT id FROM payment_outgoing WHERE `type`='direct' AND name='" . $direct["name"] . "' AND `IBAN`='" . $direct["IBAN"] .  "' AND amount='" . $direct["amount"] . "' AND description='" . $direct["description"] . "'");
 			if($check_direct->rowCount() == 0){
-				$Query->insert($direct, "payment_outgoing");
+				\system\Query::insert($direct, "payment_outgoing");
 			}
 		}
 	}
@@ -97,7 +97,7 @@ if($_POST["type"] == "directPay"){
 				
 					$check_budget = $PDO->query("SELECT id FROM payment_outgoing WHERE `type`='budget' AND name='" . $budget["name"] . "' AND `IBAN`='" . $budget["IBAN"] .  "' AND budget_code='" . $budget["budget_code"] . "' AND amount='" . $budget["amount"] . "' AND budget_eik='" . $budget["budget_eik"] . "' AND budget_egn='" . $budget["budget_egn"] . "'  AND description='" . $budget["description"] . "'");
 					if($check_budget->rowCount() == 0){
-						$Query->insert($budget, "payment_outgoing");
+						\system\Query::insert($budget, "payment_outgoing");
 					}
 				}
 			}
@@ -108,7 +108,7 @@ if($_POST["type"] == "directPay"){
 $output = rtrim($output, "\r\n");
 echo $_POST["type"];
 
-$file = $Core->doc_root() . "/web/file/export/" . $_POST["type"] . ".txt";
+$file = \system\Core::doc_root() . "/web/file/export/" . $_POST["type"] . ".txt";
 $f=fopen($file,"w"); 
 # Now UTF-8 - Add byte order mark 
 fwrite($f, pack("CCC",0xef,0xbb,0xbf)); 
@@ -122,5 +122,5 @@ foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id 
 }
 echo '</table>';
 
-echo '<script>location.href="' . $Core->this_path(0, -1) . '/payment_export?file=' . $file . '"</script>';
+echo '<script>location.href="' . \system\Core::this_path(0, -1) . '/payment_export?file=' . $file . '"</script>';
 ?>

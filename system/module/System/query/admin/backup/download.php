@@ -1,6 +1,6 @@
 <?php
 $backup = $_GET["path"] . '/' . basename($_GET["path"]) . ".zip";
-$ZipAPP = new \system\module\File\php\ZipAPP($backup, $_GET["path"]);
+$ZipAPP = new \module\File\ZipAPP($backup, $_GET["path"]);
 $ZipAPP->create();
 
 header("Content-type: application/zip"); 

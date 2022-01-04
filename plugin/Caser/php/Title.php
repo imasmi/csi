@@ -1,15 +1,11 @@
 <?php
-namespace plugin\Caser\php;
-use \system\module\Setting\php\Setting as Setting;
+namespace plugin\Caser;
+use \module\Setting\Setting as Setting;
 
 class Title{
     public function __construct($id=0, $array=array()){
         global $PDO;
         $this->PDO = $PDO;
-        global $Core;
-        $this->Core = $Core;
-        global $Query;
-        $this->Query = $Query;
         global $Page;
         $this->Page = $Page;
         global $User;
@@ -20,8 +16,9 @@ class Title{
         $this->plugin = "Caser"; //Full name of the plugin
         $this->link_id = 0;
 	$this->id = $id;
-	$this->item = $Query->select($id, "id", $this->table);
-	$this->case = $Query->select($this->item["case_id"], "id", "cases");
+	$this->item = $PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $id . "'")->fetch();
+	$this->case = $PDO->query("SELECT * FROM caser WHERE id='" . $this->item["case_id"] . "'")->fetch();
+	
 	}
 
 	public function date(){
@@ -36,7 +33,7 @@ class Title{
 
 	public function creditors(){
 		foreach (json_decode($this->item["creditor"]) as $person){
-		$pers = $this->Query->select($person, "id", "person");
+		$pers = $this->PDO->query("SELECT * FROM person WHERE id='" . $person . "'")->fetch();
 		$Person = new \plugin\Person\php\Person($pers["id"]);
 		?>
 			<b><?php echo $pers["name"];?></b>
@@ -51,7 +48,7 @@ class Title{
 	public function debtors($nap=false, $bank=false){
 		$Bnb = new \plugin\Reference\php\Bnb;
 		foreach (json_decode($this->item["debtor"]) as $person){
-		$pers = $this->Query->select($person, "id", "person");
+		$pers = $this->PDO->query("SELECT * FROM person WHERE id='" . $person . "'")->fetch();
 		$Person = new \plugin\Person\php\Person($pers["id"]);
 		?>
 			<b><?php echo $pers["name"];?></b>

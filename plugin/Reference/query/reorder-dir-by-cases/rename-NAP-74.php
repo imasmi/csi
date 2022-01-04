@@ -8,7 +8,7 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
 		$items[$a] = [];
 		$folder_name = $_POST["dir"] . "/" . $_POST["file_" . $a]; //Assemble the folder name
 		$name_convert = iconv ( "UTF-8", "windows-1251" ,  $folder_name ); //Convert the name to windows encoding format
-		$case_number = $Query->select($_POST["case_" . $a], "id", "caser", "number")["number"]; //Get the case number by id
+		$case_number = $PDO->query("SELECT number FROM caser WHERE id='" . $_POST["case_" . $a] . "'")->fetch()["number"]; //Get the case number by id
 		$cases[] = $case_number;
 		$folder_new = $_POST["dir"] . "/" . $case_number . "_" . $_POST["file_" . $a]; //Assemble the new folder name
 		$new_convert = iconv ( "UTF-8", "windows-1251" ,  $folder_new ); //Convert the new windows name to windows format
@@ -18,7 +18,7 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
 		}
 
 
-		foreach($Core->list_dir($new_convert, ["select" => "file"]) as $file){
+		foreach(\system\Core::list_dir($new_convert, ["select" => "file"]) as $file){
 			$file_name = iconv ( "windows-1251", "UTF-8" ,  $file );
 			$pathinfo = pathinfo($file_name);
 			$pathinfo["case"] = $case_number;

@@ -6,17 +6,17 @@ if($check_user->rowCount() != 1){ $check["#address"] = $Text->_("Error");}
 
 if(empty($check)){
 
-    require_once($Core->doc_root() . '/system/module/Setting/php/SettingAPP.php');
-    $SettingAPP = new \system\module\Setting\php\SettingAPP($User->id, array("fortable" => $User->table));
+    require_once(\system\Core::doc_root() . '/system/module/Setting/php/SettingAPP.php');
+    $SettingAPP = new \module\Setting\SettingAPP($User->id, array("fortable" => $User->table));
     
     $array = array(
         "value" => isset($_POST["default"]) ? "default" : ""
     );
-    $Query->update($array, $_GET["id"], "id", $Setting->table);
+    \system\Query::update($array, $_GET["id"], "id", $Setting->table);
     
     if(isset($_POST["default"])){
         foreach($PDO->query("SELECT * FROM " . $Setting->table . " WHERE `fortable` = '" . $User->table . "' AND page_id='" . $User->_("id") . "' AND link_id='0' AND tag='address'") as $setting){
-            $Query->update(array("value" => $_GET["id"] == $setting["id"] ? "default" : ""), $setting["id"], "id", $Setting->table);
+            \system\Query::update(array("value" => $_GET["id"] == $setting["id"] ? "default" : ""), $setting["id"], "id", $Setting->table);
         }
     }
     
@@ -28,6 +28,6 @@ if(empty($check)){
     ?><script>history.go(-1)</script><?php
 
 } else {
-    $Form->validate($check);
+    \system\Form::validate($check);
 }
 ?>

@@ -1,10 +1,10 @@
 <?php
-$profile = $Query->select($_GET["id"]);
+$profile = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 ?>
 <div class="admin">
 <div class="error-message" id="error-message"></div>
 <div class="title"><?php echo $profile["username"];?></div>
-<form class="form" id="change-password" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>', S.serialize('#change-password'), '#error-message')">
+<form class="form" id="change-password" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>', S.serialize('#change-password'), '#error-message')">
     <table class="table">
         <tr>
             <td><?php echo $Text->_("New password");?></td>

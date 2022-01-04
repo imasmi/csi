@@ -1,16 +1,12 @@
 <?php
-namespace plugin\Money\php;
-use \system\module\Setting\php\Setting as Setting;
-use \plugin\Caser\php\Caser as Caser;
+namespace plugin\Money;
+use \module\Setting\Setting as Setting;
+use \plugin\Caser\Caser as Caser;
 
 class Money{
 	public function __construct($case_id=false){
 		global $PDO;
 		$this->PDO = $PDO;
-		global $Core;
-		$this->Core = $Core;
-		global $Query;
-		$this->Query = $Query;
 		global $Page;
 		$this->Page = $Page;
 		global $User;
@@ -67,7 +63,7 @@ class Money{
 					<td><?php echo  $paymentDate;?></td>
 					<td><a href="" class="caseNumber"><?php echo $Caser->number;?></a></td>
 					<td><?php echo  $this->User->item($payment["user"])["email"];?></td></td>
-					<td><?php echo $this->Query->select($protocol["name"], "id", "doc_types", "name")["name"];?></td>
+					<td><?php echo \system\Query::select($protocol["name"], "id", "doc_types", "name")["name"];?></td>
 					<td><?php echo $payment["reason"];?></td>
 					<td><?php echo $this->sum($payment["amount"]);?></td>
 					<td><?php echo $payment["allocate"] > 0 ? $this->sum($payment["allocate"]) : "Не се разпределя";?></td>
@@ -93,14 +89,14 @@ class Money{
 			"Дата" => array("date", 'echo date("d.m.Y", strtotime($list["date"]));'),
 			"Вид" => array("type", 'echo $list["type"] == "bill" ? "Сметка" : "Фактура";'),
 			"Сума" => "sum",
-			"Дело" => array("case_id", '$caser = $this->Query->select($list["case_id"], "id", "caser"); echo $caser["number"];'),
-			"Задължено лице" => array("payer", '$person = $this->Query->select($list["payer"], "id", "person"); echo $person["name"];'),
+			"Дело" => array("case_id", '$caser = \system\Query::select($list["case_id"], "id", "caser"); echo $caser["number"];'),
+			"Задължено лице" => array("payer", '$person = \system\Query::select($list["payer"], "id", "person"); echo $person["name"];'),
 			"Данъчна основа" => "tax_base",
 			"Данък" => "vat",
 			"Сметка №" => "bill",
 			"Фактура №" => "invoice",
 		);
-
+		$dir = \system\Core::url() . "Money/invoice";
 		$actions = array(
 			"add" => $dir . "/add?id=" . $_GET["id"],
 			"edit" => $dir . "/edit",
@@ -133,12 +129,12 @@ class Money{
 					<td><?php echo  $invoice["type"] == "bill" ? "Сметка" : "фактура";?></td>
 					<td><?php echo $this->sum($invoice["sum"]);?></td>
 					<td><a href="" class="caseNumber"><?php echo $Caser->number;?></a></td>
-					<td><?php echo $this->Query->select($invoice["payer"], "id", "person")["name"];?></td></td>
+					<td><?php echo \system\Query::select($invoice["payer"], "id", "person")["name"];?></td></td>
 					<td><?php echo $this->sum($invoice["tax_base"]);?></td>
 					<td><?php echo $this->sum($invoice["vat"]);?></td>
 					<td><?php echo $invoice["bill"];?></td>
 					<td><?php echo $invoice["invoice"];?></td>
-					<td><button type="button" class="button" onclick="window.open('<?php echo $this->Core->url();?>Money/invoice/edit?id=<?php echo $invoice["id"];?>', '_self')">Редакция</button></td>
+					<td><button type="button" class="button" onclick="window.open('<?php echo \system\Core::url();?>Money/invoice/edit?id=<?php echo $invoice["id"];?>', '_self')">Редакция</button></td>
 				</tr>
 				<?php } ?>
 			</table>

@@ -5,12 +5,12 @@ $check_user = $PDO->query("SELECT * FROM " . $Setting->table . " WHERE id='" . $
 if($check_user->rowCount() != 1){ $check["#address"] = $Text->_("Error");}
 
 if(empty($check)){
-    require_once($Core->doc_root() . '/system/module/Setting/php/SettingAPP.php');
-    $SettingAPP = new \system\module\Setting\php\SettingAPP($User->id, array("fortable" => $User->table));
+    require_once(\system\Core::doc_root() . '/system/module/Setting/php/SettingAPP.php');
+    $SettingAPP = new \module\Setting\SettingAPP($User->id, array("fortable" => $User->table));
     $SettingAPP->remove($_GET["id"]);
     ?><script>history.go(-2)</script><?php
 } else {
-    $Form->validate($check);
+    \system\Form::validate($check);
 }
 
 ?>

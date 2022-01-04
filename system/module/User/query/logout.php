@@ -1,5 +1,5 @@
 <?php
 unset($_SESSION["id"]);
-unset($_SESSION["role"]);
-echo '<script>location.href=\'' . $Core->url() . '\'</script>';
+unset($_SESSION["group"]);
+echo '<script>location.href=\'' . \system\Core::url() . '\'</script>';
 ?>

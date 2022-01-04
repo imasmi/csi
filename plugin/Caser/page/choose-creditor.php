@@ -1,6 +1,6 @@
 <?php
 $Object = $Plugin->object();
-$dir = $Core->this_path(0,-1);
+$dir = \system\Core::this_path(0,-1);
 
 $actions = array(
     "choose" => $dir . "/index?creditor"

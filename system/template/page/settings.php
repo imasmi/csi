@@ -1,20 +1,17 @@
 <?php
-$File = new \system\module\File\php\File($_GET["id"]);
-$SettingAPP = new \system\module\Setting\php\SettingAPP($_GET["id"]);
-$FileAPP = new system\module\File\php\FileAPP($_GET["id"]);
+$File = new \module\File\File($_GET["id"]);
+$SettingAPP = new \module\Setting\SettingAPP($_GET["id"]);
+$FileAPP = new system\module\File\FileAPP($_GET["id"]);
 
-$select = $Query->select($_GET["id"], "id", $Page->table);
+$select = $select = $PDO->query("SELECT * FROM " . $Page->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 $abbrevs = $Language->items;
-
-#$select = $Query->select($_GET["id"]);
-#$Query->select($value, $selector="id", $table="module", $fields="*", $delimeter="=")
 ?>
 
 <div class="admin">
 <div class="title"><?php echo $select[$Language->_()];?> settings</div>
 <div class="error-message" id="error-message"></div>
-<form class="form" id="form" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>" method="post" enctype="multipart/form-data">
-<!--<form class="form" id="form" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>" method="post" onsubmit="return Core.post('<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>', Core.serialize('#form'), '#error-message')">-->
+<form class="form" id="form" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>" method="post" enctype="multipart/form-data">
+<!--<form class="form" id="form" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>" method="post" onsubmit="return Core.post('<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>', Core.serialize('#form'), '#error-message')">-->
     <input type="hidden" name="page_id" value="<?php echo $_GET["id"];?>"/>
     <table class="table">
         <tr>

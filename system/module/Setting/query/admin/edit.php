@@ -1,11 +1,11 @@
 <?php
 $check = array();
-$select = $Query->select($_GET["id"]);
+$select = $PDO->query("SELECT * FROM " . $Setting->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 
 #UPDATE USER DATA IF ALL EVERYTHING IS FINE
 if(empty($check)){
     
-    $update = $Query->update($_POST, $_GET["id"]);
+    $update = \system\Query::update($_POST, $_GET["id"]);
     
     if($update){
         ?><script>history.go(-1)</script><?php
@@ -13,6 +13,6 @@ if(empty($check)){
          echo $Text->_("Something went wrong");
     }
 } else {
-    $Form->validate($check);
+    \system\Form::validate($check);
 }
 ?>

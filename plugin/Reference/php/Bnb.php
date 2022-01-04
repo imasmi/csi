@@ -1,16 +1,7 @@
 <?php
-namespace plugin\Reference\php;
+namespace plugin\Reference;
 
-class Bnb{
-	public function __construct(){
-		global $PDO;
-		$this->PDO = $PDO;
-		global $Core;
-		$this->Core = $Core;
-		global $Query;
-		$this->Query = $Query;
-	}
-	
+class Bnb{	
 	public function pCode($person){
 		return ($person["type"] == "person") ? "100" : "200";
 	}
@@ -24,7 +15,7 @@ class Bnb{
 	}
 	
 	public function refLink(){
-		return $this->Core->url() . 'Reference/query/bnb';
+		return \system\Core::url() . 'Reference/query/bnb';
 	}
 	
 	public function fields($array){
@@ -168,7 +159,7 @@ class Bnb{
 	}
 	
 	public function caser($id){
-		$person = $this->Query->select($id, "EGN_EIK", "person", "id");
+		$person = \system\Query::select($id, "EGN_EIK", "person", "id");
 		foreach($this->PDO->query("SELECT c.number FROM caser_title t, caser c WHERE c.id=t.case_id AND t.debtor LIKE '%\"" . $person["id"] . "\"%'") as $case){
 			echo '<div>' . $case["number"] . '</div>';
 		}

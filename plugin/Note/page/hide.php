@@ -1,6 +1,5 @@
 <?php
-$select = $Query->select($_GET["id"], "id", "note");
-#$Query->select($value, $selector="id", $table="module", $fields="*", $delimeter="=")
+$select = $PDO->query("SELECT * FROM note WHERE id='" . $_GET["id"] . "'")->fetch();
 ?>
 
 <div class="admin">

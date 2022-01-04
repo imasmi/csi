@@ -1,15 +1,11 @@
 <?php
-namespace plugin\Import\php;
+namespace plugin\Import;
 
 class Import{
 	public function __construct(){
 		global $PDO;
 		$this->PDO = $PDO;
-		global $Core;
-		$this->Core = $Core;
-		global $Query;
-		$this->Query = $Query;
-		$this->qwdir = $this->Core->url() . "Import/query";
+		$this->qwdir = \system\Core::url() . "Import/query";
 		$this->fRow = ""; // this will be changed in the importTrap file
 	}
 
@@ -96,7 +92,7 @@ class Import{
 
 	public function button(){
 		?>
-		<form action="<?php echo $this->Core->url();?>Import/import-entry-point" enctype="multipart/form-data" method="post" id="importForm">
+		<form action="<?php echo \system\Core::url();?>Import/import-entry-point" enctype="multipart/form-data" method="post" id="importForm">
 			<input type="file" class="button file-button" name="import" onchange="document.getElementById('importForm').submit()"/>
 			<br/>
 			<select name="custom" class="space-20">
@@ -167,7 +163,7 @@ class Import{
 		$doc_type->execute(array($name));
 		if($doc_type->rowCount() > 0){
 			$docu = $doc_type->fetch();
-			$this->Query->update(array("type" => $type), $docu["id"], "id", "doc_types");
+			\system\Query::update(array("type" => $type), $docu["id"], "id", "doc_types");
 			$doc = $docu["id"];
 		} else {
 			$insertDoc = $this->PDO -> prepare("INSERT INTO doc_types (name,type) VALUES(:name, :type)");

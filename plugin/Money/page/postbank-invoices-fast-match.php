@@ -2,7 +2,7 @@
 $fast_match = json_decode($_POST["fast_match"], true);
 ?>
 
-<form method="post" action="<?php echo $Core->query_path();?>">
+<form method="post" action="<?php echo \system\Core::query_path();?>">
     <table class="admin">
         <tr>
             <th></th>
@@ -15,7 +15,7 @@ $fast_match = json_decode($_POST["fast_match"], true);
         </tr>
 
         <?php foreach($fast_match as $cnt => $payment) {
-            $case_number = $Query->select($payment["case_id"], "id", "caser", "number")["number"];
+            $case_number = $PDO->query("SELECT number FROM caser WHERE id='" . $payment["case_id"] . "'")->fetch()["number"];
             ?>
             <input type="hidden" name="<?php echo $cnt;?>_payment" value="<?php echo $payment["id"];?>"/>
             <tr id="row-<?php echo $cnt;?>">

@@ -1,7 +1,7 @@
 <?php 
-require_once $Core->doc_root() . '/composer/vendor/autoload.php';
+require_once \system\Core::doc_root() . '/composer/vendor/autoload.php';
 $Barcode = new \plugin\Document\php\Barcode();
-require_once($Core->doc_root() . '/system/module/File/php/FileAPP.php');
+require_once(\system\Core::doc_root() . '/system/module/File/php/FileAPP.php');
 $print_dir = $_POST["dir"] . "/print/";
 $FileAPP = new \system\module\File\php\FileAPP;
 $FileAPP->delete_dir($print_dir);
@@ -13,8 +13,10 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
     if(!is_dir($print_dir)){mkdir($print_dir);}
       
     //echo $_POST["file_" . $a] . " -> " . $_POST["barcode_" . $a] . '<br>';
-    $barcode = $Query->select($_POST["barcode_" . $a], "barcode", "document");
-    $case = $Query->select($barcode["case_id"], "id", "caser");
+    $barcode = $PDO->query("SELECT * FROM document WHERE barcode='" . $_POST["barcode_" . $a] . "'")->fetch();
+    $case = $PDO->query("SELECT * FROM caser WHERE id='" . $barcode["case_id"] . "'")->fetch();
+
+
     $content = file_get_contents($file);
     $mpdf = new \Mpdf\Mpdf();
     $mpdf->WriteHTML('<div style="position: fixed; top: -60px; right: -20px;">' . $Barcode->html_return($barcode) . '</div>' . $content);

@@ -1,9 +1,9 @@
 <?php
-$PageAPP = new \system\module\Page\php\PageAPP;
-$FileAPP = new system\module\File\php\FileAPP;
-$CodeAPP = new \system\module\Code\php\CodeAPP;
+$PageAPP = new \module\Page\PageAPP;
+$FileAPP = new system\module\File\FileAPP;
+$CodeAPP = new \module\Code\CodeAPP;
 $check = array();
-$select = $Query->select($_GET["id"]);
+$select = $PDO->query("SELECT * FROM " . $Page->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 if($CodeAPP->special_characters_check($_POST["filename"]) === true){$check["#filename"] = "Special characters are not allowed.";}
 
 foreach($Language->items as $value){
@@ -15,10 +15,10 @@ foreach($Language->items as $value){
 #UPDATE USER DATA IF ALL EVERYTHING IS FINE
 if(empty($check)){
     $_POST["filename"] = $PageAPP->url_format($_POST["filename"]);
-    if($select["menu"] != $_POST["menu"]){ $_POST["row"] = $Query->new_id($Page->table, "row", " WHERE menu='" . $_POST["menu"] . "'");}
+    if($select["menu"] != $_POST["menu"]){ $_POST["row"] = \system\Query::new_id($Page->table, "row", " WHERE menu='" . $_POST["menu"] . "'");}
     
     if($_POST["homepage"] == "on"){
-        $PDO->query("UPDATE " . $Query->table() . " SET `type`='' WHERE `type`='homepage'");
+        $PDO->query("UPDATE " . \system\Query::table() . " SET `type`='' WHERE `type`='homepage'");
         unset($_POST["homepage"]);
         $_POST["type"] = "homepage";
     }
@@ -27,7 +27,7 @@ if(empty($check)){
         $_POST[$value] = (strpos($_POST[$value], "http") !== false) ? $_POST[$value] : $PageAPP->url_format($_POST[$value]);
     }
     
-    $update = $Query->update($_POST, $_GET["id"]);
+    $update = \system\Query::update($_POST, $_GET["id"]);
     
     if($update){
         #ADD FILE IF NOT EXISTS
@@ -55,7 +55,7 @@ if(empty($check)){
         echo $Text->_("Something went wrong");
     }
 } else {
-    $Form->validate($check);
+    \system\Form::validate($check);
 }
 exit;
 ?>

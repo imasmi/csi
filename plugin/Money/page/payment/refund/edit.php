@@ -1,12 +1,12 @@
 <?php 
-$select = $Query->select($_GET["id"], "id", $Setting->table);
-$payment = $Query->select($select["page_id"], "id", "payment");
+$select = $PDO->query("SELECT * FROM " . $Setting->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
+$payment = $PDO->query("SELECT * FROM payment WHERE id='" . $select["page_id"] . "'")->fetch();
 ?>
 
 <div class="admin">
 <div class="title">Плащане от <?php echo dates::_($payment["date"]);?> за <?php echo $payment["amount"];?> лева</div>
 <div class="error-message" id="error-message"></div>
-<form class="form" id="form" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>', S.serialize('#form'), '#error-message')">
+<form class="form" id="form" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>', S.serialize('#form'), '#error-message')">
     <table class="table">
         <tr>
             <td>Информация</td>

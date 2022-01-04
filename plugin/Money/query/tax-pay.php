@@ -1,7 +1,7 @@
 <div class="csi view">
 <?php
 $doc = $PDO -> query("SELECT * FROM doc_types t, document d  WHERE d.name=t.id AND d.type LIKE 'outgoing' AND d.number='" . $_POST["open"] . "' ORDER by d.date DESC")->fetch();
-$case = $Query->select($doc["case_id"], "id", "caser");
+$case = $PDO->query("SELECT * FROM caser WHERE id='" . $doc["case_id"] . "'")->fetch();
 if(isset($_POST["debtor"]) && $_POST["debtor"] != '0'){
 	$person = $PDO -> query("SELECT * FROM person WHERE id=" . $_POST["debtor"])->fetch();
 }

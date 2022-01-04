@@ -1,5 +1,5 @@
 <?php
-$ini = parse_ini_file($Core->doc_root() . "/web/ini/language.ini", true);
+$ini = parse_ini_file(\system\Core::doc_root() . "/web/ini/language.ini", true);
 
 #CHECK IF THERE IS ONE MORE THAN ONE LANGUAGE
 if(count($ini) < 2){ ?>
@@ -30,7 +30,7 @@ if(count($ini) < 2){ ?>
         
     <tr>
         <td colspan="2" class="text-center">
-            <button class="button" onclick="window.open('<?php echo $Core->query_path() . '?lang=' . $_GET["lang"];?>', '_self')"><?php echo $Text->item("Yes");?></button>
+            <button class="button" onclick="window.open('<?php echo \system\Core::query_path() . '?lang=' . $_GET["lang"];?>', '_self')"><?php echo $Text->item("Yes");?></button>
             <button type="button" class="button" onclick="history.go(-1)"><?php echo $Text->item("Back");?></button>
         </td>
     </tr>

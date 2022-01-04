@@ -1,3 +1,11 @@
+<?php
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
+include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
+include_once(\system\Core::doc_root() . '/plugin/Money/php/Money.php');
+$Money = new \plugin\Money\Money;
+include_once(\system\Core::doc_root() . '/web/php/dates.php');
+?>
+
 <div class="csi view">
 <table class="listTable" border="1px">
 	<tr>
@@ -12,7 +20,6 @@
 	<tr>
 
 <?php 
-$Money = new \plugin\Money\php\Money;
 $cnt = 1;
 $payed = 0;
 $unpartitioned = 0;
@@ -21,22 +28,22 @@ $pdiSum = 0;
 $napSum = 0;
 $otherSum = 0;
 foreach($PDO->query("SELECT * FROM payment WHERE partitioned < allocate AND unpartitioned >= 0 AND user=2 ORDER by date ASC") as $payment){
-	$case = $Query->select($payment["case"], "id", "caser");
-	$Caser = new \plugin\Caser\php\Caser($payment["case_id"]);
+	$case = $PDO->query("SELECT * FROM caser WHERE id='" . $payment["case_id"] . "'")->fetch();
+	$Caser = new \plugin\Caser\Caser($payment["case_id"]);
 ?>
 	<tr>
 		<td><?php echo $cnt;?></td>
 		<td><?php echo $payment["id"];?></td>
-		<td><?php echo dates::_($payment["date"]);?></td>
+		<td><?php echo \web\dates::_($payment["date"]);?></td>
 		<td><?php $Caser->open();?></td>
-		<td><?php echo $Query->select($payment["person"], "id", "person", "name")["name"];?></td>
+		<td><?php echo $PDO->query("SELECT name FROM person WHERE id='" . $payment["person"] . "'")->fetch()["name"];?></td>
 		<td><?php echo $Money->sum($payment["amount"]);?></td>
 		<td><?php echo $Money->sum($payment["unpartitioned"]);?></td>
 		<td id="notes<?php echo $Caser->id;?>">
 			<?php 
 			if(isset($Caser->id)){
 				ob_start();
-				$Note->_(" WHERE case_id=" . $Caser->id . " AND payment=1 AND hide is NULL", $Caser->id, "payment", "#notes" . $Caser->id);
+				\plugin\Note\Note::_(" WHERE case_id=" . $Caser->id . " AND payment=1 AND hide is NULL", $Caser->id, "payment", "#notes" . $Caser->id);
 				$note = ob_get_contents();
 				ob_end_clean();
 				echo $note;

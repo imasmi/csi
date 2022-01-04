@@ -1,5 +1,5 @@
 <?php
-$dir = $Core->this_path(0,-1);
+$dir = \system\Core::this_path(0,-1);
 
 $array = array(
 	"Информация" => "bg",

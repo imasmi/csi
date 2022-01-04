@@ -2,7 +2,7 @@
 	$type = count(explode(',', $rows[1])) > 15 ? "case" : "sum";
 ?>
 <div class="admin">
-	<form  method="post" action="<?php echo $Core->this_path(0, -1);?>/query/report">
+	<form  method="post" action="<?php echo \system\Core::this_path(0, -1);?>/query/report">
 		<input type="hidden" name="rows" value='<?php echo serialize($rows);?>'/>
 		<div class="title">ОТЧЕТ ЗА ДЕЙНОСТТА НА ЧСИ</div>
 		<table class="admin">

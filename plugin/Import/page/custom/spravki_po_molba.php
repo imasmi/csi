@@ -1,7 +1,7 @@
 <?php
 $caser = array();
 for($a = 1; $a < count($csv); $a++){
-	$caser[] =  $Query->select($csv[$a][2], "number", "caser", "id")["id"];
+	$caser[] =  $PDO->query("SELECT id FROM caser WHERE number='" . $csv[$a][2] . "'")->fetch()["id"];
 }
 
 # ФУНКЦИЯ ЗА СТАРТОВИ СПРАВКИ ПО ДЕЛАТА

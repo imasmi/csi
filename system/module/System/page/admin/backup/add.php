@@ -1,7 +1,7 @@
 <div class="admin">
 <div class="title">Add backup</div>
 <div class="error-message" id="error-message"></div>
-<form class="form" id="form" action="<?php echo $Core->query_path();?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path();?>', S.serialize('#form'), '#error-message');">
+<form class="form" id="form" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#form'), '#error-message');">
     <table class="table">
         <tr>
             <td>Name</td>
@@ -12,7 +12,7 @@
             <td>Type</td>
             <td>
                 <?php $types = array("full", "plugin", "web");?>
-                <select name="type" id="type" required onchange="if(this.value == 'plugin'){S('#plugin').style.display = 'table-row';} else {S.hide('#plugin');}; if(S('#database').checked === true && (this.value == 'web' || this.value == 'plugin')){S.post('<?php echo $Core->query_path(0, -1);?>/tables_select', {'type' : S('#type').value, 'plugin' : S('input[name=\'plugin\']:checked').value}, '#tables');} else {S('#tables').innerHTML = '';}">
+                <select name="type" id="type" required onchange="if(this.value == 'plugin'){S('#plugin').style.display = 'table-row';} else {S.hide('#plugin');}; if(S('#database').checked === true && (this.value == 'web' || this.value == 'plugin')){S.post('<?php echo \system\Core::query_path(0, -1);?>/tables_select', {'type' : S('#type').value, 'plugin' : S('input[name=\'plugin\']:checked').value}, '#tables');} else {S('#tables').innerHTML = '';}">
                     <option value="">SELECT</option>
                     <?php foreach($types as $type){?>
                         <option value="<?php echo $type;?>"<?php if($_GET["type"] == $type){ echo " selected";}?>><?php echo ucfirst($type);?></option>
@@ -30,7 +30,7 @@
                 ++$cnt;
                 ?>
                 <div>
-                    <input type="radio" name="plugin" id="plugin" value="<?php echo $plugin;?>" <?php if($cnt == 1){echo 'checked';}?> onchange="if(S('#database').checked === true){S.post('<?php echo $Core->query_path(0, -1);?>/tables_select', {'type' : S('#type').value, 'plugin' : this.value}, '#tables');} else {S('#tables').innerHTML = '';}"/>
+                    <input type="radio" name="plugin" id="plugin" value="<?php echo $plugin;?>" <?php if($cnt == 1){echo 'checked';}?> onchange="if(S('#database').checked === true){S.post('<?php echo \system\Core::query_path(0, -1);?>/tables_select', {'type' : S('#type').value, 'plugin' : this.value}, '#tables');} else {S('#tables').innerHTML = '';}"/>
                     <span><?php echo $plugin;?></span>
                 </div>
                 <?php } ?>
@@ -45,7 +45,7 @@
         <tr>
             <td>Database</td>
             <td>
-                <input type="checkbox" name="database" id="database" onchange="if(this.checked === true){S.post('<?php echo $Core->query_path(0, -1);?>/tables_select', {'type' : S('#type').value, 'plugin' : S('input[name=\'plugin\']:checked').value}, '#tables');} else {S('#tables').innerHTML = '';}"/>
+                <input type="checkbox" name="database" id="database" onchange="if(this.checked === true){S.post('<?php echo \system\Core::query_path(0, -1);?>/tables_select', {'type' : S('#type').value, 'plugin' : S('input[name=\'plugin\']:checked').value}, '#tables');} else {S('#tables').innerHTML = '';}"/>
                 <div id="tables"></div>
             </td>
         </tr>

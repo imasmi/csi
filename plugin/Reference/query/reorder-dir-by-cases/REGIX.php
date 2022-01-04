@@ -2,7 +2,7 @@
 $list = $_POST["dir"];
 $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 ?>
-<form class="form" id="form" accept-charset="UTF-8" method="post" action="<?php echo $Core->this_path(0,-1);?>/rename-NAP-191" target="_blank">
+<form class="form" id="form" accept-charset="UTF-8" method="post" action="<?php echo \system\Core::this_path(0,-1);?>/rename-NAP-191" target="_blank">
 <input type="hidden" name="dir" value="<?php echo $list;?>"/>
 <table class="listTable napReorder">
 	<tr>
@@ -34,7 +34,7 @@ $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 			$egn = $matches[2];
 		}
 
-		$person = $Query->select(trim($egn), "EGN_EIK", "person", "id");
+		$person = $PDO->query("SELECT id FROM person WHERE EGN_EIK='" . trim($egn) . "'")->fetch();
 		$case = $PDO->query('SELECT case_id FROM caser_title WHERE debtor LIKE \'%"' . $person["id"] . '"%\' ORDER by case_id DESC')->fetch();
 	?>
 		<td><?php echo $cnt;?></td>

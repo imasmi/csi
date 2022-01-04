@@ -1,6 +1,5 @@
 <?php
 $check = array();
-#$select = $Query->select($_GET["id"], "id", "note");
 
 #CHECK IF THERE IS NOTE
 if($_POST["note"] === ""){ $check["#note"] = "Въведете текст за бележка";}
@@ -24,8 +23,8 @@ if(empty($check) == true){
 		$array[$key] = isset($_POST[$key]) ? 1 : 0;
 	}
     
-    $update = $Query->update($array, $_GET["id"], "id", "note");
-    #$Query->update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
+    $update = \system\Query::update($array, $_GET["id"], "id", "note");
+    #\system\Query::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
     
     if($update){
         ?><script>history.go(-1)</script><?php

@@ -1,4 +1,4 @@
 <?php
-$Query->update($_POST, $_GET["id"], "id","bank");
+\system\Query::update($_POST, $_GET["id"], "id","bank");
 ?>
 <script>history.go(-2)</script>

@@ -2,7 +2,7 @@
 if($_POST["barcode"] == ""){
 	return false;
 } else {
-	$document = $Query->select($_POST["barcode"], "barcode", "document");
+	$document = $PDO->query("SELECT * FROM document WHERE barcode='" . $_POST["barcode"] . "'")->fetch();
 	$barcode = new \plugin\Document\php\Barcode;
 	$barcode->_($document, $_POST["id"]);
 }

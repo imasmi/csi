@@ -1,4 +1,5 @@
 <?php
-$CodeAPP = new \system\module\Code\php\CodeAPP;
-$CodeAPP->edit_css($_GET["selector"], $_POST);
+require_once(\system\Core::doc_root() . "/system/module/Code/php/CodeAPP.php");
+$Code = new \module\Code\CodeAPP;
+$Code->edit_css($_GET["selector"], $_POST);
 ?>

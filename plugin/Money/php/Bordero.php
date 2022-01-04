@@ -1,12 +1,10 @@
 <?php
-namespace plugin\Money\php;
+namespace plugin\Money;
 
 class bordero{
 	public function __construct($xml){
 		global $PDO;
 		$this->PDO = $PDO;
-		global $Core;
-		$this->Core = $Core;
 		$this->xml = $xml;
 		$payTypes = array();
 		$payTypes["transfer"] = array(
@@ -90,8 +88,8 @@ class bordero{
 	}
 	
 	private function logo($payerAccount){
-		//return ($payerAccount == "BG81BPBI79301033376203") ? "" : '<img src="' . $this->Core->url() . 'web/file/postbank_logo.png" alt="" style="height: 95px;"/>';
-		return ($payerAccount == "BG81BPBI79301033376203") ? "" : '<img src="' . $this->Core->url() . 'web/file/postbank_new_logo.png" alt="" style="height: 95px;"/>';
+		//return ($payerAccount == "BG81BPBI79301033376203") ? "" : '<img src="' . \system\Core::url() . 'web/file/postbank_logo.png" alt="" style="height: 95px;"/>';
+		return ($payerAccount == "BG81BPBI79301033376203") ? "" : '<img src="' . \system\Core::url() . 'web/file/postbank_new_logo.png" alt="" style="height: 95px;"/>';
 	}
 	
 	public function transfer($pay){ 

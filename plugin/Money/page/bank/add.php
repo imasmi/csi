@@ -1,5 +1,5 @@
 <?php 
-	$select = $Query->select($_GET["person"], "id", "person");
+	$select = $PDO->query("SELECT * FROM person WHERE id='" . $_GET["person"] . "'")->fetch();
 	$units = array();
 	foreach($PDO->query("SELECT * FROM bank_units ORDER by id ASC") as $unit){
 		$units[$unit["id"]] = $unit["name"];
@@ -8,7 +8,7 @@
 <div class="admin">
 <div class="title">Добавяне на банова сметка: <?php echo $select["name"];?></div>
 <div class="errorMessage" id="errorMessage"></div>
-<form class="form" id="form" action="<?php echo $Core->query_path();?>" method="post">
+<form class="form" id="form" action="<?php echo \system\Core::query_path();?>" method="post">
     <input type="hidden" name="person_id" value="<?php echo $_GET["person"];?>"/>
 	<table class="table">
         <tr>

@@ -30,7 +30,7 @@ foreach($array as $row => $values){
 		$array = array(
 			"value" => serialize($values)
 		);
-		$Query->update($array,$report["id"], "id", "report");
+		\system\Query::update($array,$report["id"], "id", "report");
 	} else {
 		$array = array(
 			"year" => $year,
@@ -40,8 +40,8 @@ foreach($array as $row => $values){
 			"value" => serialize($values)
 		);
 
-		$Query->insert($array,"report");
+		\system\Query::insert($array,"report");
 	}
 }
 ?>
-<script>window.open('<?php echo $Core->url() . 'Reference/report/' . $_POST["type"] . '?year=' . $year . '&period=' . $period;?>', '_self');</script>
+<script>window.open('<?php echo \system\Core::url() . 'Reference/report/' . $_POST["type"] . '?year=' . $year . '&period=' . $period;?>', '_self');</script>

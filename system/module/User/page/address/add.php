@@ -6,7 +6,7 @@ $User->control();
 <div class="admin">
 <div class="title"><?php echo $Text->_("Add address");?></div>
 <div class="error-message" id="error-message"></div>
-<form class="form" id="edit–profile" action="<?php echo $Core->query_path();?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path();?>', S.serialize('#edit–profile'), '#error-message')">
+<form class="form" id="edit–profile" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#edit–profile'), '#error-message')">
     <table class="table">
         
         <tr>

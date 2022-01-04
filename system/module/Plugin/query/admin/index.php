@@ -1,8 +1,13 @@
 <?php
+require_once(\system\Core::doc_root() . "/system/php/Ini.php");
+$Ini = new \system\Ini;
+
 $plugins_array = array();
-foreach($Plugin->items as $plugin => $value){
-    $plugins_array[$plugin] = $_POST[$plugin] == 0 ? 0 : ($_POST[$plugin . "_show"] == 1 ? 2 : 1);
+foreach($_POST as $plugin => $value){
+    if(strpos($plugin, "_admin-panel") === false && strpos($plugin, "_theme") === false){
+        $plugins_array[$plugin] = ["active" => $_POST[$plugin], "admin-panel" => $_POST[$plugin . "_admin-panel"], "theme" => $_POST[$plugin . "_theme"]];
+    }
 }
-$Ini->save($Core->doc_root() . "/web/ini/plugin.ini", $plugins_array);
+\system\Ini::save(\system\Core::doc_root() . "/web/ini/plugin.ini", $plugins_array);
 ?>
 <script>history.back();</script>

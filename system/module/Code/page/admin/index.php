@@ -1,7 +1,7 @@
 <div class="admin">
 <div class="title">CODE</div>
 <div class="attention">This module is for finding and editing code strings. Use this module only if you know what you are doing. Backup your project before using this function!</div>
-<form class="form" id="form" action="<?php echo $Core->query_path();?>" method="post" target="_blank">
+<form class="form" id="form" action="<?php echo \system\Core::query_path();?>" method="post" target="_blank">
     <table class="table center">
         <tr>
             <td>Code</td>
@@ -15,7 +15,7 @@
         
         <tr>
             <td>Path</td>
-            <td><?php echo $Core->doc_root();?>/ <input type="text" name="path" id="path"/></td>
+            <td><?php echo \system\Core::doc_root();?>/ <input type="text" name="path" id="path"/></td>
         </tr>
         
         <tr>

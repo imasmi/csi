@@ -1,10 +1,10 @@
 <?php
-$select = $Query->select($_GET["id"], "id", $Page->table);
+$select = $PDO->query("SELECT * FROM " . $Page->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 ?>
 
 <div class="admin">
 <div>Are you sure you want to delete this page?</div>
-    <form method="post" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>">
+    <form method="post" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>">
         <table class="table">
             
             <tr>

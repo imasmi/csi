@@ -1,6 +1,6 @@
 <div class="admin">
 <div class="error-message" id="error-message"></div>
-<form class="form" id="forgoten-password" action="<?php echo $Core->query_path();?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path();?>', S.serialize('#forgoten-password'), '#error-message'); return false;">
+<form class="form" id="forgoten-password" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#forgoten-password'), '#error-message'); return false;">
     <table class="table">
         <tr>
             <th><?php echo $Text->_("Email");?></th>

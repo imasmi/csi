@@ -1,8 +1,8 @@
 <?php
 namespace plugin\Plugin_file\php;
-use \system\module\Text\php\Text as Text;
-use \system\module\File\php\File as File;
-use \system\module\Setting\php\Setting as Setting;
+use \module\Text\Text as Text;
+use \module\File\File as File;
+use \module\Setting\Setting as Setting;
 
 class Plugin_file{
     public function __construct($id=false){
@@ -14,16 +14,14 @@ class Plugin_file{
         $this->Query = $Query;
         global $Page;
         $this->Page = $Page;
-        global $User;
-        $this->User = $User;
         global $Setting;
         $this->Setting = $Setting;
 		global $Text;
 		$this->Text = $Text;
 		global $File;
 		$this->File = $File;
-		if($User != "admin"){require_once($Core->doc_root() . "/system/module/Listing/php/ListingAPP.php");}
-        $this->ListingAPP = new \system\module\Listing\php\ListingAPP;
+		require_once(\system\Core::doc_root() . "/system/module/Listing/php/ListingAPP.php");
+        $this->ListingAPP = new \module\Listing\ListingAPP;
         $this->table = $File->table;
         $this->tag = "plugin_file"; //Database tag for file table
         $this->plugin = "Plugin_file"; //Full name of the plugin

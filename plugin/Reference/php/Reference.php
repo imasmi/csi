@@ -1,29 +1,26 @@
 <?php
-namespace plugin\Reference\php;
-use \system\module\Setting\php\Setting as Setting;
+namespace plugin\Reference;
+use \module\Setting\Setting as Setting;
 
 class Reference{
     public function __construct($id=false){
-        global $PDO;
-        $this->PDO = $PDO;
-        global $Core;
-        $this->Core = $Core;
-        global $Query;
-        $this->Query = $Query;
-        global $Page;
-        $this->Page = $Page;
-        global $User;
-        $this->User = $User;
-        global $Setting;
-        $this->Setting = $Setting;
+	global $PDO;
+	$this->PDO = $PDO;
+	global $Page;
+	$this->Page = $Page;
+	global $User;
+	$this->User = $User;
+	global $Setting;
+	$this->Setting = $Setting;
 	global $Caser;
 	$this->Caser = $Caser;
 	global $Note;
 	$this->Note = $Note;
+	include_once(\system\Core::doc_root() . '/plugin/Reference/php/Bnb.php');
 	$this->Bnb = new Bnb;
-        $this->tag = "reference"; //Database tag for page table
-        $this->plugin = "Reference"; //Full name of the plugin
-        $this->link_id = 0;
+	$this->tag = "reference"; //Database tag for page table
+	$this->plugin = "Reference"; //Full name of the plugin
+	$this->link_id = 0;
 	$this->id = $id;
     }
 
@@ -53,10 +50,10 @@ class Reference{
 			<?php
 				$a = 1;
 				foreach($caser as $case_id){
-				$case = $this->Query->select($case_id, "id", "caser");
+				$case = \system\Query::select($case_id, "id", "caser");
 				$Caser = new \plugin\Caser\php\Caser($case["id"]);
 				foreach ($Caser->debtor as $person){
-				$pers = $this->Query->select($person, "id", "person");
+				$pers = \system\Query::select($person, "id", "person");
 
 				if(strpos($pers["name"], "ПОЧИНАЛ") === false){
 					$rowNumb = $a . "_" . rand();
@@ -73,9 +70,9 @@ class Reference{
 					<td>
             <?php echo $pers["name"];?>
             <br>
-            <a href="<?php echo $this->Core->url();?>Reference/noi?case=<?php echo $case["id"];?>&person=<?php echo $pers["id"];?>&type=0" class="getNap" target="_blank">Трудови договори</a>
+            <a href="<?php echo \system\Core::url();?>Reference/noi?case=<?php echo $case["id"];?>&person=<?php echo $pers["id"];?>&type=0" class="getNap" target="_blank">Трудови договори</a>
           </td>
-					<td <?php if($title_date == "0000-00-00"){ echo 'class="color-2-bg"';}?>><input type="text" onchange="csi.changeDate(this);S.post('<?php echo $this->Core->url();?>Reference/query/title_date', {title: <?php echo $Caser->title_main["id"];?>, title_date: this.value})" value="<?php echo $title_date;?>"/></td>
+					<td <?php if($title_date == "0000-00-00"){ echo 'class="color-2-bg"';}?>><input type="text" onchange="csi.changeDate(this);S.post('<?php echo \system\Core::url();?>Reference/query/title_date', {title: <?php echo $Caser->title_main["id"];?>, title_date: this.value})" value="<?php echo $title_date;?>"/></td>
 					<td id="notes<?php echo $case["id"];?>"><?php $this->Note->_(" WHERE case_id=" . $case["id"] . " AND spravki=1 AND hide is NULL", $case["id"], "spravki", "#notes" . $case["id"]);?></td>
 				</tr>
 			<?php $a++; }}}?>
@@ -83,7 +80,7 @@ class Reference{
 			</form>
 		<div id="titul"></div>
 		<?php if($_GET["url"] == "spravki/startovi"){?>
-		<form method="post" action="<?php echo $this->Core->url();?>query/spravki/remove_from_startovi" onsubmit="return confirm('Искате ли да премахнете тези дела от стартови справки?') == true ? true : false;">
+		<form method="post" action="<?php echo \system\Core::url();?>query/spravki/remove_from_startovi" onsubmit="return confirm('Искате ли да премахнете тези дела от стартови справки?') == true ? true : false;">
 			<?php
 		}
 			$this->massout($caser);
@@ -98,7 +95,7 @@ class Reference{
 	public function massOut($caser){
 		$out = array();
 		foreach($caser as $case_id){
-			$case = $this->Query->select($case_id, "id", "caser");
+			$case = \system\Query::select($case_id, "id", "caser");
 			?>
 			<?php if($_GET["url"] == "spravki/startovi"){?><input name="<?php echo $case_id;?>" id="startovi_<?php echo $case_id;?>" type="hidden" value="1"/><?php } ?>
 			<?php
@@ -134,7 +131,7 @@ class Reference{
 				<option value="191" <?php if($type == 191){ echo 'selected';}?>>ДОПК 191</option>
 				<option value="74" <?php if($type == 74){ echo 'selected';}?>>Член 74</option>
 			</select>
-			<a href="" onclick="event.preventDefault(); window.open('<?php echo $this->Core->url();?>Reference/nap?case=<?php echo $case_id;?>&person=<?php echo $person_id;?>&type=' + document.getElementById('<?php echo $typeN;?>').value, 'blank'); " class="getNap bnbCheckbox">ИЗВАДИ НАП</a>
+			<a href="" onclick="event.preventDefault(); window.open('<?php echo \system\Core::url();?>Reference/nap?case=<?php echo $case_id;?>&person=<?php echo $person_id;?>&type=' + document.getElementById('<?php echo $typeN;?>').value, 'blank'); " class="getNap bnbCheckbox">ИЗВАДИ НАП</a>
       <?php
   }
 }

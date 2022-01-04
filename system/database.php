@@ -1,11 +1,11 @@
-<?php 
+<?php
 session_start();
 
 /* DATABASE CONFIGURATION */
-if(file_exists($Core->doc_root() . "/web/ini/database.ini")){
-    $database = parse_ini_file($Core->doc_root() . "/web/ini/database.ini");
+if(file_exists(\system\Core::doc_root() . "/web/ini/database.ini")){
+    $database = parse_ini_file(\system\Core::doc_root() . "/web/ini/database.ini");
 } else {
-    require_once($Core->doc_root() . "/system/module/System/install/index.php");
+    require_once(\system\Core::doc_root() . "/system/module/System/install/index.php");
     exit;
 }
 /* DATABASE CONFIGURATION */

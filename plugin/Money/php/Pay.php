@@ -1,15 +1,9 @@
 <?php
-namespace plugin\Money\php;
+namespace plugin\Money;
 
 class pay{
 	
 	public function __construct(){
-		global $Core;
-		$this->Core = $Core;
-		global $PDO;
-		$this->PDO = $PDO;
-		global $Form;
-		$this->Form = $Form;
 		global $Page;
 		$this->Page = $Page;
 	}

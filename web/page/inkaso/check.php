@@ -1,5 +1,5 @@
 <?php 
-$list = file_get_contents($Core->doc_root() . "/output.txt");
+$list = file_get_contents(\system\Core::doc_root() . "/output.txt");
 $rows = explode("\n", $list);
 $array = array();
 foreach($rows as  $row){

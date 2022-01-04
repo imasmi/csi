@@ -1,17 +1,21 @@
 <?php
-$PageAPP = new \system\module\Page\php\PageAPP;
-$CodeAPP = new \system\module\Code\php\CodeAPP;
+require_once(\system\Core::doc_root() . "/system/module/Page/php/PageAPP.php");
+$PageAPP = new \module\Page\PageAPP;
+require_once(\system\Core::doc_root() . "/system/module/Code/php/CodeAPP.php");
+$CodeAPP = new \module\Code\CodeAPP;
 $check = array();
 $Object = $Plugin->object();
 $plugin = isset($Object->plugin) ? $Object->plugin : NULL;
 
 #CHECK IF FILE ALREADY EXISTS IN THIS FOLDER
 if(isset($_POST["filename"]) && $_POST["filename"] != ""){
-    $check_file = $PDO->query("SELECT * FROM " . $Query->table() . " WHERE link_id='" . $_POST["link_id"]. "' AND filename='" . $_POST["filename"] . "'");
+    $check_file = $PDO->query("SELECT * FROM " . \system\Query::table() . " WHERE link_id='" . $_POST["link_id"]. "' AND filename='" . $_POST["filename"] . "'");
     if($check_file->rowCount() > 0){ $check["#filename"] = "There is a file with the same nema already.";}
 }
 
-if($CodeAPP->special_characters_check($_POST["filename"]) === true){$check["#filename"] = "Special characters are not allowed.";}
+if(isset($_POST["filename"])){
+    if($CodeAPP->special_characters_check($_POST["filename"]) === true){$check["#filename"] = "Special characters are not allowed.";}
+}
 
 foreach($Language->items as $value){
     if($CodeAPP->special_characters_check($_POST[$value]) === true){
@@ -26,7 +30,7 @@ $array = array(
         "link_id" => isset($_POST["link_id"]) ? $_POST["link_id"] : $Object->link_id,
         "user_id" => $User->id,
         "plugin" => isset($Object->plugin) ? $Object->plugin : NULL,
-        "row" => $Query->new_id($Page->table, "row", " WHERE link_id='" . $_POST["link_id"] . "'"),
+        "row" => \system\Query::new_id($Page->table, "row", " WHERE link_id='" . $_POST["link_id"] . "'"),
         "menu" => isset($_POST["menu"]) ? $_POST["menu"] : NULL,
         "tag" => $Object->tag,
         "type" => isset($_POST["type"]) ? $_POST["type"] : NULL,
@@ -37,7 +41,7 @@ foreach($Language->items as $key=>$value){
     $array[$value] = (strpos($_POST[$value], "http") !== false) ? $_POST[$value] : $PageAPP->url_format($_POST[$value]);
 }
 
-$new_page = $Query->insert($array, $Object->table);
+$new_page = \system\Query::insert($array, $Object->table);
 
 if($new_page){
     $id = $PDO->lastInsertId();
@@ -47,15 +51,17 @@ if($new_page){
         $posts["Menu_" . $value] = $_POST["Menu_" . $value]; 
         $posts["Description_" . $value] = $_POST["Description_" . $value]; 
     }
-    $FileAPP = new system\module\File\php\FileAPP($id, array("plugin" => $plugin));
-    $SettingAPP = new \system\module\Setting\php\SettingAPP($id, array("plugin" => $plugin));
+    require_once(\system\Core::doc_root() . "/system/module/File/php/FileAPP.php");
+    $FileAPP = new \module\File\FileAPP($id, array("plugin" => $plugin));
+    require_once(\system\Core::doc_root() . "/system/module/Setting/php/SettingAPP.php");
+    $SettingAPP = new \module\Setting\SettingAPP($id, array("plugin" => $plugin));
     $SettingAPP->save($posts);
     $FileAPP->upload(array("page_id" => $id));
     
     /*
     // Add Title and Menu settings directly with the same content with the language url
     $settings_add = array($id, array("plugin" => $plugin));
-    $SettingAPP = new \system\module\Setting\php\SettingAPP($id);
+    $SettingAPP = new \module\Setting\SettingAPP($id);
     foreach($Language->items as $lang=>$abbrev){
         $settings_add["Title_" . $abbrev] = $_POST[$abbrev];
         $settings_add["Menu_" . $abbrev] = $_POST[$abbrev];
@@ -71,7 +77,7 @@ if($new_page){
     foreach($Language->items as $lang=>$abbrev){
         $text_add[$abbrev] = $_POST[$abbrev];
     }
-    $Query->insert($text_add, $Text->table);
+    \system\Query::insert($text_add, $Text->table);
     ?>
     <script>window.open('<?php echo $Page->url($id);?>', '_self');</script>
     */
@@ -83,7 +89,9 @@ if($new_page){
 }
 
 } else {
-    $Form->validate($check);    
+	require_once(\system\Core::doc_root() . "/system/php/Form.php");
+	$Form = new \system\Form;
+    \system\Form::validate($check);    
 }
 
 exit;

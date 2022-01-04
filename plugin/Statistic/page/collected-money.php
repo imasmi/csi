@@ -13,7 +13,7 @@ $months_end = floor((strtotime(date('Y-m-01')) - strtotime($_GET["end"])) / (360
 $creditors = [];
 foreach($PDO->query("SELECT creditor, case_id FROM caser_title") as $caser_title){
     $creditor = json_decode($caser_title["creditor"], true);
-    $status = $Query->select($caser_title["case_id"], "id", "caser", "status")["status"];
+    $status = $PDO->query("SELECT status FROM caser WHERE id='" . $caser_title["case_id"] . "'")->fetch()["status"];
     if(($status === "ВИСЯЩО" || $status === "ВЪЗОБНОВЕНО") && isset($creditor[0])){
         $creditors[$creditor[0]] = isset($creditors[$creditor[0]]) ? $creditors[$creditor[0]] + 1 : 1;
     }
@@ -59,7 +59,7 @@ foreach($creditors as $creditor => $cases_count){
         foreach($creditors as $creditor => $cases_count){
             $creditor_sum = 0;
             $creditor_tax = 0;
-            $name = $Query->select($creditor, "id", "person", "name")["name"];
+            $name = $PDO->query("SELECT name FROM person WHERE id='" . $creditor . "'")->fetch()["name"];
         ?>
             <tr>
                 <td rowspan="2"><?php echo $cnt++;?></td>

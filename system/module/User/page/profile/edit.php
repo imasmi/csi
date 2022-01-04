@@ -3,12 +3,12 @@
 $User->control();
 
 #GET USER PROFILE DATA
-$profile = $Query->select($User->_("id"));
+$profile = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $User->_("id") . "'")->fetch();
 ?>
 
 <div class="admin">
 <div class="error-message" id="error-message"></div>
-<form class="form" id="edit-profile" action="<?php echo $Core->query_path();?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path();?>', S.serialize('#edit-profile'), '#error-message')">
+<form class="form" id="edit-profile" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#edit-profile'), '#error-message')">
     <table class="table">
         <tr>
             <td><?php echo $Text->_("Username");?></td>

@@ -1,23 +1,18 @@
 <?php
-namespace system\php;
+namespace system;
 
 class Form{
-    public function __construct(){
-        global $Core;
-        $this->Core = $Core;
-    }
-    
-    public function validate($check){
+    public static function validate($check){
         foreach($check as $key => $value){
             if($value !== false){echo '<div class="errorLine">' . $value . '</div>';}
             ?><script>S.highlight('<?php echo $key;?>')</script><?php
         }
     }
-    
-	public function on_off($key, $value=0, $input=true){
+
+	public static function on_off($key, $value=0, $input=true){
 	    $class = ($value > 0) ? "on" : "off";
 	?>
-	    <div class="on-off">
+	    <div class="on-off" id="on-off-<?php echo $key;?>">
 	        <div class="change-on-off" onclick="<?php if($input === true){?>S('#<?php echo $key?>_switcher').value = 1;<?php } else {?>S.show('#<?php echo $key;?>');<?php } ?> S.classAdd('#<?php echo $key;?>_on_off', 'on'); S.classRemove('#<?php echo $key;?>_on_off', 'off');">ON</div>
 	        <div class="change-on-off" onclick="<?php if($input === true){?>S('#<?php echo $key?>_switcher').value = 0;<?php } else {?>S.hide('#<?php echo $key;?>');<?php } ?> S.classAdd('#<?php echo $key;?>_on_off', 'off'); S.classRemove('#<?php echo $key;?>_on_off', 'on');">OFF</div>
 	        <div class="switcher <?php echo $class;?>" id="<?php echo $key;?>_on_off"></div>
@@ -25,11 +20,11 @@ class Form{
 	    <?php if($input === true){?><input type="hidden" name="<?php echo $key;?>" id="<?php echo $key;?>_switcher" value="<?php echo $value;?>"/><?php } ?>
 	<?php
 	}
-	
+
 	//Array possible values: select => string, reuqired => boolean, title => string, addon => multilingual or true, addon-label => string label for the addon, onchange => javascript code,
-    public function select($name, $values, $array = array()){
+    public static function select($name, $values, $array = array()){
         global $Language;
-        $Text = new \system\module\Text\php\Text(0);
+        $Text = new \module\Text\Text(0);
         ?>
         <select name="<?php echo $name;?>" id="<?php echo $name;?>"
         <?php if(isset($array["required"]) && $array["required"] == true){echo ' required';}?>
@@ -46,14 +41,14 @@ class Form{
         if(isset($array["addon"]) && $array["addon"] !== false){
         ?>
             <input type="checkbox" id="<?php echo $name;?>-addon-checkbox" onclick="if(this.checked == true){S('#<?php echo $name;?>').disabled = true; S.all('.<?php echo $name;?>-addon', function(el){el.disabled = false; }); S.show('#<?php echo $name;?>-addon');} else {S('#<?php echo $name;?>').disabled = false; S.all('.<?php echo $name;?>-addon', function(el){el.disabled = true;});  S.hide('#<?php echo $name;?>-addon');}"/>
-            <span><?php echo $array["addon-label"] ? $array["addon-label"] : 'Create new ' . $name;?></span>
-            
+            <span><?php echo isset($array["addon-label"]) ? $array["addon-label"] : 'Create new ' . $name;?></span>
+
             <div id="<?php echo $name;?>-addon" class="hide">
                 <?php if($array["addon"] === "multilingual"){
                     foreach($Language->items as $lang => $abbrev){?>
                     <div><?php echo $lang;?></div>
                     <input type="text" name="<?php echo $name;?>_<?php echo $abbrev?>" class="<?php echo $name;?>-addon" disabled required/>
-                    <?php } 
+                    <?php }
                 } else { ?>
                     <input type="text" name="<?php echo $name;?>" class="<?php echo $name;?>-addon" disabled required/>
                 <?php } ?>
@@ -61,8 +56,8 @@ class Form{
         <?php
         }
     }
-	
-	public function created($name, $value="0000-00-00 00:00:00"){
+
+	public static function created($name, $value="0000-00-00 00:00:00"){
         ?>
         <input type="date" id="<?php echo $name;?>_date" value="<?php echo date("Y-m-d", strtotime($value));?>" onchange="$('#<?php echo $name;?>').val(this.value + ' ' + $('#<?php echo $name;?>_time').val())"/>
 		<input type="time" id="<?php echo $name;?>_time" value="<?php echo date("H:i:s", strtotime($value));?>" onchange="$('#<?php echo $name;?>').val($('#<?php echo $name;?>_date').val() + ' ' + this.value)"/>
@@ -70,6 +65,4 @@ class Form{
     <?php
     }
 }
-
-$Form = new Form();
 ?>

@@ -28,7 +28,7 @@ if(!empty($error)){
 	exit;
 }
 
-$file = $Core->doc_root() . "/web/file/export/bnbRef.txt";
+$file = \system\Core::doc_root() . "/web/file/export/bnbRef.txt";
 	
 //$output = rtrim($output, "\r\n");
 $f=fopen($file,"w"); 

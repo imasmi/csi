@@ -1,6 +1,5 @@
 <?php
-if($User->_() === "admin"){
-    $TextAPP = new \system\module\Text\php\TextAPP();
+if($User->group("admin")){
     echo $TextAPP->wysiwyg();
     echo '<input type="hidden" id="lang" value="' . $Language->_() . '"/>';
 }

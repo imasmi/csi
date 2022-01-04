@@ -11,7 +11,7 @@ if($User->pass_requirements($_POST["newpassword"]) != "1"){$check["#newpassword"
 if(empty($check)){
     $array = array("password" => password_hash($_POST["newpassword"], PASSWORD_DEFAULT));
 
-    $update = $Query->update($array, $_GET["id"]);
+    $update = \system\Query::update($array, $_GET["id"]);
     if($update){
         ?><script>history.go(-1)</script><?php
     } else {
@@ -19,6 +19,6 @@ if(empty($check)){
     }
     
 } else {
-    $Form->validate($check);
+    \system\Form::validate($check);
 }
 ?>

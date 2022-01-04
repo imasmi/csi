@@ -9,7 +9,7 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		if($key == "date"){
 			$array[$key] = date("Y-m-d", strtotime($_POST[$key . '-' . $a]));
 		} elseif($key == "case_id"){
-			$array[$key] = $Query->select($_POST[$key . '-' . $a], "number", "caser")["id"];
+			$array[$key] = $PDO->query("SELECT id FROM caser WHERE number='" . $_POST[$key . '-' . $a] . "'")->fetch()["id"];
 		} elseif($key == "name"){
 			$array[$key] = $Import->doc($_POST[$key . '-' . $a], 'protocol');
 		} else {
@@ -21,10 +21,10 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		$checks = $PDO->query("SELECT * FROM document WHERE type='protocol' AND number='" . $array["number"] . "' AND date='" . $array["date"] . "'");
 		if($checks->rowCount() > 0){
 			$check = $checks->fetch();
-			$Query->update($array, $check["id"], "id", "document");
+			\system\Query::update($array, $check["id"], "id", "document");
 			$updates++;
 		} else {
-			$Query->insert($array, "document");
+			\system\Query::insert($array, "document");
 			$inserts++;
 		}
 	} else {

@@ -17,8 +17,8 @@
 		<td><?php echo $report["year"];?></td>
 		<td><?php echo $report["period"];?></td>
 		<td><?php echo $report["type"];?></td>
-		<td><button class="button" onclick="window.open('<?php echo $Core->this_path(0, -1);?>/report/<?php echo $report["type"];?>?year=<?php echo $report["year"];?>&period=<?php echo $report["period"];?>', '_self')">Open</button></td>
-		<td><button class="button" onclick="window.open('<?php echo $Core->this_path(0, -1);?>/report/<?php echo $report["type"];?>_calculations?year=<?php echo $report["year"];?>&period=<?php echo $report["period"];?>', '_self')">Calculations</button></td>
+		<td><button class="button" onclick="window.open('<?php echo \system\Core::this_path(0, -1);?>/report/<?php echo $report["type"];?>?year=<?php echo $report["year"];?>&period=<?php echo $report["period"];?>', '_self')">Open</button></td>
+		<td><button class="button" onclick="window.open('<?php echo \system\Core::this_path(0, -1);?>/report/<?php echo $report["type"];?>_calculations?year=<?php echo $report["year"];?>&period=<?php echo $report["period"];?>', '_self')">Calculations</button></td>
 	</tr>
 	<?php 
 	$cnt++;

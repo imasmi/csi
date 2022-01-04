@@ -1,19 +1,20 @@
 <?php
+require_once(\system\Core::doc_root() . "/system/module/Listing/php/ListingAPP.php");
+$ListingAPP = new \module\Listing\ListingAPP;
 
 $fields = array(
-        "#" => "id", 
+        "#" => "id",
         "Username" => "username",
         "Role" => "role",
         "Email" => "email",
         "Status" => "status"
 );
 
-$ListingAPP = new \system\module\Listing\php\ListingAPP;
 $actions = $ListingAPP->actions();
-$actions["change password"] = $Core->this_path(0,-1) . "/change-password";
+$actions["change password"] = \system\Core::this_path(0,-1) . "/change-password";
 ?>
 
 
 <div class="admin">
-    <?php $ListingAPP->_($fields, $actions, $Query->table(), "WHERE deleted is NULL");?>
+    <?php $ListingAPP->_($fields, $actions, \system\Query::table(), "WHERE deleted is NULL");?>
 </div>

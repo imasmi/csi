@@ -1,11 +1,17 @@
 <?php
-$Note->listing(" WHERE case_id='" . $_GET["id"] . "' AND hide is NULL ORDER by period DESC, id DESC", $_GET["id"]);
+include_once(\system\Core::doc_root() . '/system/module/Listing/php/ListingAPP.php');
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
+include_once(\system\Core::doc_root() . '/plugin/Reference/php/Reference.php');
+include_once(\system\Core::doc_root() . '/plugin/Document/php/Document.php');
+include_once(\system\Core::doc_root() . '/plugin/Money/php/Money.php');
+include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
+\plugin\Note\Note::listing(" WHERE case_id='" . $_GET["id"] . "' AND hide is NULL ORDER by period DESC, id DESC", $_GET["id"]);
 
-$Caser = new \plugin\Caser\php\Caser($_GET["id"]);
-$charger = $Query->select($Caser->charger, "id", $User->table);
-$Reference = new \plugin\Reference\php\Reference;
-$Document = new \plugin\Document\php\Document($_GET["id"]);
-$Money = new \plugin\Money\php\Money($_GET["id"]);
+$Caser = new \plugin\Caser\Caser($_GET["id"]);
+$charger = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $Caser->charger . "'")->fetch();
+$Reference = new \plugin\Reference\Reference;
+$Document = new \plugin\Document\Document($_GET["id"]);
+$Money = new \plugin\Money\Money($_GET["id"]);
 ?>
 <div id="caser">
 	<div class="clear">
@@ -24,7 +30,7 @@ $Money = new \plugin\Money\php\Money($_GET["id"]);
 					</tr>
 					
 					<?php foreach($Caser->creditor as $creditor_id){
-							$creditor = $Query->select($creditor_id, "id", "person");
+							$creditor = $PDO->query("SELECT * FROM person WHERE id='" . $creditor_id . "'")->fetch();
 						?>
 						<tr>
 							<td>
@@ -42,7 +48,7 @@ $Money = new \plugin\Money\php\Money($_GET["id"]);
 					</tr>
 					
 					<?php foreach($Caser->debtor as $debtor_id){
-							$debtor = $Query->select($debtor_id, "id", "person");
+							$debtor = $PDO->query("SELECT * FROM person WHERE id='" . $debtor_id . "'")->fetch();
 						?>
 						<tr>
 							<td>
@@ -71,7 +77,7 @@ $Money = new \plugin\Money\php\Money($_GET["id"]);
 					<div class="column-6">
 						<div class="title">Взискатели</div>
 						<?php foreach(json_decode($title["creditor"]) as $creditor_id){
-								$creditor = $Query->select($creditor_id, "id", "person");
+								$creditor = $PDO->query("SELECT * FROM person WHERE id='" . $creditor_id . "'")->fetch();
 							?>
 							<h3><?php echo $creditor["name"];?></h3>
 							<div><?php echo $creditor["EGN_EIK"];?></div>
@@ -81,7 +87,7 @@ $Money = new \plugin\Money\php\Money($_GET["id"]);
 					<div class="column-6">
 						<div class="title">Длъжници</div>
 						<?php foreach(json_decode($title["debtor"]) as $debtor_id){
-								$debtor = $Query->select($debtor_id, "id", "person");
+								$debtor = $PDO->query("SELECT * FROM person WHERE id='" . $debtor_id . "'")->fetch();
 							?>
 							<h3><?php echo $debtor["name"];?></h3>
 							<div><?php echo $debtor["EGN_EIK"];?></div>

@@ -1,21 +1,8 @@
 <?php
-namespace web\php;
+namespace web;
 
-class csi{
-	public function __construct(){
-		global $Core;
-		$this->Core = $Core;
-		global $Query;
-		$this->Query = $Query;
-		global $Form;
-		$this->Form = $Form;
-		global $Page;
-		$this->Page = $Page;
-		global $Note;
-		$this->Note = $Note;
-	}		
-	
-	public function createTXT($file){
+class csi{	
+	public static function createTXT($file){
 		header('Content-Type: text/plain');
 		header('Content-Disposition: attachment; filename='.basename($file));
 		header('Expires: 0');
@@ -27,6 +14,4 @@ class csi{
 		exit;
 	}
 }
-
-$csi = new csi;
 ?>

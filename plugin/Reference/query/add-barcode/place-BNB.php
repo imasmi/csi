@@ -1,11 +1,11 @@
 <?php 
-require_once $Core->doc_root() . '/composer/vendor/autoload.php';
+require_once \system\Core::doc_root() . '/composer/vendor/autoload.php';
 $Bnb = new \plugin\Reference\php\Bnb;
 $Barcode = new \plugin\Document\php\Barcode();
-require_once($Core->doc_root() . '/system/module/File/php/FileAPP.php');
+require_once(\system\Core::doc_root() . '/system/module/File/php/FileAPP.php');
 $FileAPP = new \system\module\File\php\FileAPP;
 
-$files = $Core->list_dir('C:/Users/1/Downloads/BNB'); //get all file names
+$files = \system\Core::list_dir('C:/Users/1/Downloads/BNB'); //get all file names
 foreach($files as $file){
     if(is_file($file)){
         $pathinfo = pathinfo($file);
@@ -23,13 +23,13 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
     if(!isset($_POST["barcode_" . $a])){continue;} //Check if the row is removed
     $egn = $_POST["egn_" . $a];
     $value = json_decode($_POST["value_" . $a], true);
-    $document = $Query->select($_POST["barcode_" . $a], "barcode", "document");
-    $case_numb = $Query->select($document["case_id"], "id", "caser", "number")["number"];
+    $document = $PDO->query("SELECT * FROM document WHERE barcode='" . $_POST["barcode_" . $a] . "'")->fetch();
+    $case_numb = $PDO->query("SELECT number FROM caser WHERE id='" . $document["case_id"] . "'")->fetch()["number"];
 ?>
     <?php echo $Barcode->html_return($document);?>
     <table>
         <tr>
-            <td><img src="<?php echo $Core->url() . $File->items[1]["path"];?>" style="width: 130px;"/></td>
+            <td><img src="<?php echo \system\Core::url() . $File->items[1]["path"];?>" style="width: 130px;"/></td>
             <td style="font-size: 13px;">
                 <b>
                     <div>БЪЛГАРСКА НАРОДНА БАНКА</div>

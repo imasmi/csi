@@ -1,48 +1,43 @@
 <?php
-namespace system\module\Text\php;
+namespace module\Text;
 
 class TextAPP extends Text{
-    
+
     public function wysiwyg(){
         /* SELECTED CONTENT FOR WYSIWYG */
-		
+
 		echo '<input type="hidden" id="selected-content" value=""/>';
-		
-		$files_dir = $this->Core->url() . 'system/module/Text/files';
-		
+
+		$files_dir = \system\Core::url() . 'system/module/Text/files';
+
 		/* WYSIWYG editor*/
-		echo '<div id="wysiwyg" style="display: none;">
+		echo '<div id="wysiwyg" class="TextAPP" style="display: none;">
 			<img src="' . $files_dir . '/undo.png" onclick="TextAPP.wysiwyg(\'undo\')" title="undo" alt="undo">
 			<img src="' . $files_dir . '/redo.png" onclick="TextAPP.wysiwyg(\'redo\')" title="redo" alt="redo">
 			<img src="' . $files_dir . '/link.png" onclick="TextAPP.wysiwyg(\'createLink\',prompt(\'URL?\'))" title="link" alt="link">
-			<img src="' . $files_dir . '/unlink.png" onclick="TextAPP.wysiwyg(\'unlink\')" title="unlink" alt="unlink">	
+			<img src="' . $files_dir . '/unlink.png" onclick="TextAPP.wysiwyg(\'unlink\')" title="unlink" alt="unlink">
 			<img src="' . $files_dir . '/h1.png" onclick="TextAPP.wysiwyg(\'formatBlock\', \'<h1>\')" title="h1" alt="h1" class="Htag">
-			<img src="' . $files_dir . '/h2.png" onclick="TextAPP.wysiwyg(\'formatBlock\', \'<h2>\')" title="h2" alt="h2" class="Htag"> 
+			<img src="' . $files_dir . '/h2.png" onclick="TextAPP.wysiwyg(\'formatBlock\', \'<h2>\')" title="h2" alt="h2" class="Htag">
 			<img src="' . $files_dir . '/h3.png" onclick="TextAPP.wysiwyg(\'formatBlock\', \'<h3>\')" title="h3" alt="h3" class="Htag">
-			<img src="' . $files_dir . '/h4.png" onclick="TextAPP.wysiwyg(\'formatBlock\', \'<h4>\')" title="h4" alt="h4" class="Htag"> 
-			<img src="' . $files_dir . '/h5.png" onclick="TextAPP.wysiwyg(\'formatBlock\', \'<h5>\')" title="h5" alt="h5" class="Htag"> 
-			<img src="' . $files_dir . '/h6.png" onclick="TextAPP.wysiwyg(\'formatBlock\', \'<h6>\')" title="h6" alt="h6" class="Htag">  
+			<img src="' . $files_dir . '/h4.png" onclick="TextAPP.wysiwyg(\'formatBlock\', \'<h4>\')" title="h4" alt="h4" class="Htag">
+			<img src="' . $files_dir . '/h5.png" onclick="TextAPP.wysiwyg(\'formatBlock\', \'<h5>\')" title="h5" alt="h5" class="Htag">
+			<img src="' . $files_dir . '/h6.png" onclick="TextAPP.wysiwyg(\'formatBlock\', \'<h6>\')" title="h6" alt="h6" class="Htag">
 			<img src="' . $files_dir . '/paragraph.png" onclick="TextAPP.wysiwyg(\'insertparagraph\')" title="paragraph" alt="paragraph">
 			<img src="' . $files_dir . '/indent.png" onclick="TextAPP.wysiwyg(\'indent\')" title="indent" alt="indent">
 			<img src="' . $files_dir . '/outdent.png" onclick="TextAPP.wysiwyg(\'outdent\')" title="outdent" alt="outdent">
-			<select onchange="TextAPP.wysiwyg(\'FontSize\', this.value)">
-				<option value="1">10</option>
-				<option value="2">14</option>
-				<option value="3">16</option>
-				<option value="4">18</option>
-				<option value="5">24</option>
-				<option value="6">32</option>
-				<option value="7">48</option>
-				<option value="7">72</option>
-			</select>
+			<select onchange="TextAPP.changeFont(this.value)">';
+    		    for($s = 8; $s < 100; ++$s){
+    		        echo '<option value="' . $s . '">' . $s . '</option>';
+    		    }
+		    echo '</select>
 			<img src="' . $files_dir . '/delete.png" onclick="TextAPP.wysiwyg(\'delete\')" title="delete" alt="delete">
 			</br>
-			
+
 			<img src="' . $files_dir . '/bold.png" onclick="TextAPP.wysiwyg(\'bold\')" title="bold" alt="bold">
 			<img src="' . $files_dir . '/italic.png" onclick="TextAPP.wysiwyg(\'italic\')" title="italic" alt="italic">
 			<img src="' . $files_dir . '/underline.png" onclick="TextAPP.wysiwyg(\'underline\')" title="underline" alt="underline">
-			<img src="' . $files_dir . '/strikethrough.png" onclick="TextAPP.wysiwyg(\'strikethrough\')" title="strikethrough" 
-alt="strikethrough">	
+			<img src="' . $files_dir . '/strikethrough.png" onclick="TextAPP.wysiwyg(\'strikethrough\')" title="strikethrough"
+alt="strikethrough">
 			' . $this->color_picker('backcolor', 'wysiwyg') . '
 			' . $this->color_picker('forecolor', 'wysiwyg') . '
 			<img src="' . $files_dir . '/al.png" onclick="TextAPP.wysiwyg(\'justifyleft\')" title="left" alt="left">
@@ -64,18 +59,25 @@ alt="strikethrough">
 			</select>
 		</div>';
     }
-    
+
     /* COLOR PICKER */
 	private function color_picker($id, $type, $value = ""){
 		$cnt = 1;
-		$files_dir = $this->Core->url() . 'system/module/Text/files';
+		$files_dir = \system\Core::url() . 'system/module/Text/files';
 		$output = '<div class="color-wrapper">';
 		if($type == "wysiwyg"){
-			$output .= '<img src="' . $files_dir . '/' . $id . '.png" title="' . $value . '" alt="' . $value . '" onclick="S.show(\'#color-selector-' . $id . '\')">' ;
+			$output .= '<img src="' . $files_dir . '/' . $id . '.png" title="' . $value . '" alt="' . $value . '" onclick="S.show(\'#color-picker-' . $id . '\'); S.event(S(\'#color-selector-' . $id . '\'), \'mousedown\')">' ;
 		} else {
 			$output .= '<div id="settings-color' . $id . '" class="settings-color" style="background-color: ' . $value . ';" onclick="TextAPP.colorSelector(\'' . $id . '\')"></div>';
 			$output .= '<input type="hidden" name="' . $id . '" id="color-val-' . $id . '" value="' . $this->entities($value) . '"/>';
 		}
+		
+		$output .= '<div class="color-picker white-bg" id="color-picker-' . $id . '">';
+		    $output .= '<input value="000000" class="color-selector"  id="color-selector-' . $id . '" data-jscolor="{}" onchange="TextAPP.wysiwyg(\'' . $id . '\', this.value)">';
+		    $output .= '<span onclick="S.hide(\'#color-picker-' . $id . '\')" class="pointer">X</span>';
+		$output .= '</div>';
+		
+		/*
 		$output .= '<table class="color-picker set-table" id="color-selector-' . $id . '" cellspacing="0px" border="0px">';
 			$output .= '<tr>';
 				$output .= '<th colspan="34">Choose color</th>';
@@ -96,18 +98,19 @@ alt="strikethrough">
  			}
 			}
 		$output .= '</table>';
+		*/
 		$output .= '</div>';
 		return $output;
 	}
-	
-	//array possible values: 
-    //start => int, 
-    //length => int, 
+
+	//array possible values:
+    //start => int,
+    //length => int,
     //search => string (if set start point is the start of the first founded occurence of the needle)
     public function slice($text, $array=array()){
         $start = isset($array["start"]) ? $array["start"] : 0;
         $words = explode(" ", $text);
-        
+
         if(isset($array["search"])){
             foreach($words as $wordKey => $wordValue){
                 if(!empty($wordValue) && isset($array["search"]) && strpos(mb_strtolower($wordValue, "UTF-8"), mb_strtolower($array["search"], "UTF-8")) !== false){
@@ -117,10 +120,10 @@ alt="strikethrough">
                 }
             }
         }
-        
+
         $length = isset($array["length"]) ? $start + $array["length"] : $start + 15;
         $slice = array_slice($words, $start, $array["length"]);
-        $colon = count($words) > $length ? " ..." : ""; 
+        $colon = count($words) > $length ? " ..." : "";
         return implode(" ", $slice) . $colon;
     }
 }

@@ -7,7 +7,7 @@ if($_POST["field"] == ""){ $check["#field"] = "Insert field!";}
 if(empty($check)){
 #INSERT IF ALL EVERYTHING IS FINE
 
-$insert = $Query->insert($_POST);
+$insert = \system\Query::insert($_POST);
 
 if($insert){
     ?><script>history.go(-1)</script><?php
@@ -16,7 +16,7 @@ if($insert){
 }
 
 } else {
-    $Form->validate($check);    
+    \system\Form::validate($check);    
 }
 
 exit;

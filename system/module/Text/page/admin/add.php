@@ -1,8 +1,8 @@
-<?php $PageAPP = new \system\module\Page\php\PageAPP;?>
+<?php $PageAPP = new \module\Page\PageAPP;?>
 <div class="admin">
 <div class="error-message" id="error-message"></div>
 <div class="title text-center">Add text</div>
-<form class="form" id="add-text" action="<?php echo $Core->query_path();?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path();?>', S.serialize('#add-text'), '#error-message')">
+<form class="form" id="add-text" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#add-text'), '#error-message')">
     <table class="table">
         <tr>
             <th>Page</th>

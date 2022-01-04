@@ -1,17 +1,7 @@
 <?php
-namespace plugin\Document\php;
+namespace plugin\Document;
 
 class Barcode{
-
-	public function __construct(){
-		global $Core;
-		$this->Core = $Core;
-		global $PDO;
-		$this->PDO = $PDO;
-		global $Query;
-		$this->Query = $Query;
-	}
-
 	public function create($text = "0", $size = 40, $orientation = "horizontal", $code_type = "code128"){
 	/*
 	 *  Author:  David S. Tufts
@@ -122,27 +112,27 @@ class Barcode{
 	}
 
 	public function _($doc, $id, $size = 20, $orientation = "horizontal", $code_type = "code128a"){
-			$case = $this->Query->select($doc["case_id"], "id", "caser");
+			$case = \system\Query::select($doc["case_id"], "id", "caser");
 		?>
 		<div class="adminBarcode text-center">
 			<span>ЧСИ Георги Тарльовски Рег № 882</span>
 			<div>Входящ № <?php echo $doc["number"];?> / <?php echo date("d.m.Y", strtotime($doc["date"]));?>г</div>
 			<div>Изп.дело № <?php echo $case["number"];?></div>
 			<div class="barcodeWrap">
-				<img src="<?php echo $this->Core->url();?>Document/query/barcode/image_create?text=<?php echo $doc["barcode"];?>&size=<?php echo $size;?>&orientation=<?php echo $orientation;?>&code_type=<?php echo $code_type;?>" class="barcode" alt="barcode" />
-				<div class="barNumber"><input type="text" onchange="S.post('<?php echo $this->Core->url();?>Document/query/barcode/create_barcode', {barcode: this.value, id: '<?php echo $id;?>'}, '#<?php echo $id;?>')" value="<?php echo $doc["barcode"];?>"/></div>
+				<img src="<?php echo \system\Core::url();?>Document/query/barcode/image_create?text=<?php echo $doc["barcode"];?>&size=<?php echo $size;?>&orientation=<?php echo $orientation;?>&code_type=<?php echo $code_type;?>" class="barcode" alt="barcode" />
+				<div class="barNumber"><input type="text" onchange="S.post('<?php echo \system\Core::url();?>Document/query/barcode/create_barcode', {barcode: this.value, id: '<?php echo $id;?>'}, '#<?php echo $id;?>')" value="<?php echo $doc["barcode"];?>"/></div>
 			</div>
 		</div>
 		<?php
 	}
 
 	public function html_return($doc){
-		$case = $this->Query->select($doc["case_id"], "id", "caser");
+		$case = \system\Query::select($doc["case_id"], "id", "caser");
 		return '<div style="width: 180px;padding: 10px; position: fixed; top: -60px; right: -20px; text-align: center; font-weight: bold;font-family: arial, tahoma;line-height: 13px;font-size: 11px;">
 		<span style="font-weight: normal; font-size: 0.8em;">ЧСИ Георги Тарльовски Рег № 882</span>
 			<div>Входящ № ' . $doc["number"] . ' / ' . date("d.m.Y", strtotime($doc["date"])) . 'г</div>
 			<div>Изп.дело № ' . $case["number"] . '</div>
-			<img src="' . $this->Core->url() . 'Document/query/barcode/image_create?text=' . $doc["barcode"]. '&size=20&orientation=horizontal&code_type=code128a" style="width: 100%;height: 50px;margin: 4px auto;display: block;"/>
+			<img src="' . \system\Core::url() . 'Document/query/barcode/image_create?text=' . $doc["barcode"]. '&size=20&orientation=horizontal&code_type=code128a" style="width: 100%;height: 50px;margin: 4px auto;display: block;"/>
 			<div style="text-align: left;margin-left: 26px;font-size: 0.9em;">' . $doc["barcode"]. '</div>
 		</div>';
 }
@@ -251,7 +241,7 @@ class Barcode{
 
 			// Draw barcode to the screen
 
-			$font_path = $this->Core->doc_root() . '/web/file/arial.ttf';
+			$font_path = \system\Core::doc_root() . '/web/file/arial.ttf';
 			$new_text = "ЧСИ Георги Тарльовски Рег.№ 882";
 			imagettftext($image, 7.2, 0,10, 15, $black, $font_path, $new_text);
 			$new_text = "Входящ № " . $get["number"] . " / " . date("d.m.Y", strtotime($get["date"])) . "г.";
@@ -261,7 +251,7 @@ class Barcode{
 			$new_text = $get["barcode"];
 			imagettftext($image, 10, 0, 10, 115, $black, $font_path, $new_text);
 
-			imagepng($image, $this->Core->doc_root() . "/temp/barcode.png", 9);
+			imagepng($image, \system\Core::doc_root() . "/temp/barcode.png", 9);
 			imagedestroy($image);
 			}
 }

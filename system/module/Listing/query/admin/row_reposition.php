@@ -1,6 +1,6 @@
 <?php 
-    $current = $Query->select($_POST["move-id"], "id", $_POST["table"]);
-    $new = $Query->select($_POST["stop-id"], "id", $_POST["table"]);
+    $current = $PDO->query("SELECT * FROM " . $_POST["table"] . " WHERE id='" . $_POST["move-id"] . "'")->fetch();
+    $new = $PDO->query("SELECT * FROM " . $_POST["table"] . " WHERE id='" . $_POST["stop-id"] . "'")->fetch();
 
     if($new["row"] > $current["row"]){
         $low = $current["row"];

@@ -1,30 +1,24 @@
 <?php
-namespace plugin\Plugin_page\php;
-use \system\module\Text\php\Text as Text;
-use \system\module\File\php\File as File;
-use \system\module\Setting\php\Setting as Setting;
+namespace plugin\Plugin_page;
+use \module\Text\Text as Text;
+use \module\File\File as File;
+use \module\Setting\Setting as Setting;
 
 class Plugin_page{
     public function __construct($id=false){
         global $PDO;
         $this->PDO = $PDO;
-        global $Core;
-        $this->Core = $Core;
-        global $Query;
-        $this->Query = $Query;
         global $Page;
         $this->Page = $Page;
-        global $User;
-        $this->User = $User;
         global $Setting;
         $this->Setting = $Setting;
 		global $Text;
 		$this->Text = $Text;
 		global $File;
 		$this->File = $File;
-		if($User->_() != "admin"){require_once($Core->doc_root() . "/system/module/Listing/php/ListingAPP.php");}
-        $this->ListingAPP = new \system\module\Listing\php\ListingAPP;
-        $this->table = $Query->table('page');
+		require_once(\system\Core::doc_root() . "/system/module/Listing/php/ListingAPP.php");
+        $this->ListingAPP = new \module\Listing\ListingAPP;
+        $this->table = \system\Query::table('page');
         $this->tag = "plugin_page"; //Database tag for page table
         $this->plugin = "Plugin_page"; //Full name of the plugin
         $this->link_id = 0;

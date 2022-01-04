@@ -1,16 +1,12 @@
 <?php
-namespace plugin\Person\php;
-use \system\module\Setting\php\Setting as Setting;
+namespace plugin\Person;
+use \module\Setting\Setting as Setting;
 
 class Person{
 	// array("type" => creditor|debtor)
 	public function __construct($id=false, $array = array()){
 		global $PDO;
 		$this->PDO = $PDO;
-		global $Core;
-		$this->Core = $Core;
-		global $Query;
-		$this->Query = $Query;
 		global $Page;
 		$this->Page = $Page;
 		global $User;
@@ -20,7 +16,7 @@ class Person{
 		$this->table = "person";
 		$this->plugin = "Person"; //Full name of the plugin
 		$this->id = $id;
-		$this->item = $Query->select($id, "id", $this->table);
+		$this->item = $PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $id . "'")->fetch();
 		$this->name = $this->item["name"];
 		$this->type = $this->item["type"];
 		$this->type_name = $this->type == "person" ? "ЕГН" : "ЕИК";
@@ -38,7 +34,7 @@ class Person{
 	?>
 		<div class="selector">
 			<input type="hidden" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php if(isset($person)){ echo $person["id"];}?>"/>
-			<input type="text" autocomplete="off" id="<?php echo $name;?>-data" onkeyup="S.post('<?php echo $this->Core->url() . $this->plugin;?>/query/selector', {data: this.value, id: '<?php echo $name;?>'}, '#<?php echo $name;?>-list', true)" value="<?php if(isset($person)){ echo $person["name"];}?>"/>
+			<input type="text" autocomplete="off" id="<?php echo $name;?>-data" onkeyup="S.post('<?php echo \system\Core::url() . $this->plugin;?>/query/selector', {data: this.value, id: '<?php echo $name;?>'}, '#<?php echo $name;?>-list', true)" value="<?php if(isset($person)){ echo $person["name"];}?>"/>
 			<div id="<?php echo $name;?>-list" class="select-list"></div>
 		</div>
 	<?php
@@ -46,8 +42,8 @@ class Person{
 
 	public function edit(){
 		?>
-			<button class="button" onclick="window.open('<?php echo $this->Core->url();?>other/person/edit?id=<?php echo $this->id;?>', '_self')">Edit</button>
-			<button class="button" onclick="window.open('<?php echo $this->Core->url();?>other/person/bank?id=<?php echo $this->id;?>', '_self')">Banks</button>
+			<button class="button" onclick="window.open('<?php echo \system\Core::url();?>other/person/edit?id=<?php echo $this->id;?>', '_self')">Edit</button>
+			<button class="button" onclick="window.open('<?php echo \system\Core::url();?>other/person/bank?id=<?php echo $this->id;?>', '_self')">Banks</button>
 		<?php
 	}
 

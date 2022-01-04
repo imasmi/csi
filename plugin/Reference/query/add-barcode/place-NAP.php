@@ -1,5 +1,5 @@
 <?php
-require_once $Core->doc_root() . '/composer/vendor/autoload.php';
+require_once \system\Core::doc_root() . '/composer/vendor/autoload.php';
 $Barcode = new \plugin\Document\php\Barcode;
 //First, get the correct document size.
 
@@ -8,7 +8,7 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
 
   if($_GET["type"] == 74){
     $folder_convert = iconv ( "UTF-8", "windows-1251" ,  $_POST["dir"] . "/" . $_POST["file_" . $a]);
-    foreach($Core->list_dir($folder_convert) as $folder_file){
+    foreach(\system\Core::list_dir($folder_convert) as $folder_file){
         if(strpos($folder_file, "_1_") !== false){
           $file = $folder_file;
         }
@@ -22,8 +22,9 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
   }
 
   //echo $_POST["file_" . $a] . " -> " . $_POST["barcode_" . $a] . '<br>';
-  $barcode = $Query->select($_POST["barcode_" . $a], "barcode", "document");
-  $case = $Query->select($barcode["case_id"], "id", "caser");
+  $barcode = $PDO->query("SELECT * FROM document WHERE barcode='" . $_POST["barcode_" . $a] . "'")->fetch();
+  $case = $PDO->query("SELECT * FROM caser WHERE id='" . $barcode["case_id"] . "'")->fetch();
+
   $bar_data = array(
     "barcode" => $barcode["barcode"],
     "number" => $barcode["number"],

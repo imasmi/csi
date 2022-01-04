@@ -2,14 +2,14 @@
 $check = array();
 
 #CHECK IF LABEL IS FREE
-if($Query->select($_POST["tag"], "tag")){ $check["#username"] = "This tag is already in use";}
+if($PDO->query("SELECT * FROM " . $Text->table . " WHERE tag='" . $_POST["tag"] . "'")->fetch()->rowCount() > 0){ $check["#username"] = "This tag is already in use";}
 
 
 if(empty($check)){
 
 #CREATE NEW TEXT IF ALL EVERYTHING IS FINE
 
-$new_text = $Query->insert($_POST);
+$new_text = \system\Query::insert($_POST);
 
 if($new_text){
     ?><script>history.go(-1)</script><?php
@@ -18,7 +18,7 @@ if($new_text){
 }
 
 } else {
-    $Form->validate($check);    
+    \system\Form::validate($check);    
 }
 
 exit

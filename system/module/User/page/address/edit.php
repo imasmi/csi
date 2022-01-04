@@ -2,14 +2,14 @@
 #SEND HOME IF USER OF ANY TYPE IS NOT LOGGED
 $User->control();
 
-$Setting = new \system\module\Setting\php\Setting($User->id, array("fortable" => $User->table));
+$Setting = new \module\Setting\Setting($User->id, array("fortable" => $User->table));
 $address_check = $PDO->query("SELECT * FROM " . $Setting->table . " WHERE id='" . $_GET["id"] . "' AND page_id='" . $User->id . "' AND link_id='0' AND fortable='" . $User->table . "'");
 if($address_check->rowCount() == 1){
     $address = $address_check->fetch();
 ?>
     <div class="admin">
     <div class="error-message" id="error-message"></div>
-    <form class="form" id="edit-profile" action="<?php echo $Core->query_path();?>?id=<?php echo $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo $Core->query_path();?>?id=<?php echo $_GET["id"];?>', S.serialize('#edit-profile'), '#error-message')">
+    <form class="form" id="edit-profile" action="<?php echo \system\Core::query_path();?>?id=<?php echo $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>?id=<?php echo $_GET["id"];?>', S.serialize('#edit-profile'), '#error-message')">
         <table class="table">
             <tr>
                 <td><?php echo $Text->_("Country");?></td>

@@ -1,10 +1,10 @@
 <?php
 #SEND HOME IF USER OF ANY TYPE IS NOT LOGGED
-$text = $Query->select($_GET["id"]);
+$text = $PDO->query("SELECT * FROM " . $Text->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 ?>
 
 <div class="admin">
-    <form method="post" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>">
+    <form method="post" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>">
         <table class="table">
                 
             <tr>

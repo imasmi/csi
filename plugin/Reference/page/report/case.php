@@ -1,4 +1,4 @@
-<form method="post" action="<?php echo $Core->query_path(0, -1);?>/case_and_sum?type=case&year=<?php echo $_GET["year"];?>&period=<?php echo $_GET["period"];?>">
+<form method="post" action="<?php echo \system\Core::query_path(0, -1);?>/case_and_sum?type=case&year=<?php echo $_GET["year"];?>&period=<?php echo $_GET["period"];?>">
 <table border="1px" class="report">
 	<tr>
 		<th colspan="100%">

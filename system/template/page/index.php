@@ -1,5 +1,5 @@
 <?php
-$dir = $Core->this_path(0,-1);
+$dir = \system\Core::this_path(0,-1);
 
 $actions = array(
     "add" => $dir . "/add",
@@ -11,7 +11,7 @@ $actions = array(
 
 <div class="admin">
     <?php 
-        $ListingAPP = new \system\module\Listing\php\ListingAPP; 
+        $ListingAPP = new \module\Listing\ListingAPP; 
         $ListingAPP->_("*", $actions, "module", "WHERE id != 0");
     ?>
 </div>

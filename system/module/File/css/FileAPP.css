@@ -1,5 +1,4 @@
 #file-title{background-color: #08494c;color: #fff;}
-#file{display: none;}
 .file-change-button{margin: 0 auto; font-size: 20px; background-color: #b10000; display: block;}
 .file-preview{width: 100px; height: 40px; margin: 0 auto;}
 .file-edit .image, .file-edit .video{margin: 0 auto 20px; height: 200px; max-width: 300px; width: auto; object-fit: contain; background-size: contain;}

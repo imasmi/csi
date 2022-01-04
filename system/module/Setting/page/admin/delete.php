@@ -1,9 +1,9 @@
 <?php
-$select = $Query->select($_GET["id"]);
+$select = $PDO->query("SELECT * FROM " . $Setting->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 ?>
 
 <div class="admin">
-    <form method="post" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>">
+    <form method="post" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>">
         <table class="table">
                 
             <tr>

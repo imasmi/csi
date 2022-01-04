@@ -1,6 +1,6 @@
 <div class="admin">
 	<h2 class="text-center">Проверка на банка</h2>
-	<form action="<?php echo $Core->query_path(0, -1);?>/postbank-payments" method="post">
+	<form action="<?php echo \system\Core::query_path(0, -1);?>/postbank-payments" method="post">
 		<table class="csi" border="1px">
 			<tr>
 				<th></th>
@@ -38,7 +38,7 @@
 				$debtor = $Import->clearEmpty($Import->clearBank($bank[$a + 9]));
 				$creditor = $Import->clearEmpty($Import->clearBank($bank[$a + 10]));
 				$bank_account = explode(" ", $creditor);
-				$bank_id = $Query->select($bank_account[0], "IBAN", "bank")["id"];
+				$bank_id = $PDO->query("SELECT id FROM bank WHERE IBAN='" . $bank_account[0] . "'")->fetch()["id"];
 				$description = $Import->clearEmpty($Import->clearBank($bank[$a + 11]));
 
 				$check = $PDO->query("SELECT * FROM payment WHERE amount='" . $amount . "' AND transaction_date='" . $date . "' AND bank='" . $bank_id . "'");

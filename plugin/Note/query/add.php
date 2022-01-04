@@ -23,8 +23,8 @@ foreach($Note->places() as $key=>$value){
 	$array[$key] = isset($_POST[$key]) ? 1 : 0;
 }
 
-$insert = $Query->insert($array, "note");
-#$Query->insert($array, $table="module")
+$insert = \system\Query::insert($array, "note");
+#\system\Query::insert($array, $table="module")
 
 if($insert){
 	if(!isset($_POST["where"])){ ?><script>history.go(-1)</script><?php }

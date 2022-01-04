@@ -1,12 +1,12 @@
 <?php
-	$select = $Query->select($_GET["id"], "id", "invoice", "*", "LIKE");
+	$select = $PDO->query("SELECT * FROM invoice WHERE id LIKE '" . $_GET["id"] . "'")->fetch();
 	$Person = new \plugin\Person\php\Person($select["payer"]);
 ?>
 <div class="admin">
 <h2 class="text-center title"><?php echo $select["type"] == "bill" ? "Сметка " . $select["bill"] : "Фактура " . $select["invoice"];?></h2>
 <h3 class="text-center">Сума: <?php echo $select["sum"];?> лева</h3>
 <div class="errorMessage" id="errorMessage"></div>
-<form class="form" id="form" action="<?php echo $Core->query_path();?>?id=<?php echo $_GET["id"];?>" method="post">
+<form class="form" id="form" action="<?php echo \system\Core::query_path();?>?id=<?php echo $_GET["id"];?>" method="post">
 	<table class="table">
         <tr>
             <td>Дело</td>
@@ -32,14 +32,14 @@
 					if($select["payment"]){
 						foreach(json_decode($select["payment"]) as $pay_id){
 							++$pay_cnt;
-							$payment = $Query->select($pay_id, "id", "payment");
+							$payment = $PDO->query("SELECT * FROM payment WHERE id='" . $pay_id . "'")->fetch();
 							?>
 								<div id="payment-<?php echo $pay_cnt;?>">
 									<input type="hidden" type="number" name="payment_<?php echo $pay_cnt;?>" value="<?php echo $payment["id"];?>"/>
 									<button type="button" class="button" onclick="S.remove('#payment-<?php echo $pay_cnt;?>')">-</button>
 									<span><?php echo $payment["amount"];?></span>-
 									<span><?php echo $payment["date"];?></span>
-									<span>Платени от <?php echo $Query->select($payment["person"], "id", "person")["name"];?></span>
+									<span>Платени от <?php echo $PDO->query("SELECT name FROM person WHERE id='" . $payment["person"] . "'")->fetch()["name"];?></span>
 									<span> (<?php echo $payment["description"];?>)</span>
 								</div>
 							<?php
@@ -48,7 +48,7 @@
 				?>
 				</div>
 				<input type="hidden" name="payment-cnt" id="payment-cnt" value="<?php echo $pay_cnt;?>"/>
-				<button type="button" class="button margin-20" onclick="S.popup('<?php echo $Core->url() . $Plugin->_();?>/query/invoice/add-payment', {invoice: '<?php echo $select["id"];?>', payment_cnt: S('#payment-cnt').value, case_id: S('#case_id').value})">+ Добави</button>
+				<button type="button" class="button margin-20" onclick="S.popup('<?php echo \system\Core::url() . $Plugin->_();?>/query/invoice/add-payment', {invoice: '<?php echo $select["id"];?>', payment_cnt: S('#payment-cnt').value, case_id: S('#case_id').value})">+ Добави</button>
 			</td>
         </tr>
 

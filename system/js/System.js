@@ -275,21 +275,37 @@ S.bind = function(func, actions = "load,resize,scroll", elem=window){
     });
 }
 
-S.animate = function(check_elem=".animation", add_class="animate"){
+S.animate = function(check_elem=".animation", add_class="animate", loop=false){
     S.all(check_elem, function(el){
         if(S.visible(el)){
             if(el.classList.contains(add_class) === false){el.classList.add(add_class);}
-        } else {
+        } else if(loop){
             if(el.classList.contains(add_class) === true){el.classList.remove(add_class);}
         }
     });
 }
 
-S.slideTo = function(elem = "#index", behave = "smooth"){
-    window.scroll({
-      top: S(elem).getBoundingClientRect().top + window.scrollY,
-      behavior: behave
+S.slideTo = function(elem = "#index", arr = false){
+    let pos = S(elem).getBoundingClientRect().top + window.scrollY;
+    let currentPos = window.pageYOffset;
+    let start = null;
+    let time = arr.hasOwnProperty("time") ? arr["time"] : 500;
+    pos = +pos, time = +time;
+    window.requestAnimationFrame(function step(currentTime) {
+        start = !start ? currentTime : start;
+        let progress = currentTime - start;
+        if (currentPos < pos) {
+            window.scrollTo(0, ((pos - currentPos) * progress / time) + currentPos);
+        } else {
+            window.scrollTo(0, currentPos - ((currentPos - pos) * progress / time));
+        }
+        if (progress < time) {
+            window.requestAnimationFrame(step);
+        } else {
+            window.scrollTo(0, pos);
+        }
     });
+    
 }
 
 S.computed = function(elem, prop=false){
@@ -307,8 +323,8 @@ S.parallax = function(elem, arr){
     S.all(elem, function(el){
         rect = el.getBoundingClientRect();
         startPoint = viewportTop + rect.top;
-            
             for(dir in arr){
+                
                 if(!el.querySelector("#parallaxStart")){
                     topStyle = getComputedStyle(el).getPropertyValue(dir);
                     topStart = topStyle.split("px");
@@ -316,6 +332,7 @@ S.parallax = function(elem, arr){
                 }
                 
                 var newPos = Number(topStart[0]) + (viewportTop - Number(el.querySelector("#parallaxStart").value))/(arr[dir]);
+
                 if(dir == "top"){
                     el.style.top = newPos + "px";
                 } else {
@@ -326,41 +343,72 @@ S.parallax = function(elem, arr){
     });
 }
 
-S.galleryGetImages = function(cat){
-    var gallery = {};
-    a = 1;
-    S.all("#gallery-" + cat + " *", function(el){
-        if(el.classList.contains('gallery-changer') === false && el.hasAttribute("data-gallery-category") === true){
-            var category = el.getAttribute("data-gallery-category");
-            if(cat == category){
-                gallery[a] = el.getAttribute("data-gallery-image");
-                a++;
+S.unique = function(object){
+    let output;
+    if(Array.isArray(object)){
+        output = [];
+        for (let i = 0; i < object.length; i++){
+            if (output.indexOf(object[i]) === -1 && object[i] !== ''){
+                output.push(object[i]);
             }
         }
-    });
-    return gallery;
+    } else {
+        output = {};
+        for (let key in object){
+            if (Object.values(output).indexOf(object[key]) === -1 && object[key] !== ''){
+                output[key] = object[key];
+            }
+        }
+    }
+    return output;
 }
 
-S.gallery = function(elem=this){
-    var category = elem.getAttribute("data-gallery-category");
-    var image = elem.getAttribute("data-gallery-image");
-    var gallery = S.galleryGetImages(category);
-    var cnt = 0;
-    console.log(gallery);
-    for (var key in gallery) {
-       cnt++;
-       if(gallery[key] == image){ var current = cnt;}
-    }
-    var prev = S.inRange(current - 1, cnt);
-    var next = S.inRange(current + 1, cnt);
+S.galleryItem = function(itemNumb, selector, cnt = false){
+    let galleryID = selector + " #web-gallery";
+    let gallery = S(galleryID);
+    S.all(galleryID + " .web-gallery-item", function(el){ el.style.display = "none";});
     
-    var portrait = window.innerHeight > window.innerWidth ? true : false; 
-    gal = '<a class="gallery-changer select-none" onclick="S.gallery(this)" style="position: absolute; color: #fff; cursor: pointer; outline: none; width: 50px; height: 50px; z-index: 2; left: 3%; top: 50%; transform: translateY(-50%) rotate(180deg);" data-gallery-category="' + category + '" data-gallery-image="' + gallery[prev] + '"><img class="fullscreen" src=\'/system/file/arrow.svg\'></a>';
-    gal += '<div class="gallery-image contain" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);' + (portrait ? 'width: 100vw; max-height: 100vh;' : 'height: 100vh; max-width: 100vw;') + '">' + S('#picture-' + image).outerHTML + '</div>';
-    gal += '<a class="gallery-changer select-none" onclick="S.gallery(this)" style="position: absolute; color: #fff; cursor: pointer; width: 50px; height: 50px; outline: none; right: 3%; top: 50%; transform: translateY(-50%);" data-gallery-category="' + category + '" data-gallery-image="' + gallery[next] + '"><img class="fullscreen" src=\'/system/file/arrow.svg\'></a>';
-    gal += '<div style="position: absolute; bottom: 5%; text-align: center; color: #fff; width: 100%;">Showing ' + current + ' of ' + cnt + '</div>';
-    gal += '<a class="gallery-close select-none" onclick="S.popupExit()" style="color: #fff; position: absolute; right: 30px; top: 30px; width: 50px; height: 50px;"><img class="fullscreen" src=\'/system/file/close.svg\'></a>';
-    S.popup(gal);
+    if(cnt){
+        let current = Number(gallery.querySelector("#web-gallery-current").value);
+        itemNumb = S.inRange(current + itemNumb, cnt);
+        console.log(current);
+    }
+    gallery.querySelector("#web-gallery-item-" + itemNumb).style.display = "block";
+    gallery.querySelector("#web-gallery-current").value = itemNumb;
+    gallery.querySelector("#web-gallery-showing").innerHTML = itemNumb;
+    gallery.style.display = "block";
+}
+
+S.gallery = function(selector){
+    
+    let gallery = {};
+    S.all(selector + " *", function(el){
+        if(el.classList.contains('gallery-item') === true){
+            gallery[el.getAttribute("data-gallery-item")] = el.innerHTML;
+            el.addEventListener("click", function(){S.galleryItem(this.getAttribute("data-gallery-item"), selector);});
+        }
+    });
+    
+    //let gallery = S.galleryGetImages(category);
+    let current = 1;
+    let cnt = Object.keys(gallery).length;
+    
+    let newGallery = document.createElement("div");
+    newGallery.setAttribute("id", "web-gallery");
+    newGallery.setAttribute("class", "hide fixed fullscreen");
+    newGallery.setAttribute("style", "top: 0; left: 0; z-index: 999;");
+    let portrait = window.innerHeight > window.innerWidth ? true : false;
+    let gal = '<div class="background black-bg" style="opacity: 0.5" onclick="S(\'' + selector + ' #web-gallery\').style.display = \'none\';"></div>';
+    gal += '<a class="gallery-changer select-none" onclick="S.galleryItem(-1, \'' + selector + '\', ' + cnt + ')" style="position: absolute; color: #fff; cursor: pointer; outline: none; width: 50px; height: 50px; z-index: 2; left: 3%; top: 50%; transform: translateY(-50%) rotate(180deg);"><img class="fullscreen" src=\'/system/file/arrow.svg\'></a>';
+    for(let i = 1; i <= cnt; i++){
+        gal += '<div id="web-gallery-item-' + i + '" class="web-gallery-item contain' + (current != i ? ' hide': '') + '" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);' + (portrait ? 'width: 100vw!important; max-height: 100vh;' : 'height: 100vh!important; max-width: 100vw;') + '">' + gallery[i] + '</div>';
+    }
+    gal += '<a class="gallery-changer select-none" onclick="S.galleryItem(1, \'' + selector + '\', ' + cnt + ')" style="position: absolute; color: #fff; cursor: pointer; width: 50px; height: 50px; outline: none; right: 3%; top: 50%; transform: translateY(-50%);"><img class="fullscreen" src=\'/system/file/arrow.svg\'></a>';
+    gal += '<div style="position: absolute; bottom: 5%; text-align: center; color: #fff; width: 100%;">Showing <span id="web-gallery-showing">' + current + '</span> of ' + cnt + '</div>';
+    gal += '<a class="gallery-close select-none" onclick="S(\'' + selector + ' #web-gallery\').style.display = \'none\';" style="color: #fff; position: absolute; right: 30px; top: 30px; width: 50px; height: 50px;"><img class="fullscreen" src=\'/system/file/close.svg\'></a>';
+    gal += '<input type="hidden" id="web-gallery-current" value="' + current + '"/>';
+    newGallery.innerHTML = gal;
+    S(selector).append(newGallery);
 }
 
 S.offset = function(el) {
@@ -376,4 +424,14 @@ S.parents = function(dataElem){
         p.push(e);
     }
     return p;
+}
+
+S.event = function(node, eventType) {
+    var clickEvent = document.createEvent ('Event');
+    clickEvent.initEvent (eventType, true, true);
+    node.dispatchEvent (clickEvent);
+}
+
+S.back = function() {
+    window.location=document.referrer;
 }

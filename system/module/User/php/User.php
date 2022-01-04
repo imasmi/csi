@@ -1,66 +1,61 @@
 <?php
-namespace system\module\User\php;
+namespace module\User;
 
 class User{
-    public function __construct(){
-        global $Core;
-        $this->Core = $Core;
-        global $Query;
-        $this->Query = $Query;
-        $this->table = isset($Query) ? $Query->table("user") : "user";
+    public function __construct($id = false) {
+        $this->table = \system\Query::table("user");
         $this->module = "User";
-        $this->id = $this->_("id");
-        $this->roles = isset($Query) ? $Query->column_group("role", $this->table) : false;
-        $this->role = $this->_();
-        if($this->role !== false){ $this->item = $this->item();}
+        if($id === false && isset($_SESSION["id"])){ $id = $_SESSION["id"];}
+        $this->id = $id;
+        $this->column_group = \system\Query::column_group("group", $this->table);
+        if($this->id !== false){
+            $this->item = $this->item();
+            $this->groups = $this->item["group"];
+        }
+        
     }
-    
-    public function item($id=false){
-        $id = $id !== false ? $id : $this->id;
-        return $this->Query->select($id, "id", $this->table);
+
+    public function item() {
+        return $GLOBALS["PDO"]->query("SELECT * FROM " . $this->table . " WHERE id='" . $this->id . "'")->fetch();
     }
-	
-	public function logger(){
+
+	public function logger() {
 	    global $Text;
-        $this->Text = $Text;
 	    $output = '<div class="logger">';
-		if($this->_() === false){
-		     $output .= '<a href="' . $this->Core->url() . $this->module . '">' . $this->Text->item("Login") . '</a>';
-		     $output .= '<a href="' . $this->Core->url() . $this->module . '/register">' . $this->Text->item("Register") . '</a>';
+		if($this->id === false){
+		     $output .= '<a href="' . \system\Core::url() . $this->module . '">' . $Text->item("Login") . '</a>';
+		     $output .= '<a href="' . \system\Core::url() . $this->module . '/register">' . $Text->item("Register") . '</a>';
 		} else {
-		    $output .= '<a href="' . $this->Core->url() . $this->module . '/profile/profile">' . $this->Text->item("Profile") . '</a>';
-		     $output .= '<a href="' . $this->Core->url() . $this->module . '/query/logout">' . $this->Text->item("Log out") . '</a>';
+		    $output .= '<a href="' . \system\Core::url() . $this->module . '/profile/profile">' . $Text->item("Profile") . '</a>';
+		     $output .= '<a href="' . \system\Core::url() . $this->module . '/query/logout">' . $Text->item("Log out") . '</a>';
 		}
 		 $output .= '</div>';
 		 return $output;
 	}
-	
-	public function pass_requirements($pass){
+
+	public static function pass_requirements($pass) {
 	    global $Text;
-	    if(strlen($pass) >= 6){ 
+	    if(strlen($pass) >= 6){
 	        return true;
 	    } else {
 	        return $Text->item("Password must be atleast 6 symbols");
 	    }
 	}
-	
-	public function activation_link($code, $email){
+
+	public function activation_link($code, $email) {
 	    global $Text;
 	    return '<a href="' . $_SERVER["REQUEST_SCHEME"] . '://' . $_SERVER["HTTP_HOST"] . '/User/query/activate?code=' . $code . '&email=' . $email . '">' . $Text->item("Activate profile") . '</a>';
 	}
-	
-	public function control($role="any"){
-	    if($this->_("id") === false ||  ($role !== "any" && $role !== $_SESSION["role"])){
-	        ?> <script>location.href = '<?php echo $this->Core->url();?>';</script><?php
+
+	public function control($group="any") {
+	    if($this->id === false ||  ($group !== "any" && $group !== $_SESSION["group"])){
+	        ?> <script>location.href = '<?php echo \system\Core::url();?>';</script><?php
 	        exit;
 	    }
 	}
 	
-	public function _($column = 'role'){
-        return (isset($_SESSION[$column])) ? $_SESSION[$column] : false;
+	public static function group($group) {
+	    return (isset($_SESSION["group"]) && $_SESSION["group"] == $group);
 	}
 }
-
-
-$User = new User();
 ?>

@@ -1,18 +1,12 @@
 <?php
-namespace system\module\Page\php;
-use \system\module\Setting\php\Setting as Setting;
+namespace module\Page;
+use \module\Setting\Setting as Setting;
 
 class Menu{
-    
+
     public function __construct($menu, $array = array("submenu" => true, "mobile-open" => false, "mobile-close" => "X", "ul-class" => "top-menu", "query" => false)){
         global $PDO;
         $this->PDO = $PDO;
-        global $Core;
-        $this->Core = $Core;
-        global $Query;
-        $this->Query = $Query;
-        global $Module;
-        $this->Module = $Module;
         global $Plugin;
         $this->Plugin = $Plugin;
         global $Language;
@@ -26,11 +20,11 @@ class Menu{
         $top_link_id = $this->PDO->query($top_link_query)->fetch();
         $this->link_id = $top_link_id["link_id"]; // start link_id for top menu pages
     }
-    
+
     public function menu_name($id, $setting){
         return $setting != "" ? $setting : $id;
     }
-    
+
     private function like(){
         if(is_array($this->menu)){
             $like = "(";
@@ -44,10 +38,10 @@ class Menu{
         }
         return $like;
     }
-    
+
     public function select($link_id){
         $pages = array();
-        $query = isset($this->arr["query"]) && $this->arr["query"] !== false && $link_id == $this->link_id ? $this->arr["query"] : "SELECT * FROM " . $this->Page->table . " WHERE " . $this->like . " AND link_id='" . $link_id . "' ORDER by `row` ASC, id ASC";
+        $query = isset($this->arr["query"]) && $this->arr["query"] !== false && $link_id == $this->link_id ? $this->arr["query"] : "SELECT id, link_id, menu FROM " . $this->Page->table . " WHERE " . $this->like . " AND link_id='" . $link_id . "' AND theme LIKE '" . $GLOBALS["Theme"]->active . "' ORDER by `row` ASC, id ASC";
         foreach($this->PDO->query($query) as $key=>$page){
             $multiple = explode(",", $page["menu"]);
             if(count($multiple) > 1){
@@ -62,7 +56,7 @@ class Menu{
         }
         return $pages;
     }
-    
+
     public function item($key, $page){
             $Setting = new Setting($key);
             $menu_name = $Setting->_("Menu", array("page_id" => $page["id"]));
@@ -74,20 +68,20 @@ class Menu{
             </li>
         <?php
     }
-    
+
     public function pages($link_id=false){
         $link_id = $link_id !== false ? $link_id : $this->link_id;
         if($link_id == $this->link_id || $this->arr["submenu"] === true){
             $pages = $this->select($link_id);
             if(count($pages) > 0){ ?>
                 <ul class="<?php echo ($link_id != $this->link_id) ? 'sub-menu' : ((isset($this->arr["class"])) ? $this->arr["class"] : 'top-menu');?>">
-                <?php foreach($pages as $key=>$page){$this->item($key, $page);}?> 
+                <?php foreach($pages as $key=>$page){$this->item($key, $page);}?>
                 </ul>
-                <?php 
+                <?php
             }
         }
     }
-    
+
     public function _(){
     $menu_id = 'menu-' . $this->menu;
     ?>

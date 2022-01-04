@@ -4,7 +4,7 @@ if($address_check->rowCount() == 1){
     $address = $address_check->fetch();
 ?>
     <div class="admin">
-    <form method="post" action="<?php echo $Core->query_path() . '?id=' . $_GET["id"];?>">
+    <form method="post" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>">
         <table class="table">
             <tr>
                 <td colspan="2">Are you sure you want to delete this address? <?php #echo $Text->_("Are you sure you want to delete this user?");?></td>
