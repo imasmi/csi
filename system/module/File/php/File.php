@@ -9,7 +9,7 @@ class File{
         global $Page;
         $this->Page = $Page;
         $this->empty_file = "system/module/File/file/camera.png";
-        $this->table = (isset($array["table"])) ? $array["table"] : \system\Query::table("file");
+        $this->table = (isset($array["table"])) ? $array["table"] : \system\Database::table("file");
         $this->fortable = isset($array["fortable"]) ? $array["fortable"] : NULL;
         $this->plugin = isset($array["plugin"]) ? $array["plugin"] : NULL;
         $this->arr = $array;
@@ -63,7 +63,7 @@ class File{
 	/* TRIGGER PICTURE UPDATER */
 	public function trigger_file($id){
 	    #return 'onmousedown="FileAPP.moveStart(event, ' . $this->items[$id]["id"] . ')" onmouseup="FileAPP.moveSafe(' . $this->items[$id]["id"] . ')" onmouseleave="FileAPP.moveStop(' . $this->items[$id]["id"] . ')" ondblclick="FileAPP.updateFile(' . $this->items[$id]["id"] . ')" title="Click to add image"';
-	    return ' ondblclick="FileAPP.updateFile(' . $this->items[$id]["id"] . ')" title="Click to add image"';
+	    return ' ondblclick="FileAPP.updateFile(' . $id . ')" title="Click to add image"';
 	}
 	
 	public function setting($file){
@@ -79,7 +79,7 @@ class File{
 	//Default File types: video, image, audio, text, application, gallery, page_id => int|true (int for concrete page_id or true for $this->page_id to be applied)
 	public function item($id, $array = array("edit" => false)){
 			$id = $this->id($id, $array);
-			$file = isset($this->items[$id]) ? $this->items[$id] : $PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
+			$file = isset($this->items[$id]) ? $this->items[$id] : $this->PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $id . "'")->fetch();
 			if($file["type"] == "gallery"){
 			    $gallery = $this->gallery($id);
 			    if(!empty($gallery)){

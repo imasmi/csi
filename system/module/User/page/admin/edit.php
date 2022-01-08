@@ -10,7 +10,7 @@ $profile = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $_GET["
     <table class="table">
         <tr>
             <td><?php echo $Text->_("Role");?></td>
-            <td><?php echo \system\Form::select("role", \system\Query::column_group("role", $User->table), array("select" => $profile["role"], "reuqired" => true, "addon" => true));?></td>
+            <td><?php echo \system\Form::select("role", \system\Database::column_group("role", $User->table), array("select" => $profile["role"], "reuqired" => true, "addon" => true));?></td>
         </tr>
 
         <tr>

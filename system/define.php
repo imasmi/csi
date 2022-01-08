@@ -3,7 +3,7 @@ if (isset($_GET["Clear-Site-Data"])) {header('Clear-Site-Data: ' . $_GET["Clear-
 
 require_once(\system\Core::doc_root() . "/system/php/Cookie.php");
 require_once(\system\Core::doc_root() . "/system/php/Module.php");
-require_once(\system\Core::doc_root() . "/system/php/Query.php");
+require_once(\system\Core::doc_root() . "/system/php/Database.php");
 
 require_once(\system\Core::doc_root() . "/system/module/Language/php/Language.php");
 $Language = new \module\Language\Language;

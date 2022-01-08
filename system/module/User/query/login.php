@@ -1,5 +1,5 @@
 <?php
-$check_user = $PDO -> prepare("SELECT id, username, status, `group`, password, email FROM " . \system\Query::table() . " WHERE username=? AND deleted IS null");
+$check_user = $PDO -> prepare("SELECT id, username, status, `group`, password, email FROM " . \system\Database::table() . " WHERE username=? AND deleted IS null");
 $check_user->execute(array($_POST["username"]));
 
 $check = array();

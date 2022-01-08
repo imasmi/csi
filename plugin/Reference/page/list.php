@@ -1,3 +1,7 @@
+<?php 
+include_once(\system\Core::doc_root() . '/plugin/Reference/php/Reference.php');
+$Reference = new \plugin\Reference\Reference;
+?>
 <div class="csi admin">
 <?php
 $caser = array();
@@ -43,7 +47,6 @@ $class = ($spravka != "nap") ? ' hidden' : "";
 <div id="<?php echo $spravka;?>" class="spravki<?php echo $class;?>">
 	<h3 class="title text-center"><?php echo $key;?></h3>
 	<?php
-		$Reference = new \plugin\Reference\php\Reference;
 		$Reference->starters($caser[$spravka]);?>
 </div>
 <?php }} ?>

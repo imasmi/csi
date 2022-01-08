@@ -26,7 +26,7 @@
             <span>A variable with instance of \system\Core class.</span>
             
         <h3>ListingAPP->Query</h3>
-            <span>A variable with instance of \system\Query class.</span>
+            <span>A variable with instance of \system\Database class.</span>
             
         <h3>ListingAPP->Info</h3>
             <span>A variable with instance of \system\system\Info class.</span>
@@ -80,13 +80,13 @@
             <ul>
                 <li>
                     <h4>ListingAPP->view(value, fields, selector, table, delimeter)</h4>
-                    <span>value: a value to select with \system\Query::select function</span>
+                    <span>value: a value to select with \system\Database::select function</span>
                     <span>fields (array or *): array with columns to display or * for all columns</span>
-                    <span>selector: column to select with \system\Query::select function</span>
-                    <span>table: table to select with \system\Query::select function</span>
-                    <span>delimeter: delimeter to select with \system\Query::select function</span>
+                    <span>selector: column to select with \system\Database::select function</span>
+                    <span>table: table to select with \system\Database::select function</span>
+                    <span>delimeter: delimeter to select with \system\Database::select function</span>
                     <p>Example: $ListingAPP->view(10, array("id", "tag", "path"), "id", $File->table, "=")</p>
-                    <span>The example above will use \system\Query::select function to select row from $File->table with id=10 and will output its id, tag and path values in HTML table.</span>
+                    <span>The example above will use \system\Database::select function to select row from $File->table with id=10 and will output its id, tag and path values in HTML table.</span>
                 </li>
             </ul>
         

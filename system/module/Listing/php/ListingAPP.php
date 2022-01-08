@@ -39,7 +39,7 @@ class ListingAPP{
     }
 
     public function view($value, $array="*", $selector="id", $table="module", $delimeter="="){
-        $table = ($table === "module") ? \system\Query::table() : $table;
+        $table = ($table === "module") ? \system\Database::table() : $table;
 
         $fields = ($array === "*") ? $array : implode(",", $array);
         $select = $PDO->query("SELECT " . $fields . " FROM " . $table . " WHERE id='" . $value . "'")->fetch();
@@ -83,13 +83,13 @@ class ListingAPP{
         ?>
         <ul class="pagination">
             <li class="pagination-p">
-                <?php if($p > 1){?><a class="button" href="<?php echo$this->replace_get(array("p" => $p - 1) + $url);?>"><?php echo $this->Text->item("Previous");?></a><?php } ?>
+                <?php if($p > 1){?><a class="button" href="<?php echo \system\Core::url() . $this->replace_get(array("p" => $p - 1) + $url);?>"><?php echo $this->Text->item("Previous");?></a><?php } ?>
                 <select onchange="window.open( this.value,'_self')" class="button inline-block">
                     <?php for($a = 1; $a <= $pages; ++$a){?>
-                        <option value="<?php echo $this->replace_get(array("p" => $a) + $url);?>"<?php if($a == $p){ echo ' selected';}?>><?php echo $a;?></option>
+                        <option value="<?php echo \system\Core::url() . $this->replace_get(array("p" => $a) + $url);?>"<?php if($a == $p){ echo ' selected';}?>><?php echo $a;?></option>
                     <?php } ?>
                 </select>
-                <?php if($p < $pages){?><a class="button" href="<?php echo $this->replace_get(array("p" => $p + 1) + $url)?>"><?php echo $this->Text->item("Next");?></a><?php } ?>
+                <?php if($p < $pages){?><a class="button" href="<?php echo \system\Core::url() . $this->replace_get(array("p" => $p + 1) + $url)?>"><?php echo $this->Text->item("Next");?></a><?php } ?>
             </li>
             
             <?php if (!isset($array["per-page"]) || $array["per-page"] == true) { ?>
@@ -108,7 +108,7 @@ class ListingAPP{
                         <?php foreach($per_values as $perPage){
                         $selected = ($perPage == $pp) ? " selected" : "";
                         ?>
-                        <option value='<?php echo $this->replace_get(array("p" => 1, "pp" => $perPage) + $url);?>' <?php echo $selected;?>><?php echo $perPage;?></option>
+                        <option value='<?php echo \system\Core::url() . $this->replace_get(array("p" => 1, "pp" => $perPage) + $url);?>' <?php echo $selected;?>><?php echo $perPage;?></option>
                         <?php }?>
                     </select>
                 </li>
@@ -123,7 +123,7 @@ class ListingAPP{
     // Array possible values: "row-order" => ASC|DESC (order by row column, ASC is default)
     // example for array ("row-order" => "ASC", "row-query" => "type='category' AND link_id='18'")
     public function _($array="*", $actions="*", $table="module", $query=""){
-        $table = ($table === "module") ? \system\Query::table() : $table;
+        $table = ($table === "module") ? \system\Database::table() : $table;
         if($array === "*"){$array = $this->PDO->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA= '" . $this->db["database"] . "' AND TABLE_NAME = '" . $table . "'")->fetchALL(\PDO::FETCH_COLUMN);}
         if($actions === "*"){$actions = $this->actions();}
         ?>

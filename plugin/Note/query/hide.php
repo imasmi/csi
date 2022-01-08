@@ -8,8 +8,8 @@ $array = array(
 		);
 
 
-$update = \system\Query::update($array, $_GET["id"], "id", "note");
-#\system\Query::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
+$update = \system\Database::update($array, $_GET["id"], "id", "note");
+#\system\Database::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
 
 if($update){
 	if(isset($_GET["type"])){

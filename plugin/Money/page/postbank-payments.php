@@ -1,3 +1,6 @@
+<?php 
+include_once(\system\Core::doc_root() . '/web/php/dates.php');
+?>
 <table class="admin" border="1px">
 	<tr><th colspan="100%">Проверка на банка</th></tr>
 	<tr>
@@ -72,7 +75,7 @@
 							foreach($payments as $sub_bill){
 								foreach($sub_bill as $sub_postbank_id => $sub_invoice){
 									if($bill_id != 0 && $sub_postbank_id == $postbank_id){
-										if($sub_invoice["type"] == "invoice"){echo $sub_invoice["invoice"] . "/" . \web\php\dates::_($sub_invoice["date"]) . "<br>";}
+										if($sub_invoice["type"] == "invoice"){echo $sub_invoice["invoice"] . "/" . \web\dates::_($sub_invoice["date"]) . "<br>";}
 									}
 								}
 							}
@@ -99,7 +102,7 @@
 							foreach($payments as $sub_bill){
 								foreach($sub_bill as $sub_postbank_id => $sub_invoice){
 									if($bill_id != 0 && $sub_postbank_id == $postbank_id){
-										if($sub_invoice["type"] == "bill"){echo $sub_invoice["bill"] . "/" . \web\php\dates::_($sub_invoice["date"]) . "<br>";}
+										if($sub_invoice["type"] == "bill"){echo $sub_invoice["bill"] . "/" . \web\dates::_($sub_invoice["date"]) . "<br>";}
 									}
 								}
 							}

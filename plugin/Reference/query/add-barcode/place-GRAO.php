@@ -1,10 +1,12 @@
 <?php 
 require_once \system\Core::doc_root() . '/composer/vendor/autoload.php';
-$Barcode = new \plugin\Document\php\Barcode();
 require_once(\system\Core::doc_root() . '/system/module/File/php/FileAPP.php');
+$FileAPP = new \module\File\FileAPP;
+include_once(\system\Core::doc_root() . '/plugin/Document/php/Barcode.php');
+$Barcode = new \plugin\Document\Barcode();
+
 $print_dir = $_POST["dir"] . "/print/";
-$FileAPP = new \system\module\File\php\FileAPP;
-$FileAPP->delete_dir($print_dir);
+if ( file_exists($print_dir) ) { $FileAPP->delete_dir($print_dir); }
 
 for($a = 1; $a < $_POST["rows"]; ++$a){
     if(!isset($_POST["file_" . $a])){continue;} //Check if the row is removed

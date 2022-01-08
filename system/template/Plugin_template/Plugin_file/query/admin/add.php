@@ -11,7 +11,7 @@ $array = array(
         "link_id" => 0,
         "user_id" => $User->id,
         "plugin" => isset($Object->plugin) ? $Object->plugin : NULL,
-        "row" => \system\Query::new_id($Object->table, "row", " WHERE `tag`='" . $Object->type . "'"),
+        "row" => \system\Database::new_id($Object->table, "row", " WHERE `tag`='" . $Object->type . "'"),
         "tag" => $Object->type,
         "type" => "image",
         "created" => date("Y-m-d H:i:s")
@@ -21,7 +21,7 @@ foreach($Language->items as $lang=>$abbrev){
     $array[$abbrev] = $_POST[$abbrev];
 }
 
-$newItem = \system\Query::insert($array, $Object->table);
+$newItem = \system\Database::insert($array, $Object->table);
 $id = $PDO->lastInsertId();
 
 if($newItem){

@@ -1,4 +1,6 @@
 <?php
+include_once(\system\Core::doc_root() . '/plugin/Import/php/Import.php');
+$Import = new \plugin\Import\Import;
 $names = $Import->fields()["incoming"];
 $updates = 0;
 $inserts = 0;
@@ -15,7 +17,7 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		} elseif($key == "name"){
 			$array[$key] = $Import->doc($_POST[$key . '-' . $a], 'outgoing');
 		} elseif($key == "user"){
-			$array[$key] = $PDO->query("SELECT id FROM " . $User->table . " WHERE email='" . $_POST[$key . '-' . $a] . "'")->fetch()["name"];
+			$array[$key] = $PDO->query("SELECT id FROM " . $User->table . " WHERE email='" . $_POST[$key . '-' . $a] . "'")->fetch()["id"];
 		}  elseif(!isset($_POST[$key . '-' . $a])){
 			unset($array[$key]);
 		} else {
@@ -28,10 +30,10 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		if($checks->rowCount() > 0){
 			$check = $checks->fetch();
 			if($array["name"] == 4 || $array["name"] == 5){$array["note"] = $check["note"];}
-			\system\Query::update($array, $check["id"], "id", "document");
+			\system\Database::update($array, $check["id"], "id", "document");
 			$updates++;
 		} else {
-			\system\Query::insert($array, "document");
+			\system\Database::insert($array, "document");
 			$inserts++;
 		}
 	} else {

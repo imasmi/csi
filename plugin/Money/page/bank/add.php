@@ -1,9 +1,10 @@
 <?php 
-	$select = $PDO->query("SELECT * FROM person WHERE id='" . $_GET["person"] . "'")->fetch();
-	$units = array();
-	foreach($PDO->query("SELECT * FROM bank_units ORDER by id ASC") as $unit){
-		$units[$unit["id"]] = $unit["name"];
-	}
+include_once(\system\Core::doc_root() . '/system/php/Form.php');
+$select = $PDO->query("SELECT * FROM person WHERE id='" . $_GET["person"] . "'")->fetch();
+$units = array();
+foreach($PDO->query("SELECT * FROM bank_units ORDER by id ASC") as $unit){
+    $units[$unit["id"]] = $unit["name"];
+}
 ?>
 <div class="admin">
 <div class="title">Добавяне на банова сметка: <?php echo $select["name"];?></div>
@@ -13,7 +14,7 @@
 	<table class="table">
         <tr>
             <td>Банка</td>
-            <td><?php $Form->select("bank_unit", $units);?></td>
+            <td><?php \system\Form::select("bank_unit", $units);?></td>
         </tr>
         
 		<tr>

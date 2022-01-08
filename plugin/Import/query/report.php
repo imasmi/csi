@@ -30,7 +30,7 @@ foreach($array as $row => $values){
 		$array = array(
 			"value" => serialize($values)
 		);
-		\system\Query::update($array,$report["id"], "id", "report");
+		\system\Database::update($array,$report["id"], "id", "report");
 	} else {
 		$array = array(
 			"year" => $year,
@@ -40,7 +40,7 @@ foreach($array as $row => $values){
 			"value" => serialize($values)
 		);
 
-		\system\Query::insert($array,"report");
+		\system\Database::insert($array,"report");
 	}
 }
 ?>

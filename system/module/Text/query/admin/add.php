@@ -9,7 +9,7 @@ if(empty($check)){
 
 #CREATE NEW TEXT IF ALL EVERYTHING IS FINE
 
-$new_text = \system\Query::insert($_POST);
+$new_text = \system\Database::insert($_POST);
 
 if($new_text){
     ?><script>history.go(-1)</script><?php

@@ -22,7 +22,7 @@
             <span>A variable with instance of \system\Core class.</span>
             
         <h3>Page->Query</h3>
-            <span>A variable with instance of \system\Query class.</span>
+            <span>A variable with instance of \system\Database class.</span>
         
         <h3>Page->Module</h3>
             <span>A variable with instance of \module\Module\Module class.</span>

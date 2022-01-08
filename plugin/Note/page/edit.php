@@ -1,6 +1,9 @@
 <?php 
+include_once(\system\Core::doc_root() . '/system/php/Form.php');
+include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
 $select = $PDO->query("SELECT * FROM note WHERE id='" . $_GET["id"] . "'")->fetch();
-$Caser = new \plugin\Caser\php\Caser($select["case_id"]);
+$Caser = new \plugin\Caser\Caser($select["case_id"]);
 ?>
 <div class="admin">
 <div class="title">Редакция на бележка</div>
@@ -46,7 +49,7 @@ $Caser = new \plugin\Caser\php\Caser($select["case_id"]);
 						foreach($Caser->debtor as $id){
 							$debtors[$id] = $PDO->query("SELECT name FROM person WHERE id='" . $id . "'")->fetch()["name"];
 						}	
-						$Form->select("debtor_id", $debtors, array("select" => $select["debtor_id"]));
+						\system\Form::select("debtor_id", $debtors, array("select" => $select["debtor_id"]));
 					}
 				?>
 			</td>
@@ -60,7 +63,7 @@ $Caser = new \plugin\Caser\php\Caser($select["case_id"]);
 				foreach($PDO->query("SELECT * FROM " . $User->table . " WHERE `status` = 'active' ORDER by email ASC") as $user){
 					$users[$user["id"]] = $user["email"];
 				}
-					$Form->select("user_id", $users, array("select" => $select["user_id"]));
+				\system\Form::select("user_id", $users, array("select" => $select["user_id"]));
 				?>
 			</td>
         </tr>
@@ -89,7 +92,7 @@ $Caser = new \plugin\Caser\php\Caser($select["case_id"]);
         </tr>
 	<?php
 	$check = (isset($_GET["check"])) ? explode(",", $_GET["check"]) : array(); 
-	foreach($Note->places() as $key=>$value){
+	foreach(\plugin\Note\Note::places() as $key=>$value){
 	?>
 		<tr>
             <td><?php echo $value;?></td>

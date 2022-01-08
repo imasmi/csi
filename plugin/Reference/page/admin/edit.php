@@ -9,12 +9,12 @@ $select = $PDO->query("SELECT * FROM " . $Page->table . " WHERE id='" . $_GET["i
     <table class="table">
         <tr>
             <td>Type</td>
-            <td><?php echo $Form->select("type", \system\Query::column_group("type", $Object->table), array("addon" => true, "select" => $select["type"]));?></td>
+            <td><?php echo $Form->select("type", \system\Database::column_group("type", $Object->table), array("addon" => true, "select" => $select["type"]));?></td>
         </tr>
         
         <tr>
             <td>Menu</td>
-            <td><?php echo $Form->select("menu", \system\Query::column_group("menu", $Object->table), array("addon" => true, "select" => $select["menu"]));?></td>
+            <td><?php echo $Form->select("menu", \system\Database::column_group("menu", $Object->table), array("addon" => true, "select" => $select["menu"]));?></td>
         </tr>
         
         <?php foreach($Language->items as $key=>$value){?>

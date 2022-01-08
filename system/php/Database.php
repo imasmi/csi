@@ -1,7 +1,7 @@
 <?php
 namespace system;
 
-class Query{
+class Database{
     //$input as array ["data" => array, "table" => string]
 	public static function insert($input, $table="module"){
 	    if(isset($input["data"])) {

@@ -48,7 +48,7 @@ class Money{
 					if($charger !== false){
 						if($_GET["charger"] == $Caser->charger){$payments[] = $payment;}
 					} else {
-						if($this->User->role == "пчси" || $this->User->role == "деловодител"){ 
+						if($this->User->group("пчси") || $this->User->group("деловодител")){ 
 							if($this->User->id == $Caser->charger){$payments[] = $payment;}
 						} else {
 							$payments[] = $payment;
@@ -63,7 +63,7 @@ class Money{
 					<td><?php echo  $paymentDate;?></td>
 					<td><a href="" class="caseNumber"><?php echo $Caser->number;?></a></td>
 					<td><?php echo  $this->User->item($payment["user"])["email"];?></td></td>
-					<td><?php echo \system\Query::select($protocol["name"], "id", "doc_types", "name")["name"];?></td>
+					<td><?php //echo $this->PDO->query("SELECT name FROM doc_types WHERE id='" . $payment["name"] . "'")->fetch()["name"];?></td>
 					<td><?php echo $payment["reason"];?></td>
 					<td><?php echo $this->sum($payment["amount"]);?></td>
 					<td><?php echo $payment["allocate"] > 0 ? $this->sum($payment["allocate"]) : "Не се разпределя";?></td>
@@ -89,8 +89,8 @@ class Money{
 			"Дата" => array("date", 'echo date("d.m.Y", strtotime($list["date"]));'),
 			"Вид" => array("type", 'echo $list["type"] == "bill" ? "Сметка" : "Фактура";'),
 			"Сума" => "sum",
-			"Дело" => array("case_id", '$caser = \system\Query::select($list["case_id"], "id", "caser"); echo $caser["number"];'),
-			"Задължено лице" => array("payer", '$person = \system\Query::select($list["payer"], "id", "person"); echo $person["name"];'),
+			"Дело" => array("case_id", '$caser = \system\Database::select($list["case_id"], "id", "caser"); echo $caser["number"];'),
+			"Задължено лице" => array("payer", '$person = \system\Database::select($list["payer"], "id", "person"); echo $person["name"];'),
 			"Данъчна основа" => "tax_base",
 			"Данък" => "vat",
 			"Сметка №" => "bill",
@@ -129,7 +129,7 @@ class Money{
 					<td><?php echo  $invoice["type"] == "bill" ? "Сметка" : "фактура";?></td>
 					<td><?php echo $this->sum($invoice["sum"]);?></td>
 					<td><a href="" class="caseNumber"><?php echo $Caser->number;?></a></td>
-					<td><?php echo \system\Query::select($invoice["payer"], "id", "person")["name"];?></td></td>
+					<td><?php echo \system\Database::select($invoice["payer"], "id", "person")["name"];?></td></td>
 					<td><?php echo $this->sum($invoice["tax_base"]);?></td>
 					<td><?php echo $this->sum($invoice["vat"]);?></td>
 					<td><?php echo $invoice["bill"];?></td>

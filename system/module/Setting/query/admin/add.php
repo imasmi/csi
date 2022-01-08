@@ -7,7 +7,7 @@ if($_POST["field"] == ""){ $check["#field"] = "Insert field!";}
 if(empty($check)){
 #INSERT IF ALL EVERYTHING IS FINE
 
-$insert = \system\Query::insert($_POST);
+$insert = \system\Database::insert($_POST);
 
 if($insert){
     ?><script>history.go(-1)</script><?php

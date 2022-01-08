@@ -15,7 +15,7 @@ $FileAPP_page = new module\File\FileAPP;
     <table class="table">
         <tr>
             <td>Tag</td>
-            <td><?php echo \system\Form::select("tag", array("page" => "Page") + \system\Query::column_group("tag"), array("select" => "page", "required" => true, "addon" => true));?></td>
+            <td><?php echo \system\Form::select("tag", array("page" => "Page") + \system\Database::column_group("tag"), array("select" => "page", "required" => true, "addon" => true));?></td>
         </tr>
 
         <tr>
@@ -30,7 +30,7 @@ $FileAPP_page = new module\File\FileAPP;
 
         <tr>
             <td>Menu <?php echo \system\Info::_('<div>Select menu for the web page to appears in. If the page is attached to parent page, the parent page should also be included in the menu.</div>');?></td>
-            <td><?php echo \system\Form::select("menu", \system\Query::column_group("menu"), array("addon" => true, "select" => (isset($_GET["menu"]) ? $_GET["menu"] : false)));?></td>
+            <td><?php echo \system\Form::select("menu", \system\Database::column_group("menu"), array("addon" => true, "select" => (isset($_GET["menu"]) ? $_GET["menu"] : false)));?></td>
         </tr>
 
         <tr>

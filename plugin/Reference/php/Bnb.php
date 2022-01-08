@@ -61,7 +61,7 @@ class Bnb{
 	}
 	
 	public function accounts($accounts){
-		if(isset($accounts)){?>
+		if($accounts){?>
 		<h4>БАНКОВИ СМЕТКИ</h4>
 		<?php foreach($accounts as $bank){?>
 			<table border="1" style="border-collapse: collapse; margin-top: 30px; font-size: 12px;">
@@ -121,7 +121,7 @@ class Bnb{
 	}
 	
 	public function safes($safes){
-		if(isset($safes)){?>
+		if($safes){?>
 		<h4>ДОГОВОРИ ЗА НАЕМ НА БАНКОВИ СЕЙФОВЕ</h4>
 		<?php foreach($safes as $bsafe){?>
 			<table border="1" style="border-collapse: collapse; margin-top: 30px; font-size: 12px;">	
@@ -159,7 +159,7 @@ class Bnb{
 	}
 	
 	public function caser($id){
-		$person = \system\Query::select($id, "EGN_EIK", "person", "id");
+		$person = \system\Database::select($id, "EGN_EIK", "person", "id");
 		foreach($this->PDO->query("SELECT c.number FROM caser_title t, caser c WHERE c.id=t.case_id AND t.debtor LIKE '%\"" . $person["id"] . "\"%'") as $case){
 			echo '<div>' . $case["number"] . '</div>';
 		}

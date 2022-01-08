@@ -1,4 +1,5 @@
 <?php
+include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
 $check = array();
 
 #CHECK IF THERE IS NOTE
@@ -19,12 +20,12 @@ $array = array(
 			"date" => date("Y-m-d H:i:s")
         );
 		
-foreach($Note->places() as $key=>$value){
+foreach(\plugin\Note\Note::places() as $key=>$value){
 	$array[$key] = isset($_POST[$key]) ? 1 : 0;
 }
 
-$insert = \system\Query::insert($array, "note");
-#\system\Query::insert($array, $table="module")
+$insert = \system\Database::insert($array, "note");
+#\system\Database::insert($array, $table="module")
 
 if($insert){
 	if(!isset($_POST["where"])){ ?><script>history.go(-1)</script><?php }
@@ -35,7 +36,7 @@ if($insert){
 } else {
     $Form->validate($check);
 }
-if(isset($_POST["where"])){$Note->_($_POST["where"], $_POST["case_id"], $_POST["place"],$_POST["element"]);}
+if(isset($_POST["where"])){\plugin\Note\Note::_($_POST["where"], $_POST["case_id"], $_POST["place"],$_POST["element"]);}
 
 exit;
 ?>

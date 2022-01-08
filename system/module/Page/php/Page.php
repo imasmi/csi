@@ -9,7 +9,7 @@ class Page{
         $this->PDO = $PDO;
         global $Plugin;
         $this->Plugin = $Plugin;
-        $this->table = (isset($array["table"])) ? $array["table"] : \system\Query::table("page");
+        $this->table = (isset($array["table"])) ? $array["table"] : \system\Database::table("page");
         $this->items = $this->items($page_id);
         $this->arr = $array;
         // Change session language if page of other language is opened

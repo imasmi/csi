@@ -14,8 +14,8 @@ $array = array(
 	"bg" => $_POST["bg"]
 );
 
-$insert = \system\Query::insert($array, $Setting->table);
-#\system\Query::insert($array, $table="module")
+$insert = \system\Database::insert($array, $Setting->table);
+#\system\Database::insert($array, $table="module")
 
 if($insert){
     ?><script>history.go(-1)</script><?php

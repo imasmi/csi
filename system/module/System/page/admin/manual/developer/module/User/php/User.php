@@ -10,7 +10,7 @@
             <span>A variable with instance of \system\Core class.</span>
             
         <h3>User->Query</h3>
-            <span>A variable with instance of \system\Query class.</span>
+            <span>A variable with instance of \system\Database class.</span>
             
         <h3>User->table</h3>
             <span>Database table to store users data. Default is the prefix_user.</span>

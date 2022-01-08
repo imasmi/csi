@@ -1,3 +1,8 @@
+<?php 
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
+include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
+include_once(\system\Core::doc_root() . '/plugin/Money/php/Pay.php');
+?>
 <div class="csi admin">
 	<input type="time" id="start-time" value="<?php echo isset($_GET["start_time"]) ? $_GET["start_time"] : date("H:i:s");?>"/>
 	<button type="button" class="button" onclick="window.open(location.href + (location.href.indexOf('?') === -1 ? '?' : '&') +'start_time=' + S('#start-time').value, '_self')">Промени начален час</button>
@@ -31,7 +36,7 @@ $end = isset($_GET["end"]) && $_GET["end"] != "" ? $_GET["end"] : $start;
 $a = 1;
 foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id AND d.user='2' AND d.date >= '" . $start . " " . $start_time . "' AND d.date <= '" . $end . " 23:59:59' ORDER by d.id ASC") as $distribution){
 // CASE DEBTORS
-	$Caser = new \plugin\Caser\php\Caser($distribution[0]);
+	$Caser = new \plugin\Caser\Caser($distribution[0]);
 	$case_debtors = $Caser->debtor;
 	$heir = 0;
 	if(count($case_debtors) == 1){
@@ -84,7 +89,7 @@ foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id 
 				<input type="checkbox" name="payment<?php echo $a;?>" class="distribution" id="payment<?php echo $a;?>" <?php echo (($sum > 0 && $type=='direct') ? "checked" : "");?>/>
 				<input type="hidden" name="type<?php echo $a;?>" id="type<?php echo $a;?>" value="<?php echo $type;?>"/>
 			</td>
-			<td id="notes<?php echo $case["id"];?>"><?php $Note->_(" WHERE (case_id=" . $distribution["case_id"] . " OR person_id='" . $creditorID . "') AND payment=1 AND hide is NULL", $distribution["case_id"], "payment", "#notes" . $distribution["case_id"]);?></td>
+			<td id="notes<?php echo $distribution["case_id"];?>"><?php \plugin\Note\Note::_(" WHERE (case_id=" . $distribution["case_id"] . " OR person_id='" . $creditorID . "') AND payment=1 AND hide is NULL", $distribution["case_id"], "payment", "#notes" . $distribution["case_id"]);?></td>
 			<td>
 				<?php echo $Caser->open();?>
 				<?php if($distribution["user"] != 2){?><div style="color: red"><?php echo $PDO->query("SELECT email FROM " . $User->table . " WHERE id='" . $distribution["user"] . "'")->fetch()["email"];?></div><?php } ?>
@@ -110,15 +115,15 @@ foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id 
 			
 			<?php
 			
-			$express_bank_check = $PDO -> query("SELECT id FROM bank WHERE person_id='" . $creditorID . "' AND bank_unit = '14'");
-			if($express_bank_check->rowCount > 0){
+			$express_bank_check = $PDO->query("SELECT id FROM bank WHERE person_id='" . $creditorID . "' AND bank_unit = '14'");
+			if($express_bank_check->rowCount() > 0){
 				?>
 					<div class="important">Лицето има банкови сметки в ЕКСПРЕСБАНК. Банкови преводи към ЕКСПРЕСБАНК вече не са разрешени, да проверя за нова банкова сметка.</div>
 				<?php
 			}
 			
 			if($type == "budget"){
-				echo $Pay->budgetPay($creditorID, $creditor_name, $a, $sum, $debtor["EGN_EIK"], $distribution);
+				echo \plugin\Money\Pay::budgetPay($creditorID, $creditor_name, $a, $sum, $debtor["EGN_EIK"], $distribution);
 			} else {
 				$bank = $PDO -> query("SELECT * FROM bank WHERE person_id='" . $creditorID . "'");
 				$chooseBank = ($bank->rowCount() > 1) ? 'class="color-1-bg"' : '';
@@ -142,7 +147,7 @@ foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id 
 			<?php
 	/* DESCRIPTION - АКО Е ЗА СЪДА ИЛИ МВР Е ЕДНО, ако е друго бюджетно е за всяко индивидуално, ако е директно плащане е стандартно */			
 			if(strpos($creditor_name, 'СЪД') !== false || strpos($creditor_name, 'МВР') !== false){
-				$description = $Pay->caserNumbersDescription($distribution, $creditor_name);
+				$description = \plugin\Money\Pay::caserNumbersDescription($distribution, $creditor_name);
 			?>
 				<textarea name="description<?php echo $a;?>" id="description<?php echo $a;?>" class="<?php echo $debtor_color;?>" maxlength="70"><?php echo  $description;?></textarea>
 			<?php
@@ -187,10 +192,7 @@ foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id 
 			<?php $Caser->open();?>
 			<?php
 				$csiSum += $bill["sum"];
-				if($bill["transfered"] == "yes"){
 			?>
-				<img id="correct" <?php echo $this->pic(80);?>
-			<?php } ?>
 		</td>
 		<td><?php echo $billType;?></td>
 		<td><input type="text" name="name<?php echo $a;?>" id="name<?php echo $a;?>" value="ЧСИ ГЕОРГИ ЦЕНОВ ТАРЛЬОВСКИ" readonly/></td>

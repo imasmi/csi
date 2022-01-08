@@ -401,9 +401,8 @@ class ImageProcessor implements \Psr\Log\LoggerAwareInterface
 			return $info;
 
 		}
-
+		
 		if ($type === 'png') {
-
 			// Check signature
 			if (strpos($data, chr(137) . 'PNG' . chr(13) . chr(10) . chr(26) . chr(10)) !== 0) {
 				return $this->imageError($file, $firsttime, 'Error parsing PNG identifier');
@@ -1028,7 +1027,6 @@ class ImageProcessor implements \Psr\Log\LoggerAwareInterface
 			if (isset($gd['PNG Support']) && $gd['PNG Support']) {
 
 				$im = @imagecreatefromstring($data);
-
 				if (!$im) {
 					return $this->imageError($file, $firsttime, 'Error parsing image file - image type not recognised, and not supported by GD imagecreate');
 				}

@@ -1,3 +1,9 @@
+<?php
+include_once(\system\Core::doc_root() . '/plugin/Reference/php/Bnb.php');
+$Bnb = new \plugin\Reference\Bnb;
+include_once(\system\Core::doc_root() . '/plugin/Import/php/Import.php');
+$Import = new \plugin\Import\Import;
+?>
 <form class="form admin" id="form" accept-charset="UTF-8" method="post" action="<?php echo \system\Core::this_path(0, -1);?>/place-BNB" target="_blank">
 <table class="listTable napReorder">
 	<tr>
@@ -12,7 +18,6 @@
 <?php 
 $cnt = 1;
 $used_docs = array();
-$Bnb = new \plugin\Reference\php\Bnb;
 
 foreach(\system\Core::list_dir($_POST["dir"]) as $files){
 	if(pathinfo($files)["extension"] === "xml"){

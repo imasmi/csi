@@ -12,7 +12,7 @@ class Text{
         global $Page;
         $this->Page = $Page;
         $this->page_id = $page_id !== false ? $page_id : $Page->_();
-        $this->table = (isset($array["table"])) ? $array["table"] : \system\Query::table("text");
+        $this->table = (isset($array["table"])) ? $array["table"] : \system\Database::table("text");
         $this->fortable = isset($array["fortable"]) ? $array["fortable"] : NULL;
         $this->plugin = isset($array["plugin"]) ? $array["plugin"] : NULL;
         $this->arr = $array;
@@ -49,7 +49,7 @@ class Text{
             $check_tag = $this->PDO->query("SELECT * FROM " . $this->table . " WHERE tag='" . $id . "' AND fortable IS NULL");
             if($check_tag->rowCount() > 0 && !isset($array["page_id"]) && (isset($this->arr["page_id"]) && $this->arr["page_id"] == 0)){
                 $tag = $check_tag->fetch();
-                \system\Query::update(array("page_id" => "0"), $tag["id"], "id", $this->table);
+                \system\Database::update(array("page_id" => "0"), $tag["id"], "id", $this->table);
                 $this->items[$tag["id"]] = $tag;
                 $this->items[$id] = $tag;
                 return $tag["id"];

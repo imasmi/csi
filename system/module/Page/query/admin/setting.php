@@ -25,10 +25,10 @@ if(empty($check)){
             "filename" => $PageAPP->url_format($_POST["filename"])
     );
     
-    if($select["menu"] != $_POST["menu"]){ $array["row"] = \system\Query::new_id($Page->table, "row", " WHERE menu='" . $_POST["menu"] . "'");}
+    if($select["menu"] != $_POST["menu"]){ $array["row"] = \system\Database::new_id($Page->table, "row", " WHERE menu='" . $_POST["menu"] . "'");}
     
     if(isset($_POST["homepage"]) && $_POST["homepage"] == "on"){
-        $PDO->query("UPDATE " . \system\Query::table() . " SET `type`='' WHERE `type`='homepage'");
+        $PDO->query("UPDATE " . \system\Database::table() . " SET `type`='' WHERE `type`='homepage'");
         $array["type"] = "homepage";
     }
     
@@ -36,7 +36,7 @@ if(empty($check)){
         $array[$value] = (strpos($_POST[$value], "http") !== false) ? $_POST[$value] : $PageAPP->url_format($_POST[$value]);
     }
     
-    $update = \system\Query::update($array, $_GET["id"]);
+    $update = \system\Database::update($array, $_GET["id"]);
     
     if($update){
         #ADD FILE IF NOT EXISTS

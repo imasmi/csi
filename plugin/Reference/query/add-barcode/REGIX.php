@@ -1,3 +1,8 @@
+<?php
+include_once(\system\Core::doc_root() . '/plugin/Document/php/Barcode.php');
+$Barcode = new \plugin\Document\Barcode();
+?>
+
 <!doctype HTML>
 <head>
   <link rel="stylesheet" href="<?php echo \system\Core::url();?>web/css/style.css">
@@ -30,8 +35,7 @@ foreach($listDir as $f){
   }
   $barcode = $PDO->query("SELECT * FROM document WHERE case_id='" . $case_id . "' AND type='incoming'" . $exclude . " ORDER by id DESC")->fetch();
   $bar_check[$case_id][] = $barcode["id"];
-
-  $Barcode = new \plugin\Document\php\Barcode();
+  
   $content = file_get_contents($listConv . '/' . $name);
   ?>
     <div class="regix-print relative">

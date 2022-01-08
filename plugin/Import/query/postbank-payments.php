@@ -17,7 +17,7 @@ for($a = 1; $a <= $_POST["cnt"]; ++$a){
 			"description" => $_POST["description_" . $a]
 		);
 		
-		\system\Query::insert($array, "payment");
+		\system\Database::insert($array, "payment");
 	}
 }
 ?>

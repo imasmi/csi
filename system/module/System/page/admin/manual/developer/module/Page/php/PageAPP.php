@@ -14,7 +14,7 @@
             <span>A variable with instance of \system\Core class.</span>
             
         <h3>PageAPP->Query</h3>
-            <span>A variable with instance of \system\Query class.</span>
+            <span>A variable with instance of \system\Database class.</span>
             
         <h3>PageAPP->Form</h3>
             <span>A variable with instance of \module\Module\Module class.</span>

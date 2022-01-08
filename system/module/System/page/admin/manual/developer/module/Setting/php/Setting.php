@@ -12,7 +12,7 @@
         <h3>2. Array</h3>
             <span>An array with additional parameters to set object enviorment.</span>
             <ul>
-                <li>table => string(existing database table): set object related database table. Default is prefix_setting received from \system\Query::table("setting") function.</li>
+                <li>table => string(existing database table): set object related database table. Default is prefix_setting received from \system\Database::table("setting") function.</li>
                 <li>fortable => string(existing database table): set fortable to point database page_id links to specific table, different from default page table. This way you can bind your settings connections to records in another tables and select them only when Setting object with fortable additional array key is specified.</li>
                 <li>plugin => string(name of plugin): set plugin enviorment.</li>
                 <li>page_id => integer: set additional id to select settings with. The default instance created has this value set to 0 to select all global settings by default.</li>
@@ -28,7 +28,7 @@
             <span>A variable with instance of \system\Core class.</span>
             
         <h3>Setting->Query</h3>
-            <span>A variable with instance of \system\Query class.</span>
+            <span>A variable with instance of \system\Database class.</span>
         
         <h3>Setting->Language</h3>
             <span>A variable with instance of \module\Language\Language class.</span>

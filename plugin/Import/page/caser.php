@@ -36,12 +36,12 @@ for($b = 0; $b < count($cData); $b++){
 $rows = explode("\n", $cData[$b]);
 for($a = 0; $a < count($rows); $a++){
 	$case_number = $rows[$a]; // CASE NUMBER
-	$case_status = rtrim(ltrim($Import->removeOE($Import->clearEmpty($rows[$a + 1])), '('),')');
-	$case_data = explode('<ss:Data ss:Type="String">', $rows[$a + 8]); //CASE DATA
-	$titul = explode('<br />', strip_tags($case_data[2], '<br>')); //CASE TITUL
-	$vziskateli = explode('<p class="person', $case_data[4]); //CASE CREDITORS
-	$dlujnici = explode('<p class="person', $case_data[5]); //CASE DEBTORS
-	$charger = rtrim(ltrim($Import->removeOE($Import->clearEmpty($rows[$a + 2])), '('),')');
+	$case_status = isset($rows[$a + 1]) ? rtrim(ltrim($Import->removeOE($Import->clearEmpty($rows[$a + 1])), '('),')') : false;
+	$case_data = isset($rows[$a + 8]) ? explode('<ss:Data ss:Type="String">', $rows[$a + 8]) : false; //CASE DATA
+	$titul = isset($case_data[2]) ? explode('<br />', strip_tags($case_data[2], '<br>')) : false; //CASE TITUL
+	$vziskateli = isset($case_data[4]) ? explode('<p class="person', $case_data[4]) : false; //CASE CREDITORS
+	$dlujnici = isset($case_data[5]) ? explode('<p class="person', $case_data[5]) : false; //CASE DEBTORS
+	$charger = isset($rows[$a + 2]) ? rtrim(ltrim($Import->removeOE($Import->clearEmpty($rows[$a + 2])), '('),')') : false;
 
 	if(isset($titul) && $titul[0] != ""){
 ?>

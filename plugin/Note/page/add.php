@@ -1,4 +1,9 @@
-<?php $Caser = new \plugin\Caser\php\Caser($_GET["case_id"]);?>
+<?php 
+include_once(\system\Core::doc_root() . '/system/php/Form.php');
+include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
+$Caser = new \plugin\Caser\Caser($_GET["case_id"]);
+?>
 <div class="admin">
 <div class="title">Добавяне на бележкa</div>
 <div class="errorMessage" id="errorMessage"></div>
@@ -45,7 +50,7 @@
 						foreach($Caser->debtor as $id){
 							$debtors[$id] = $PDO->query("SELECT name FROM person WHERE id='" . $id . "'")->fetch()["name"];
 						}	
-						$Form->select("debtor_id", $debtors);
+						\system\Form::select("debtor_id", $debtors);
 					}
 				?>
 			</td>
@@ -59,7 +64,7 @@
 				foreach($PDO->query("SELECT * FROM " . $User->table . " WHERE `status` = 'active' ORDER by email ASC") as $user){
 					$users[$user["id"]] = $user["email"];
 				}
-					$Form->select("user_id", $users);
+				\system\Form::select("user_id", $users);
 				?>
 			</td>
         </tr>
@@ -90,7 +95,7 @@
 
 	$check = (isset($_GET["check"])) ? explode(",", $_GET["check"]) : array();
 
-	foreach($Note->places() as $key=>$value){
+	foreach(\plugin\Note\Note::places() as $key=>$value){
 	?>
 		<tr>
             <td><?php echo $value;?></td>

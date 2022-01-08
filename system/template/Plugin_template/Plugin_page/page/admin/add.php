@@ -16,7 +16,7 @@ $Info = new \system\Info;
     <table class="table">
         <tr>
             <td>Type</td>
-            <td><?php echo \system\Form::select("type", \system\Query::column_group("type", $Object->table), array("addon" => true));?></td>
+            <td><?php echo \system\Form::select("type", \system\Database::column_group("type", $Object->table), array("addon" => true));?></td>
         </tr>
         
         <tr>
@@ -26,7 +26,7 @@ $Info = new \system\Info;
         
         <tr>
             <td>Menu <?php echo \system\Info::_('<div>Select menu for the web page to appears in. If the page is attached to parent page, the parent page should also be included in the menu.</div>');?></td>
-            <td><?php echo \system\Form::select("menu", \system\Query::column_group("menu", $Object->table), array("addon" => true));?></td>
+            <td><?php echo \system\Form::select("menu", \system\Database::column_group("menu", $Object->table), array("addon" => true));?></td>
         </tr>
     </table>
     

@@ -1,4 +1,6 @@
 <?php
+include_once(\system\Core::doc_root() . '/plugin/Import/php/Import.php');
+$Import = new \plugin\Import\Import;
 $names = $Import->fields()["invoice"];
 $updates = 0;
 $inserts = 0;
@@ -24,10 +26,10 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		$checks = $PDO->query("SELECT * FROM invoice WHERE bill='" . $array["bill"] . "'");
 		if($checks->rowCount() > 0){
 			$check = $checks->fetch();
-			\system\Query::update($array, $check["id"], "id", "invoice");
+			\system\Database::update($array, $check["id"], "id", "invoice");
 			$updates++;
 		} else {
-			\system\Query::insert($array, "invoice");
+			\system\Database::insert($array, "invoice");
 			$inserts++;
 		}
 	} else {

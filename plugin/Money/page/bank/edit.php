@@ -1,18 +1,19 @@
 <?php 
-	$select = $PDO->query("SELECT * FROM bank WHERE id='" . $_GET["id"] . "'")->fetch();
-	$units = array();
-	foreach($PDO->query("SELECT * FROM bank_units ORDER by id ASC") as $unit){
-		$units[$unit["id"]] = $unit["name"];
-	}
+include_once(\system\Core::doc_root() . '/system/php/Form.php');
+$select = $PDO->query("SELECT * FROM bank WHERE id='" . $_GET["id"] . "'")->fetch();
+$units = array();
+foreach($PDO->query("SELECT * FROM bank_units ORDER by id ASC") as $unit){
+    $units[$unit["id"]] = $unit["name"];
+}
 ?>
 <div class="admin">
-<div class="title">Добавяне на банова сметка: <?php echo $select["name"];?></div>
+<div class="title">Добавяне на банова сметка: <?php echo $units[$select["bank_unit"]];?></div>
 <div class="errorMessage" id="errorMessage"></div>
 <form class="form" id="form" action="<?php echo \system\Core::query_path();?>?id=<?php echo $_GET["id"];?>" method="post">
 	<table class="table">
         <tr>
             <td>Банка</td>
-            <td><?php $Form->select("bank_unit", $units, array("select" => $select["bank_unit"]));?></td>
+            <td><?php \system\Form::select("bank_unit", $units, array("select" => $select["bank_unit"]));?></td>
         </tr>
         
 		<tr>

@@ -17,9 +17,9 @@ if(empty($check)){
         $_POST[$value] = $PageAPP->url_format($_POST[$value]);
     }
     
-    if($_POST["menu"] != $select["menu"]){$_POST["row"] = $_POST["menu"] != "0" ? \system\Query::new_id($Object->table, "row", " WHERE menu='" . $_POST["menu"] . "'") : 0;}
-    $update = \system\Query::update($_POST, $_GET["id"], "id", $Object->table);
-    #\system\Query::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
+    if($_POST["menu"] != $select["menu"]){$_POST["row"] = $_POST["menu"] != "0" ? \system\Database::new_id($Object->table, "row", " WHERE menu='" . $_POST["menu"] . "'") : 0;}
+    $update = \system\Database::update($_POST, $_GET["id"], "id", $Object->table);
+    #\system\Database::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
     
     if($update){
         ?><script>history.go(-1)</script><?php

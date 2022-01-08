@@ -1,5 +1,7 @@
 <?php
 namespace plugin\Reference;
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
+include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
 use \module\Setting\Setting as Setting;
 
 class Reference{
@@ -50,10 +52,10 @@ class Reference{
 			<?php
 				$a = 1;
 				foreach($caser as $case_id){
-				$case = \system\Query::select($case_id, "id", "caser");
-				$Caser = new \plugin\Caser\php\Caser($case["id"]);
+				$case = $this->PDO->query("SELECT * FROM caser WHERE id='" . $case_id . "'")->fetch();
+				$Caser = new \plugin\Caser\Caser($case["id"]);
 				foreach ($Caser->debtor as $person){
-				$pers = \system\Query::select($person, "id", "person");
+				$pers = $this->PDO->query("SELECT * FROM person WHERE id='" . $person . "'")->fetch();
 
 				if(strpos($pers["name"], "ПОЧИНАЛ") === false){
 					$rowNumb = $a . "_" . rand();
@@ -73,7 +75,7 @@ class Reference{
             <a href="<?php echo \system\Core::url();?>Reference/noi?case=<?php echo $case["id"];?>&person=<?php echo $pers["id"];?>&type=0" class="getNap" target="_blank">Трудови договори</a>
           </td>
 					<td <?php if($title_date == "0000-00-00"){ echo 'class="color-2-bg"';}?>><input type="text" onchange="csi.changeDate(this);S.post('<?php echo \system\Core::url();?>Reference/query/title_date', {title: <?php echo $Caser->title_main["id"];?>, title_date: this.value})" value="<?php echo $title_date;?>"/></td>
-					<td id="notes<?php echo $case["id"];?>"><?php $this->Note->_(" WHERE case_id=" . $case["id"] . " AND spravki=1 AND hide is NULL", $case["id"], "spravki", "#notes" . $case["id"]);?></td>
+					<td id="notes<?php echo $case["id"];?>"><?php \plugin\Note\Note::_(" WHERE case_id=" . $case["id"] . " AND spravki=1 AND hide is NULL", $case["id"], "spravki", "#notes" . $case["id"]);?></td>
 				</tr>
 			<?php $a++; }}}?>
 			</table>
@@ -95,7 +97,7 @@ class Reference{
 	public function massOut($caser){
 		$out = array();
 		foreach($caser as $case_id){
-			$case = \system\Query::select($case_id, "id", "caser");
+			$case = $this->PDO->query("SELECT * FROM caser WHERE id='" . $case_id . "'")->fetch();
 			?>
 			<?php if($_GET["url"] == "spravki/startovi"){?><input name="<?php echo $case_id;?>" id="startovi_<?php echo $case_id;?>" type="hidden" value="1"/><?php } ?>
 			<?php

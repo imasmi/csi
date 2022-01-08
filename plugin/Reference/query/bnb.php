@@ -1,4 +1,6 @@
 <?php
+include_once(\system\Core::doc_root() . '/plugin/Reference/php/Reference.php');
+include_once(\system\Core::doc_root() . '/web/php/csi.php');
 $output = '';
 $cnt = 0;
 $error = array();
@@ -6,7 +8,7 @@ foreach($_POST as $id => $code){
 	$cnt++;
 	if(strpos($id, "bnb") !== false){
 		$bnb_info = explode("_", $id);
-		$Caser = new \plugin\Caser\php\Caser($bnb_info[2]);
+		$Caser = new \plugin\Caser\Caser($bnb_info[2]);
 		$case = $Caser->item;
 		$titul_date = $Caser->title_main["date"];
 		if($titul_date == "0000-00-00"){
@@ -37,6 +39,6 @@ $f=fopen($file,"w");
 fwrite($f,$output); 
 fclose($f);
 
-$csi->createTXT($file);
+\web\csi::createTXT($file);
 exit;
 ?>

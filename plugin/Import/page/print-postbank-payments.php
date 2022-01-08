@@ -1,6 +1,6 @@
-<div id="bordero" class="fullscreen">
-<?php	
-	#call bordo class from web/php/bordo.php
-	$Bordero = new \plugin\Money\php\Bordero($xml);
+<?php 
+include_once(\system\Core::doc_root() . '/plugin/Money/php/Bordero.php');
 ?>
+<div id="bordero" class="fullscreen">
+<?php $Bordero = new \plugin\Money\Bordero($xml);?>
 </div>

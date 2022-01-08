@@ -65,7 +65,7 @@ if(empty($check)){
             foreach ($page as $key => $value) {
                 if (!in_array($key, $columns)) { unset($page[$key]);}
             }
-            \system\Query::insert($page, $Page->table);
+            \system\Database::insert($page, $Page->table);
         };
         ?>
         <script>window.open('<?php echo \system\Core::url();?>?Clear-Site-Data="cache"', '_self');</script>

@@ -17,7 +17,7 @@ if(empty($check)){
 $array = array(
         "link_id" => $Object->link_id,
         "plugin" => isset($Object->plugin) ? $Object->plugin : NULL,
-        "row" => $_POST["menu"] != "0" ? \system\Query::new_id($Object->table, "row", " WHERE menu='" . $_POST["menu"] . "'") : 0,
+        "row" => $_POST["menu"] != "0" ? \system\Database::new_id($Object->table, "row", " WHERE menu='" . $_POST["menu"] . "'") : 0,
         "menu" => isset($_POST["menu"]) ? $_POST["menu"] : NULL,  
         "tag" => $Object->tag,
         "type" => isset($_POST["type"]) ? $_POST["type"] : NULL, 
@@ -28,7 +28,7 @@ foreach($Language->items as $lang=>$abbrev){
     $array[$abbrev] = $PageAPP->url_format($_POST[$abbrev]);
 }
 
-$newPage = \system\Query::insert($array, $Object->table);
+$newPage = \system\Database::insert($array, $Object->table);
 $id = $PDO->lastInsertId();
 
 if($newPage){
@@ -52,7 +52,7 @@ if($newPage){
     foreach($Language->items as $lang=>$abbrev){
         $text_add[$abbrev] = $_POST[$abbrev];
     }
-    \system\Query::insert($text_add, $Text->table);
+    \system\Database::insert($text_add, $Text->table);
     ?>
     <script>window.open('<?php echo $Page->url($id);?>', '_self');</script>
     */

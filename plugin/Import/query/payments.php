@@ -1,4 +1,6 @@
 <?php
+include_once(\system\Core::doc_root() . '/plugin/Import/php/Import.php');
+$Import = new \plugin\Import\Import;
 $names = $Import->fields()["payment"];
 $updates = 0;
 $inserts = 0;
@@ -22,10 +24,10 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		$checks = $PDO->query("SELECT * FROM payment WHERE amount='" . $array["amount"] . "' AND date='" . $array["date"] . "' AND case_id='" . $array["case_id"] . "'");
 		if($checks->rowCount() > 0){
 			$check = $checks->fetch();
-			\system\Query::update($array, $check["id"], "id", "payment");
+			\system\Database::update($array, $check["id"], "id", "payment");
 			$updates++;
 		} else {
-			\system\Query::insert($array, "payment");
+			\system\Database::insert($array, "payment");
 			$inserts++;
 		}
 	} else {

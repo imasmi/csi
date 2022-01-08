@@ -1,6 +1,7 @@
 <?php
 require_once \system\Core::doc_root() . '/composer/vendor/autoload.php';
-$Barcode = new \plugin\Document\php\Barcode;
+include_once(\system\Core::doc_root() . '/plugin/Document/php/Barcode.php');
+$Barcode = new \plugin\Document\Barcode();
 //First, get the correct document size.
 
 for($a = 1; $a < $_POST["rows"]; ++$a){

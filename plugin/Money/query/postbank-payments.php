@@ -58,7 +58,7 @@ for($a = 1; $a <= $_POST["total_cnt"]; ++$a){
 			"note" => $note_field
 		);
 		
-		\system\Query::update($update, $_POST["invoice_" . $a], "id", "postbank_payment");
+		\system\Database::update($update, $_POST["invoice_" . $a], "id", "postbank_payment");
 	}
 }
 ?>

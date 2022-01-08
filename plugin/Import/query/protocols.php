@@ -21,10 +21,10 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		$checks = $PDO->query("SELECT * FROM document WHERE type='protocol' AND number='" . $array["number"] . "' AND date='" . $array["date"] . "'");
 		if($checks->rowCount() > 0){
 			$check = $checks->fetch();
-			\system\Query::update($array, $check["id"], "id", "document");
+			\system\Database::update($array, $check["id"], "id", "document");
 			$updates++;
 		} else {
-			\system\Query::insert($array, "document");
+			\system\Database::insert($array, "document");
 			$inserts++;
 		}
 	} else {

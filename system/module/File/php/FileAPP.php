@@ -112,7 +112,7 @@ class FileAPP extends File{
             unset($file_key[count($file_key) - 1]);
             $file_key = implode("_", $file_key);
             $page_id = isset($array["page_id"]) ? $array["page_id"] : (isset($_POST["gallery_" . $file_key]) ? $_POST["gallery_" . $file_key] : $this->page_id);
-            $top_gallery_id = isset($_POST["gallery_" . $file_key]) ? \system\Query::top_id($_POST["gallery_" . $file_key], "link_id", "id", $this->table) : 0;
+            $top_gallery_id = isset($_POST["gallery_" . $file_key]) ? \system\Database::top_id($_POST["gallery_" . $file_key], "link_id", "id", $this->table) : 0;
             $accept = isset($array["accept"]) ? isset($array["accept"]) : array_keys($this->accept_ini);
             if($top_gallery_id != 0){ $top_gallery = $PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $top_gallery_id . "'")->fetch();}
             if(isset($array["link_id"])){
@@ -153,7 +153,7 @@ class FileAPP extends File{
                     if($error == "0"){
                         $mime = explode("/", $type);
                         if(in_array($type, $accept) || in_array($mime[0] . "/*", $accept)) {
-                            $id = \system\Query::new_id($this->table);
+                            $id = \system\Database::new_id($this->table);
                             $new_filePath = (isset($array["path"])) ? $array["path"] : $this->files_dir($id, $link_id); //$this->files_dir($file_dir) is the default value, use $array[path] only for custom file tables
                             $unique_file_path = $this->unique_file_name($new_filePath,$choosed_name);
                             $curFile = array("name" => $name, "path" => $unique_file_path, "error" => $error, "type" => $type, "tmp_name" => $tmp_name, "size" => $size);
@@ -167,11 +167,11 @@ class FileAPP extends File{
                             } elseif($top_gallery_id != 0 && $top_gallery["plugin"] !== NULL){
                                 $file_input["plugin"] = $top_gallery["plugin"];
                             }
-                            if($link_id != 0){$file_input["row"] = \system\Query::new_id($this->table, "row", " WHERE link_id='" . $link_id . "'");}
+                            if($link_id != 0){$file_input["row"] = \system\Database::new_id($this->table, "row", " WHERE link_id='" . $link_id . "'");}
                             foreach($GLOBALS["Language"]->items as $language=>$abbreviation){
                                 if(isset($_POST[$path . "_" . $abbreviation])){$file_input[$abbreviation] = $_POST[$path . "_" . $abbreviation];}
                             }
-                            $insert_file = \system\Query::insert($file_input, $this->table);
+                            $insert_file = \system\Database::insert($file_input, $this->table);
 
                         } else {
                             echo 'Not accepted filetype - ' . $type;
@@ -281,7 +281,7 @@ class FileAPP extends File{
                         $new_file["path"] = $file["path"];
                         $this->upload_file($new_file);
 
-                	    \system\Query::update($file, $id, "id", $this->table);
+                	    \system\Database::update($file, $id, "id", $this->table);
                 	    
                 	    //Update file settings
                         $this->setting_update($id);
@@ -306,7 +306,7 @@ class FileAPP extends File{
     				$file["path"] = ((isset($_POST['path_' . $id])) ?  $_POST['path_' . $id] : $dir) . "/" . $file["name"];
     				rename($file_select["path"], $file["path"]);
                 }
-                //if(count($file) > 0){\system\Query::update($file, $id, "id", $this->table);}
+                //if(count($file) > 0){\system\Database::update($file, $id, "id", $this->table);}
                 
                 //Update file settings
                 $this->setting_update($id);

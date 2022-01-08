@@ -1,4 +1,6 @@
 <?php
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
+include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
 $docs = "";
 $doc_name = array();
 foreach($PDO->query("SELECT id, name FROM `doc_types` WHERE (`name` LIKE '%Взискател - молба%' OR `id`='17' OR `id`='35')") as $doc_type){
@@ -16,7 +18,7 @@ $start = (isset($_GET["start"])) ? $_GET["start"] : date("Y-m-d", strtotime("- 1
 $end = (isset($_GET["end"])) ? $_GET["end"] : date("Y-m-d", strtotime("- 1 day"));
 
 foreach ($PDO->query("SELECT * FROM payment WHERE date >= '" . $start . "' AND date <='" . $end . "' AND `case_id` !=0") as $payment){
-	$Caser = new \plugin\Caser\php\Caser($payment["case_id"]);
+	$Caser = new \plugin\Caser\Caser($payment["case_id"]);
 	$doc = $PDO->query("SELECT * FROM document WHERE case_id=" . $payment["case_id"] . " AND (" . $docs . ") ORDER by date DESC")->fetch();
 	$pay = $PDO->query("SELECT date FROM distribution WHERE `case_id`=" . $Caser->id . " ORDER by date DESC")->fetch();
 
@@ -88,7 +90,7 @@ $title = ($start === $end) ? $start : $start . " - " . $end;
 			<td><?php echo $data["docDate"];?></td>
 			<td><?php echo $data["docName"];?></td>
 			<th <?php if(strtotime($data["pay"]) < strtotime("-2 years")){?>style="background-color: red;"<?php } ?>><?php echo $data["pay"];?></th>
-			<td id="notes<?php echo $data["id"];?>"><?php $Note->_(" WHERE (case_id=" . $data["id"] . " OR person_id='" . $data["creditor_id"] . "') AND payment=1 AND hide is NULL", $data["id"], "payment", "#notes" . $data["id"]);?></td>
+			<td id="notes<?php echo $data["id"];?>"><?php \plugin\Note\Note::_(" WHERE (case_id=" . $data["id"] . " OR person_id='" . $data["creditor_id"] . "') AND payment=1 AND hide is NULL", $data["id"], "payment", "#notes" . $data["id"]);?></td>
 		</tr>
 	<?php
 		$cnt++;

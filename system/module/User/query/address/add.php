@@ -5,7 +5,7 @@ $SettingAPP = new \module\Setting\SettingAPP($User->id, array("fortable" => $Use
 
 if(isset($_POST["default"])){
     foreach($PDO->query("SELECT * FROM " . $Setting->table . " WHERE `fortable` = '" . $User->table . "' AND page_id='" . $User->_("id") . "' AND link_id='0' AND tag='address'") as $setting){
-        \system\Query::update(array("value" => ""), $setting["id"], "id", $Setting->table);
+        \system\Database::update(array("value" => ""), $setting["id"], "id", $Setting->table);
     }
 }
 
@@ -18,7 +18,7 @@ $array = array(
     "value" => isset($_POST["default"]) ? "default" : ""
 );
 
-\system\Query::insert($array, $Setting->table);
+\system\Database::insert($array, $Setting->table);
 $link_id = $PDO->lastInsertId();
 
 

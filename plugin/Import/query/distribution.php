@@ -1,4 +1,6 @@
 <?php
+include_once(\system\Core::doc_root() . '/plugin/Import/php/Import.php');
+$Import = new \plugin\Import\Import;
 $distribution = array();
 foreach($_POST as $key => $value){  // GET THE NUMBERS OF THE CASES LINES
 	if(strpos($key, 'case_id') !== false){

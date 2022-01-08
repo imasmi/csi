@@ -12,11 +12,11 @@ if(empty($check)){
     $array = array(
         "value" => isset($_POST["default"]) ? "default" : ""
     );
-    \system\Query::update($array, $_GET["id"], "id", $Setting->table);
+    \system\Database::update($array, $_GET["id"], "id", $Setting->table);
     
     if(isset($_POST["default"])){
         foreach($PDO->query("SELECT * FROM " . $Setting->table . " WHERE `fortable` = '" . $User->table . "' AND page_id='" . $User->_("id") . "' AND link_id='0' AND tag='address'") as $setting){
-            \system\Query::update(array("value" => $_GET["id"] == $setting["id"] ? "default" : ""), $setting["id"], "id", $Setting->table);
+            \system\Database::update(array("value" => $_GET["id"] == $setting["id"] ? "default" : ""), $setting["id"], "id", $Setting->table);
         }
     }
     

@@ -1,6 +1,7 @@
 <?php
 #$imFile = isset($_FILES["import"]) ? file_get_contents($_FILES["import"]["tmp_name"]) : "";
-
+include_once(\system\Core::doc_root() . '/plugin/Import/php/Import.php');
+$Import = new \plugin\Import\Import;
 #BNB
 if($_FILES["import"]["type"] == "text/xml"){
 	$xml = $Import->xml($_FILES["import"]["tmp_name"]);

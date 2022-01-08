@@ -13,7 +13,7 @@ for($cnt = 1; $cnt <= $_POST["new"]; ++$cnt){
         $array[$abbrev] = $_POST[$abbrev . "_" . $cnt];
     }
     
-    $insert = \system\Query::insert($array);
+    $insert = \system\Database::insert($array);
 }
 
 if($insert){

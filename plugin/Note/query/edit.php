@@ -1,4 +1,5 @@
 <?php
+include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
 $check = array();
 
 #CHECK IF THERE IS NOTE
@@ -19,15 +20,15 @@ if(empty($check) == true){
 				"date" => date("Y-m-d H:i:s")
 			);
 			
-	foreach($Note->places() as $key=>$value){
+	foreach(\plugin\Note\Note::places() as $key=>$value){
 		$array[$key] = isset($_POST[$key]) ? 1 : 0;
 	}
     
-    $update = \system\Query::update($array, $_GET["id"], "id", "note");
-    #\system\Query::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
+    $update = \system\Database::update($array, $_GET["id"], "id", "note");
+    #\system\Database::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
     
     if($update){
-        ?><script>history.go(-1)</script><?php
+        ?><script>window.close();</script><?php
     } else {
          echo $Text->_("Something went wrong");
     }

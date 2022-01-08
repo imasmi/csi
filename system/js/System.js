@@ -316,6 +316,7 @@ S.computed = function(elem, prop=false){
     }
 }
 
+//Example: S.parallax("#example", {left: 2});
 S.parallax = function(elem, arr){
     elem = elem || ".parallax";
     a = 1;
@@ -331,8 +332,9 @@ S.parallax = function(elem, arr){
                     el.innerHTML += '<input type="hidden" id="parallaxStart" value="' + startPoint + '"/>';
                 }
                 
+                
                 var newPos = Number(topStart[0]) + (viewportTop - Number(el.querySelector("#parallaxStart").value))/(arr[dir]);
-
+                console.log(newPos);
                 if(dir == "top"){
                     el.style.top = newPos + "px";
                 } else {

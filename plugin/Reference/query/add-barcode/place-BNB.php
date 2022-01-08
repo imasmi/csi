@@ -1,9 +1,11 @@
 <?php 
 require_once \system\Core::doc_root() . '/composer/vendor/autoload.php';
-$Bnb = new \plugin\Reference\php\Bnb;
-$Barcode = new \plugin\Document\php\Barcode();
-require_once(\system\Core::doc_root() . '/system/module/File/php/FileAPP.php');
-$FileAPP = new \system\module\File\php\FileAPP;
+include_once(\system\Core::doc_root() . '/plugin/Document/php/Barcode.php');
+$Barcode = new \plugin\Document\Barcode();
+include_once(\system\Core::doc_root() . '/system/module/File/php/FileAPP.php');
+$FileAPP = new \module\File\FileAPP;
+include_once(\system\Core::doc_root() . '/plugin/Reference/php/Bnb.php');
+$Bnb = new \plugin\Reference\Bnb;
 
 $files = \system\Core::list_dir('C:/Users/1/Downloads/BNB'); //get all file names
 foreach($files as $file){
@@ -65,10 +67,10 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
     
 <?php 
     #DISPLAY BANK ACCOUNTS FOR USER
-    $Bnb->accounts($value[0]["bank"]);
+    $Bnb->accounts(isset($value[0]["bank"]) ? $value[0]["bank"] : false);
     
     #DISPLAY BANK SAFES FOR USER
-    $Bnb->safes($value[0]["safes"]);
+    $Bnb->safes(isset($value[0]["safes"]) ? $value[0]["safes"] : false);
 ?>
 
 <?php if(isset($value[1])){?>
@@ -78,10 +80,10 @@ for($a = 1; $a < $_POST["rows"]; ++$a){
 <?php 
 
     #DISPLAY BANK ACCOUNTS FOR USER'S BULSTAT
-    $Bnb->accounts($value[1]["bank"]);
+    $Bnb->accounts(isset($value[1]["bank"]) ? $value[1]["bank"] : false);
     
     #DISPLAY BANK ACCOUNTS FOR USER'S BULSTAT
-    $Bnb->safes($value[1]["safes"]);
+    $Bnb->safes(isset($value[1]["safes"]) ? $value[1]["safes"] : false);
 } ?>
 
 <h5>Съгласно чл. 8 от Наредба № 12 за Регистъра на банковите сметки и сейфове, банките носят отговорност за верността, пълнотата и своевременното подаване на информацията. Българската народна банка не извършва корекции в регистъра, освен за подаваната от нея информация.</h5>

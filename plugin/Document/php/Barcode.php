@@ -105,21 +105,20 @@ class Barcode{
 			$location = $cur_size;
 		}
 		// Draw barcode to the screen
-		header ('Content-type: image/png');
-		imagepng($image);
-
+		imagepng($image, \system\Core::doc_root() . "/temp/barcode.png", 9);
 		imagedestroy($image);
 	}
 
 	public function _($doc, $id, $size = 20, $orientation = "horizontal", $code_type = "code128a"){
-			$case = \system\Query::select($doc["case_id"], "id", "caser");
+			$case = $GLOBALS["PDO"]->query("SELECT * FROM caser WHERE id='" .$doc["case_id"] . "'")->fetch();
+			$this->create($doc["barcode"], $size, $orientation, $code_type);
 		?>
 		<div class="adminBarcode text-center">
 			<span>ЧСИ Георги Тарльовски Рег № 882</span>
 			<div>Входящ № <?php echo $doc["number"];?> / <?php echo date("d.m.Y", strtotime($doc["date"]));?>г</div>
 			<div>Изп.дело № <?php echo $case["number"];?></div>
 			<div class="barcodeWrap">
-				<img src="<?php echo \system\Core::url();?>Document/query/barcode/image_create?text=<?php echo $doc["barcode"];?>&size=<?php echo $size;?>&orientation=<?php echo $orientation;?>&code_type=<?php echo $code_type;?>" class="barcode" alt="barcode" />
+				<img src="<?php \system\Core::doc_root() . "/temp/barcode.png";?>" class="barcode" alt="barcode" />
 				<div class="barNumber"><input type="text" onchange="S.post('<?php echo \system\Core::url();?>Document/query/barcode/create_barcode', {barcode: this.value, id: '<?php echo $id;?>'}, '#<?php echo $id;?>')" value="<?php echo $doc["barcode"];?>"/></div>
 			</div>
 		</div>
@@ -127,12 +126,13 @@ class Barcode{
 	}
 
 	public function html_return($doc){
-		$case = \system\Query::select($doc["case_id"], "id", "caser");
+		$case = $GLOBALS["PDO"]->query("SELECT * FROM caser WHERE id='" .$doc["case_id"] . "'")->fetch();
+		$this->create($doc["barcode"], 20, "horizontal", "code128a");
 		return '<div style="width: 180px;padding: 10px; position: fixed; top: -60px; right: -20px; text-align: center; font-weight: bold;font-family: arial, tahoma;line-height: 13px;font-size: 11px;">
 		<span style="font-weight: normal; font-size: 0.8em;">ЧСИ Георги Тарльовски Рег № 882</span>
 			<div>Входящ № ' . $doc["number"] . ' / ' . date("d.m.Y", strtotime($doc["date"])) . 'г</div>
 			<div>Изп.дело № ' . $case["number"] . '</div>
-			<img src="' . \system\Core::url() . 'Document/query/barcode/image_create?text=' . $doc["barcode"]. '&size=20&orientation=horizontal&code_type=code128a" style="width: 100%;height: 50px;margin: 4px auto;display: block;"/>
+			<img src="' . \system\Core::doc_root() . '/temp/barcode.png' . '" style="width: 100%;height: 50px;margin: 4px auto;display: block;"/>
 			<div style="text-align: left;margin-left: 26px;font-size: 0.9em;">' . $doc["barcode"]. '</div>
 		</div>';
 }

@@ -1,4 +1,7 @@
 <?php
+include_once(\system\Core::doc_root() . '/plugin/Import/php/Import.php');
+$Import = new \plugin\Import\Import;
+
 $numbs = array();
 foreach($_POST as $key => $value){  // GET THE NUMBERS OF THE CASES LINES
 	if(strpos($key, 'case_number') !== false){
@@ -75,11 +78,11 @@ foreach ($numbs as $a){ // SAVE PEOPLE AND CASES DATA
 	$caser_check = $PDO -> query("SELECT * FROM caser WHERE number = '" .  $_POST["case_number" . $a] . "'");
 	if($caser_check->rowCount() > 0){
 		$case = $caser_check->fetch();
-		\system\Query::update($caser_array, $case["id"], "id", "caser");
+		\system\Database::update($caser_array, $case["id"], "id", "caser");
 		$case_id = $case["id"];
 		$updates++;
 	} else {
-		\system\Query::insert($caser_array, "caser");
+		\system\Database::insert($caser_array, "caser");
 		$case_id = $PDO->lastInsertId();
 		$inserts++;
 	}
@@ -102,9 +105,9 @@ foreach ($numbs as $a){ // SAVE PEOPLE AND CASES DATA
 	$title_check = $PDO->query("SELECT * FROM caser_title WHERE case_id='" . $case_id . "' ORDER by id ASC");
 	if($title_check->rowCount() > 0){
 		$title = $title_check->fetch();
-		\system\Query::update($title_array, $title["id"], "id", "caser_title");
+		\system\Database::update($title_array, $title["id"], "id", "caser_title");
 	} else {
-		\system\Query::insert($title_array, "caser_title");
+		\system\Database::insert($title_array, "caser_title");
 	}
 }
 echo 'CASES UPDATED: ' . $updates . '<br/>';
