@@ -8,7 +8,7 @@ $array = array(
 	"Дата" => array("date" => 'echo date("d.m.Y", strtotime($list["date"]));'),
 	"Вид" => array("type" => 'echo $list["type"] == "bill" ? "Сметка" : "Фактура";'),
 	"Сума" => "sum",
-	"Дело" => array("case_id" => 'include_once(\system\Core::doc_root() . "/plugin/Caser/php/Caser.php"); $Caser = new \plugin\Caser\Caser($list["case_id"]); $Caser->open();'),
+	"Дело" => array("case_id" => 'if ($list["case_id"] != 0) {include_once(\system\Core::doc_root() . "/plugin/Caser/php/Caser.php"); $Caser = new \plugin\Caser\Caser($list["case_id"]); $Caser->open();}'),
 	"Задължено лице" => array("payer" => 'echo $this->PDO->query("SELECT name FROM person WHERE id=\'" . $list["payer"] . "\'")->fetch()["name"];'),
 	"Данъчна основа" => "tax_base",
 	"Данък" => "vat",

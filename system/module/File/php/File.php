@@ -112,14 +112,18 @@ class File{
 				$output .= '</video>';
 			} elseif($file["type"] == "image"){
 			    $output .= '<picture id="picture-' . $file["id"] . '">';
-			        if(isset($file["path"]) && $file["path"] != null && (!isset($array["resize"]) || $array["resize"] !== false)){
-    			        foreach($this->imagesize as $size => $pixels){
-                            $newName = $info["dirname"] . '/' . $info["filename"] . '_' . $size . '.' . $info["extension"];
-                            if(file_exists($newName)){$output .= '<source media="(max-width: ' . ($pixels - 200) . 'px)" srcset="' . \system\Core::url() . str_replace(" ", "%20", $newName) . '">';}
-                        }
+			        if (isset($array["size"]) && file_exists($info["dirname"] . '/' . $info["filename"] . '_' . $array["size"] . '.' . $info["extension"])) {
+			            $output .= '<img ' . $style . ' src="' . \system\Core::url() . $info["dirname"] . '/' . $info["filename"] . '_' . $array["size"] . '.' . $info["extension"] . '" ' . $trigger_file . ' alt="' . $file[\module\Language\Language::_()] . '" title="' . $file[\module\Language\Language::_()] . '">';
+			        } else {
+			            if(isset($file["path"]) && $file["path"] != null && (!isset($array["resize"]) || $array["resize"] !== false)){
+        			        foreach($this->imagesize as $size => $pixels){
+                                $newName = $info["dirname"] . '/' . $info["filename"] . '_' . $size . '.' . $info["extension"];
+                                if(file_exists($newName)){$output .= '<source media="(max-width: ' . ($pixels - 200) . 'px)" srcset="' . \system\Core::url() . str_replace(" ", "%20", $newName) . '">';}
+                            }
+    			        }
+                        $output .= '<img ' . $style . ' src="' . \system\Core::url() .$file["path"] . '" ' . $trigger_file . ' alt="' . $file[\module\Language\Language::_()] . '" title="' . $file[\module\Language\Language::_()] . '">';
 			        }
-                    $output .= '<img ' . $style . ' src="' . \system\Core::url() .$file["path"] . '" ' . $trigger_file . ' alt="' . $file[\module\Language\Language::_()] . '" title="' . $file[\module\Language\Language::_()] . '">';
-                $output .= '</picture>';
+			    $output .= '</picture>';
 			} elseif($file["type"] == "audio"){
 			    if($edit === false){
     				$output .= '<div ' . $style . ' style="background-image: url(\'' . \system\Core::url() . 'system/module/File/file/notes.jpg\')" title="' . $name . '">' . $name . '</div>';

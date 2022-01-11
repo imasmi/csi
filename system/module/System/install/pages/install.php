@@ -1,7 +1,7 @@
 <?php 
 if(isset($_POST["create_database"])){
     
-require_once(\system\Core::doc_root() . "/system/php/Query.php");
+require_once(\system\Core::doc_root() . "/system/php/Database.php");
 require_once(\system\Core::doc_root() . "/system/php/Mail.php");
 require_once(\system\Core::doc_root() . "/system/module/User/php/User.php");    
     

@@ -1,17 +1,18 @@
 <?php 
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
 if($_POST['DocRequestPe_docs_docenum'][1] == "on"){	
-	$debt = $PDO -> prepare("INSERT INTO document (name,type,user,sender_receiver,date,note,case_id,person) VALUES (4,'outgoing','" . $_SESSION["user"] . "',3348, '" . date("Y-m-d") . "', :nap, '" . $_GET["case"] . "', '" . $_GET["person"] . "')");
+	$debt = $PDO -> prepare("INSERT INTO document (name,type,user,sender_receiver,date,note,case_id,person) VALUES (4,'outgoing','" . $User->id . "',3348, '" . date("Y-m-d") . "', :nap, '" . $_GET["case"] . "', '" . $_GET["person"] . "')");
 	$debt->execute(array("nap" =>$_POST["NAP_number"]));
 	$debt_id = $PDO->lastInsertId();
 }
 
 if($_POST['DocRequestPe_docs_docenum'][2] == "on"){	
-	$reference = $PDO -> prepare("INSERT INTO document (name,type,user,sender_receiver,date,note,case_id, person) VALUES (5,'outgoing','" . $_SESSION["user"] . "',3348, '" . date("Y-m-d") . "', :nap, '" . $_GET["case"] . "', '" . $_GET["person"] . "')");
+	$reference = $PDO -> prepare("INSERT INTO document (name,type,user,sender_receiver,date,note,case_id, person) VALUES (5,'outgoing','" . $User->id . "',3348, '" . date("Y-m-d") . "', :nap, '" . $_GET["case"] . "', '" . $_GET["person"] . "')");
 	$reference->execute(array("nap" =>$_POST["NAP_number"]));
 }
 	
 if(isset($_POST["DocRequestPe_case_date"]) && $_POST["DocRequestPe_case_date"] != "0000-00-00" && $_POST["DocRequestPe_case_date"] != ""){
-	$Caser = new \plugin\Caser\php\Caser($_GET["case"]);
+	$Caser = new \plugin\Caser\Caser($_GET["case"]);
 	$update_date = $PDO->query("UPDATE caser_title SET date = '" . $_POST["DocRequestPe_case_date"] . "' WHERE id=" . $Caser->title_main["id"]);
 }
 

@@ -334,7 +334,6 @@ S.parallax = function(elem, arr){
                 
                 
                 var newPos = Number(topStart[0]) + (viewportTop - Number(el.querySelector("#parallaxStart").value))/(arr[dir]);
-                console.log(newPos);
                 if(dir == "top"){
                     el.style.top = newPos + "px";
                 } else {
@@ -373,7 +372,6 @@ S.galleryItem = function(itemNumb, selector, cnt = false){
     if(cnt){
         let current = Number(gallery.querySelector("#web-gallery-current").value);
         itemNumb = S.inRange(current + itemNumb, cnt);
-        console.log(current);
     }
     gallery.querySelector("#web-gallery-item-" + itemNumb).style.display = "block";
     gallery.querySelector("#web-gallery-current").value = itemNumb;
