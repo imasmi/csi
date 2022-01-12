@@ -17,33 +17,76 @@ class Caser{
         $this->link_id = 0;
 		$this->id = $id;
 		if($this->id != 0){
-		$this->item = $PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $id ."'")->fetch();
-		$this->number = $this->item["number"];
-		$this->title_main = false; // this is also set up in $this->title() function
-		$this->title = $this->title();
-		$this->creditor = $this->creditor();		
-		$this->debtor = $this->debtor();
-		$this->charger = $this->item["charger"];
-		$this->status = $this->item["status"];
-		$this->color = $this->color($this->status);
-	}
+			$this->item = $PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $id ."'")->fetch();
+			$this->number = $this->item["number"];
+			$this->title_main = false; // this is also set up in $this->title() function
+			$this->title = $this->title();
+			$this->creditor = $this->creditor();		
+			$this->debtor = $this->debtor();
+			$this->charger = $this->PDO->query("SELECT email FROM " . $this->User->table . " WHERE id='" . $this->item["charger"] . "'")->fetch()["email"];
+			$this->status = $this->Setting->_($this->item["status"]);
+			$this->color = $this->Setting->_($this->item["status"], ["column" => "type"]);
+			$this->statistic = $this->Setting->_("statistic-" . $this->item["statistic"]);
+		}
     }
 
-// General functions 
+// Static functions 
 	
-	public function color($status){
-		switch($status){
-			case 'ВИСЯЩО': 
-				return 'color-6';
-			case 'СВЪРШЕНО':
-				return 'color-7';
-			case 'СПРЯНО':
-				return 'color-2';
-			case 'ВЪЗОБНОВЕНО':
-				return 'color-4';
-			case 'ПРЕКРАТЕНО':
-				return 'color-5';
-		}	
+	public static function status(){
+		$status = [];
+		foreach ($GLOBALS["Setting"]->items as $key => $value){
+			if ($value["tag"] == "status" && $value["plugin"] == "Caser") {
+				$status[$value["value"]] = $key;
+			}
+		}
+		return $status;
+	}
+
+	public static function number($year, $number){
+		return $year . (8820400000 + $number);
+	}
+
+	public static function split_number($number){
+		$year = substr($number, 0, 4);
+		$cnumb = substr($number, -5);
+		return array("year" => $year, "number" => ltrim($cnumb, "0"));
+	}
+
+	public static function short_number($number){
+		$split = static::split_number($number);
+		return $split["number"] . '/' . $split["year"];
+	}
+
+	public static function type(){
+		return array(
+			1000 => "ОБЩО /ш. 1000 = 1100 + 1200 + 1300 + 1400/", 
+			1100 => "І. В ПОЛЗА НА ДЪРЖАВАТА  И ОБЩИНИТЕ /ш. 1100 = 1110+1140+1170/", 
+			1110 => "1.В ПОЛЗА НА ДЪРЖАВНИ ОРГАНИ /ш.1110=1120+1130/ в т. ч.", 
+			1120 => "а/ публични държавни вземания", 
+			1130 => "б/ частни вземания", 
+			1140 => "2. В ПОЛЗА НА ОБЩИНИТЕ /ш.1140 = 1150+1160/ в т. Ч.", 
+			1150 => "а/ публични вземания ", 
+			1160 => "б/ частни вземания", 
+			1170 => "3. В ПОЛЗА НА СЪДИЛИЩАТА", 
+			1200 => "II. В ПОЛЗА НА ЮРИДИЧЕСКИ ЛИЦА И ТЪРГОВЦИ /ш. 1200 = 1210+1220+1230/ в т.ч.",
+			1210 => "а/ в полза на банки", 
+			1220 => "б/ в полза на търговци", 
+			1230 => "в/ в полза на други ЮЛ", 
+			1300 => "ІІІ. В ПОЛЗА НА ГРАЖДАНИ /ш.1300 = ш.1310+1320+1330+1340/ в т. ч.", 
+			1310 => "а/ за издръжки", 
+			1320 => "б/ по трудови спорове", 
+			1330 => "в/ предаване на дете", 
+			1340 => "г/ други", 
+			1400 => "ІV. ИЗПЪЛНЕНИЕ НА ЧУЖДЕСТРАННИ РЕШЕНИЯ ", 
+			1500 => "V. ИЗПЪЛНЕНИЕ НА ОБЕЗПЕЧИТЕЛНИ МЕРКИ ");
+	}
+
+	public static function years(){
+		$array = array();
+		for($a = date("Y"); $a > 2012; $a--){
+			$array[] = $a;
+		}
+		return $array;
 	}
 	
 	//Array possible values:
@@ -91,56 +134,12 @@ class Caser{
 		<a href="<?php echo \system\Core::url() . "Caser/open?id=" . $this->id;?>"  class="caser-number <?php echo $this->color;?>" target="_blank"><?php echo $this->number;?></a>
 		<?php
 	}
-	
-	public function split_number($number){
-		$year = substr($number, 0, 4);
-		$cnumb = substr($number, -5);
-		return array("year" => $year, "number" => ltrim($cnumb, "0"));
-	}
-
-	public function short_number($number){
-		$split = $this->split_number($number);
-		return $split["number"] . '/' . $split["year"];
-	}
-
-	public function type(){
-		return array(
-			1000 => "ОБЩО /ш. 1000 = 1100 + 1200 + 1300 + 1400/", 
-			1100 => "І. В ПОЛЗА НА ДЪРЖАВАТА  И ОБЩИНИТЕ /ш. 1100 = 1110+1140+1170/", 
-			1110 => "1.В ПОЛЗА НА ДЪРЖАВНИ ОРГАНИ /ш.1110=1120+1130/ в т. ч.", 
-			1120 => "а/ публични държавни вземания", 
-			1130 => "б/ частни вземания", 
-			1140 => "2. В ПОЛЗА НА ОБЩИНИТЕ /ш.1140 = 1150+1160/ в т. Ч.", 
-			1150 => "а/ публични вземания ", 
-			1160 => "б/ частни вземания", 
-			1170 => "3. В ПОЛЗА НА СЪДИЛИЩАТА", 
-			1200 => "II. В ПОЛЗА НА ЮРИДИЧЕСКИ ЛИЦА И ТЪРГОВЦИ /ш. 1200 = 1210+1220+1230/ в т.ч.",
-			1210 => "а/ в полза на банки", 
-			1220 => "б/ в полза на търговци", 
-			1230 => "в/ в полза на други ЮЛ", 
-			1300 => "ІІІ. В ПОЛЗА НА ГРАЖДАНИ /ш.1300 = ш.1310+1320+1330+1340/ в т. ч.", 
-			1310 => "а/ за издръжки", 
-			1320 => "б/ по трудови спорове", 
-			1330 => "в/ предаване на дете", 
-			1340 => "г/ други", 
-			1400 => "ІV. ИЗПЪЛНЕНИЕ НА ЧУЖДЕСТРАННИ РЕШЕНИЯ ", 
-			1500 => "V. ИЗПЪЛНЕНИЕ НА ОБЕЗПЕЧИТЕЛНИ МЕРКИ ");
-	}
-
-	public function years(){
-		$array = array();
-		for($a = date("Y"); $a > 2012; $a--){
-			$array[] = $a;
-		}
-		return $array;
-	}
-
 
 	public function title($id=false){
 		$id = $id !== false ? $id : $this->id;
 		$items = array();
 		$a = 0;
-		foreach($this->PDO->query("SELECT * FROM " . $this->table . "_title WHERE case_id = " . $this->id . " ORDER by id ASC") as $title){
+		foreach($this->PDO->query("SELECT * FROM " . $this->table . "_title WHERE case_id = " . $this->id . " AND deleted IS NULL ORDER by id ASC") as $title){
 		    $items[$title["id"]] = $title;
 			if ($a == 0){$this->title_main = $title;}
 			++$a;
@@ -152,8 +151,11 @@ class Caser{
 		$titles = $id !== false ? $this->title($id) : $this->title;
 		$debtors = array();	
 		foreach($titles as $title){
-			foreach(json_decode($title["debtor"]) as $debtor){
-				$debtors[] = $debtor;			
+			$debtor_data = json_decode($title["creditor"]);
+			if (is_array($debtor_data )) {
+				foreach($debtor_data as $debtor){
+					$debtors[] = $debtor;
+				}
 			}
 		}
 		return $debtors;
@@ -163,8 +165,11 @@ class Caser{
 		$titles = $id !== false ? $this->title($id) : $this->title;
 		$creditors = array();	
 		foreach($titles as $title){
-			foreach(json_decode($title["creditor"]) as $creditor){
-				$creditors[] = $creditor;			
+			$creditor_data = json_decode($title["creditor"]);
+			if (is_array($creditor_data )) {
+				foreach($creditor_data as $creditor){
+					$creditors[] = $creditor;			
+				}
 			}
 		}
 		return $creditors;

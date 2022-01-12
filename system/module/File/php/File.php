@@ -63,7 +63,7 @@ class File{
 	/* TRIGGER PICTURE UPDATER */
 	public function trigger_file($id){
 	    #return 'onmousedown="FileAPP.moveStart(event, ' . $this->items[$id]["id"] . ')" onmouseup="FileAPP.moveSafe(' . $this->items[$id]["id"] . ')" onmouseleave="FileAPP.moveStop(' . $this->items[$id]["id"] . ')" ondblclick="FileAPP.updateFile(' . $this->items[$id]["id"] . ')" title="Click to add image"';
-	    return ' ondblclick="FileAPP.updateFile(' . $id . ')" title="Click to add image"';
+	    return ' onclick="FileAPP.updateFile(' . $id . ')" title="Click to add image"';
 	}
 	
 	public function setting($file){

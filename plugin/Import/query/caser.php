@@ -1,4 +1,5 @@
 <?php
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
 include_once(\system\Core::doc_root() . '/plugin/Import/php/Import.php');
 $Import = new \plugin\Import\Import;
 
@@ -70,8 +71,8 @@ foreach ($numbs as $a){ // SAVE PEOPLE AND CASES DATA
 	$charger = ($_POST["charger" . $a] != "") ? $PDO->query("SELECT id FROM " . $User->table . " WHERE email='" . $_POST["charger" . $a] . "'")->fetch()["id"] : 0;
 	$caser_array = array(
 		"number" => $_POST["case_number" . $a],
-		"status" => $_POST["status" . $a],
-		"statistic" => $_POST["statistic" . $a],
+		"status" => \plugin\Caser\Caser::status()[$_POST["status" . $a]],
+		"statistic" => explode(" - ", $_POST["statistic" . $a])[0],
 		"charger" => $charger
 	);
 
@@ -90,7 +91,7 @@ foreach ($numbs as $a){ // SAVE PEOPLE AND CASES DATA
 // UPDATE caser_title
 	$title_array = array(
 		"case_id" => $case_id,
-		"type" => $_POST["titul" . $a],
+		"type" => $PDO->query("SELECT id FROM " . $Setting->table . " WHERE fortable='caser_title' AND tag='title-type' AND value='" . $_POST["titul" . $a] . "'")->fetch()["id"],
 		"court" => $_POST["court" . $a],
 		"number" => $_POST["court_case" . $a],
 		"creditor" => json_encode($creditors),

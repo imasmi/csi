@@ -6,26 +6,20 @@ include_once(\system\Core::doc_root() . '/system/module/Listing/php/ListingAPP.p
 include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
 include_once(\system\Core::doc_root() . '/plugin/Reference/php/Reference.php');
 $Reference = new \plugin\Reference\Reference;
-
-$actions = array(
-    "add" => $dir . "/add",
-    "admin" => $dir . "/view",
-    "edit" => $dir . "/edit",
-    "settings" => \system\Core::url() . "Page/admin/settings",
-    "delete" => \system\Core::url() . "Page/admin/delete"
-);
 ?>
 
 <div class="admin">
 	<a class="button" href="<?php echo $dir;?>/choose-creditor">Избери взискател</a>
+	<a class="button" href="<?php echo $dir;?>/add">Ново дело</a>
 	<h1 class="text-center">Изпълнителни дела</h2>
 	<table class="listing">
 		<tr>
 			<th>Номер</th>
 			<th>Статус</th>
+			<th>Отговорник</th>
+			<th>Статистика</th>
 			<th>Взискатели</th>
 			<th>Длъжници</th>
-			<th>Погасено</th>
 			<th></th>
 			<th></th>
 		</tr>
@@ -34,7 +28,7 @@ $actions = array(
 		if (isset($_GET["creditor"])) {
 			foreach($PDO->query("SELECT case_id FROM caser_title WHERE creditor LIKE '%\"" . $_GET["creditor"] ."\"%'") as $caser_title){
 				$case = $PDO->query("SELECT * FROM caser WHERE id='" . $caser_title["case_id"] . "'")->fetch();
-				if($case["status"] == "ВИСЯЩО") {
+				if($case["status"] == 55) {
 					$cases[$case["number"]] = $case;
 				}
 			}
@@ -46,14 +40,16 @@ $actions = array(
 		}
 		$ListingAPP = new \module\Listing\ListingAPP;
 		foreach($ListingAPP->page_slice($cases) as $case){
-			$title = $PDO->query("SELECT * FROM caser_title WHERE case_id='" . $case["id"] . "'")->fetch();;
+			$Caser = new \plugin\Caser\Caser($case["id"]);
 		?>
 		<tr>
-			<td><?php echo $case["number"];?></td>
-			<td class="<?php echo $Caser->color($case["status"]);?>"><?php echo $case["status"];?></td>
+			<td><?php echo $Caser->number;?></td>
+			<td class="<?php echo $Caser->color;?>"><?php echo $Caser->status;?></td>
+			<td><?php echo $Caser->charger;?></td>
+			<td><?php echo $Caser->statistic;?></td>
 			<td>
 				<?php 
-					foreach(json_decode($title["creditor"]) as $creditor){
+					foreach($Caser->creditor as $creditor){
 						$Person = new \plugin\Person\Person($creditor);
 						$Person->_();
 					}
@@ -61,7 +57,7 @@ $actions = array(
 			</td>
 			<td>
 				<?php 
-					foreach(json_decode($title["debtor"]) as $debtor){
+					foreach($Caser->debtor as $debtor){
 						$Person = new \plugin\Person\Person($debtor);
 						$Person->_();
 						$Reference->nap_link($debtor, $case["id"]);

@@ -114,7 +114,7 @@ class FileAPP extends File{
             $page_id = isset($array["page_id"]) ? $array["page_id"] : (isset($_POST["gallery_" . $file_key]) ? $_POST["gallery_" . $file_key] : $this->page_id);
             $top_gallery_id = isset($_POST["gallery_" . $file_key]) ? \system\Database::top_id($_POST["gallery_" . $file_key], "link_id", "id", $this->table) : 0;
             $accept = isset($array["accept"]) ? isset($array["accept"]) : array_keys($this->accept_ini);
-            if($top_gallery_id != 0){ $top_gallery = $PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $top_gallery_id . "'")->fetch();}
+            if($top_gallery_id != 0){ $top_gallery = $this->PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $top_gallery_id . "'")->fetch();}
             if(isset($array["link_id"])){
                 $link_id = $array["link_id"];
             } else {

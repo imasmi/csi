@@ -1,11 +1,11 @@
 <?php
 include_once(\system\Core::doc_root() . '/system/module/Listing/php/ListingAPP.php');
 include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Title.php');
 include_once(\system\Core::doc_root() . '/plugin/Reference/php/Reference.php');
 include_once(\system\Core::doc_root() . '/plugin/Document/php/Document.php');
 include_once(\system\Core::doc_root() . '/plugin/Money/php/Money.php');
 include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
-\plugin\Note\Note::listing(" WHERE case_id='" . $_GET["id"] . "' AND hide is NULL ORDER by period DESC, id DESC", $_GET["id"]);
 
 $Caser = new \plugin\Caser\Caser($_GET["id"]);
 $charger = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $Caser->charger . "'")->fetch();
@@ -16,92 +16,52 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 <div id="caser">
 	<div class="clear">
 		<div class="column-6 padding-40 text-center">
-			<h2 class="<?php echo $Caser->color;?>"><?php echo $Caser->number;?></h2>
+			<h3 class="<?php echo $Caser->color;?>"><?php echo $Caser->number;?></h3>
 			<div>Статус: <?php echo $Caser->status;?></div>
-			<div>Отговорник: <?php echo $charger["email"];?></div>
-			<div>Ред статистика: <?php echo $Caser->item["statistic"];?></div>
+			<div>Отговорник: <?php echo $Caser->charger;?></div>
+			<div>Ред статистика: <?php echo $Caser->statistic;?></div>
+			<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/edit?id=<?php echo $_GET["id"];?>">Редакция</a>
 		</div>
-		
-		<div class="column-6">
-			<div class="column-6">
-				<table class="csi">
-					<tr>
-						<th colspan="100%">Взискатели</th>
-					</tr>
-					
-					<?php foreach($Caser->creditor as $creditor_id){
-							$creditor = $PDO->query("SELECT * FROM person WHERE id='" . $creditor_id . "'")->fetch();
-						?>
-						<tr>
-							<td>
-								<h3><?php echo $creditor["name"];?></h3>
-								<div><?php echo $creditor["EGN_EIK"];?></div>
-							</td>
-						</tr>
-					<?php } ?>
-				</table>
-			</div>
-			<div class="column-6">
-				<table class="csi">
-					<tr>
-						<th colspan="100%">Длъжници</th>
-					</tr>
-					
-					<?php foreach($Caser->debtor as $debtor_id){
-							$debtor = $PDO->query("SELECT * FROM person WHERE id='" . $debtor_id . "'")->fetch();
-						?>
-						<tr>
-							<td>
-								<h3><?php echo $debtor["name"];?></h3>
-								<div><?php echo $debtor["EGN_EIK"];?></div>
-								<div><?php echo $Reference->nap_link($debtor_id, $_GET["id"]);?></div>
-							</td>
-						</tr>
-					<?php } ?>
-				</table>
-			</div>
+
+		<div class="column-6 admin paddingY-40">
+			<?php \plugin\Note\Note::listing(" WHERE case_id='" . $_GET["id"] . "' AND hide is NULL ORDER by period DESC, id DESC", $_GET["id"]);?>
 		</div>
 	</div>
 	
-	<section id="title" class="text-center">
-		<h3 class="tag" onclick="csi.section('#caser #title')">Титули</h3>
-		<?php foreach($Caser->title as $title){ ?>
+	<div id="title" class="text-center">
+		<h3>Титули</h3>
+		<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/add?id=<?php echo $_GET["id"];?>">Добавяне на титул</a>
+		<?php foreach($Caser->title as $title){
+			$Title = new \plugin\Caser\Title($title["id"]);
+			?>
 			<div class="clear">
-				<h2 class="clear text-center">
-					<div><?php echo $title["number"];?></div>
-					<div><?php echo $title["date"];?></div>
-					<div><?php echo $title["court"];?></div>
-					<div><?php echo $title["type"];?></div>
-				</h2>
-				<div class="column-6 padding-10">
+				<div class="column-4 clear text-center">
+					<?php $Title->data(); ?>
+					
+				</div>
+				
+				<div class="column-4 padding-10 text-center">
 					<div class="column-6">
 						<div class="title">Взискатели</div>
-						<?php foreach(json_decode($title["creditor"]) as $creditor_id){
-								$creditor = $PDO->query("SELECT * FROM person WHERE id='" . $creditor_id . "'")->fetch();
-							?>
-							<h3><?php echo $creditor["name"];?></h3>
-							<div><?php echo $creditor["EGN_EIK"];?></div>
-						<?php } ?>
+						<div class="marginY-20"><a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/add-person?id=<?php echo $title["id"];?>&type=creditor">Добавяне на взискател</a></div>
+						<?php $Title->creditors(); ?>
 					</div>
 					
 					<div class="column-6">
 						<div class="title">Длъжници</div>
-						<?php foreach(json_decode($title["debtor"]) as $debtor_id){
-								$debtor = $PDO->query("SELECT * FROM person WHERE id='" . $debtor_id . "'")->fetch();
-							?>
-							<h3><?php echo $debtor["name"];?></h3>
-							<div><?php echo $debtor["EGN_EIK"];?></div>
-							<div><?php echo $Reference->nap_link($debtor_id, $_GET["id"]);?></div>
-						<?php } ?>
+						<div class="marginY-20"><a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/add-person?id=<?php echo $title["id"];?>&type=debtor">Добавяне на длъжник</a></div>
+						<?php $Title->debtors(); ?>
 					</div>
 				</div>
-				
-				<div class="column-6 padding-10">
+
+				<div class="column-4 padding-10">
 					<div class="title">Дълг</div>
 				</div>
 			</div>
+
+			
 		<?php } ?>
-	</section>
+	</div>
 	
 	<section id="incoming">
 		<h3 class="tag" onclick="csi.section('#caser #incoming')">Входящи документи</h3>

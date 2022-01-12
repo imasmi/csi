@@ -1,4 +1,5 @@
 <?php
+include_once(\system\Core::doc_root() . '/system/php/Form.php');
 $select = $PDO->query("SELECT * FROM person WHERE id='" . $_GET["id"] . "'")->fetch();
 ?>
 
@@ -14,7 +15,7 @@ $select = $PDO->query("SELECT * FROM person WHERE id='" . $_GET["id"] . "'")->fe
 		
 		<tr>
             <td>type</td>
-            <td><?php echo $Form->select("type", array("person" => "person","firm" => "firm"), array("select" => $select["type"]));?></td>
+            <td><?php echo \system\Form::select("type", array("person" => "person","firm" => "firm"), array("select" => $select["type"]));?></td>
         </tr>
 		
 		<tr>
@@ -24,12 +25,12 @@ $select = $PDO->query("SELECT * FROM person WHERE id='" . $_GET["id"] . "'")->fe
 		
 		<tr>
             <td>Бюджетно</td>
-            <td><?php echo $Form->on_off("budget", $select["budget"]);?></td>
+            <td><?php echo \system\Form::on_off("budget", $select["budget"]);?></td>
         </tr>
 		
 		<tr>
             <td>Нап</td>
-            <td><?php echo $Form->on_off("nap", $select["nap"]);?></td>
+            <td><?php echo \system\Form::on_off("nap", $select["nap"]);?></td>
         </tr>
         
         <tr>

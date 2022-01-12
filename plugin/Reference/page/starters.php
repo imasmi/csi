@@ -16,7 +16,7 @@ $Reference = new \plugin\Reference\Reference;
 
 <?php
 	$cases = array();
-		foreach($PDO -> query("SELECT id FROM caser WHERE status LIKE 'ВИСЯЩО' AND pusnati_startovi=0 AND no_startovi=0 AND number>'" . $startYear . "0000000000' AND noNap = '0' ORDER by number ASC") as $case){
+		foreach($PDO -> query("SELECT id FROM caser WHERE status = '55' AND pusnati_startovi=0 AND no_startovi=0 AND number>'" . $startYear . "0000000000' AND noNap = '0' ORDER by number ASC") as $case){
 			$Caser = new \plugin\Caser\Caser($case["id"]);
 			if(strpos($Caser->title_main["type"], "Обезпечителна") === false){
 				$cases[] = $case["id"];

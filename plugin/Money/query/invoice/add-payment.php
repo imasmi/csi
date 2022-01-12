@@ -1,4 +1,8 @@
-<?php $select = $PDO->query("SELECT * FROM invoice WHERE id='" . $_POST["invoice"] . "'")->fetch();?>
+<?php 
+include_once(\system\Core::doc_root() . '/system/php/Info.php');
+include_once(\system\Core::doc_root() . '/web/php/dates.php');
+$select = $PDO->query("SELECT * FROM invoice WHERE id='" . $_POST["invoice"] . "'")->fetch();
+?>
 <div class="popup-content">
 	<h2>Добавяне на плащания</h2>
 	<div class="title"><?php echo $select["type"] == "bill" ? "Сметка " . $select["bill"] : "Фактура " . $select["invoice"];?></div>
@@ -13,7 +17,7 @@
 					<input type="checkbox" id="add-payment-<?php echo $pay_cnt;?>" class="check-payment"/>
 					<button type="button" class="button hide" onclick="S.remove('#payment-<?php echo $pay_cnt;?>')">-</button>
 					<span><?php echo $payment["amount"];?> лева</span> -
-					<span><?php echo \web\php\dates::_($payment["date"]);?></span>
+					<span><?php echo \web\dates::_($payment["date"]);?></span>
 					<span> (<?php echo $payment["description"];?>)</span>
 				</div>
 			<?php
@@ -24,7 +28,7 @@
 	<h3 class="text-center">Намиране на допълнителни плащания</h3>
 	<div class="selector">
 		<input type="number" step="0.01" autocomplete="off" id="find-data" onkeyup="S.post('<?php echo \system\Core::url() . $Plugin->_();?>/query/invoice/find-payment', {data: this.value, payment_cnt: S('#new-payment-cnt').value}, '#find-list', true)" placeholder="Сума"/>
-		<?php echo $Info->_("Намиране на допълнителни плащания, независимо от делото, за което са вкарани. Плащанията се търсят само по сума!");?>
+		<?php echo \system\Info::_("Намиране на допълнителни плащания, независимо от делото, за което са вкарани. Плащанията се търсят само по сума!");?>
 		<div id="find-list" class="select-list"></div>
 	</div>
 

@@ -102,7 +102,7 @@ class SettingAPP extends Setting{
                 $update_setting->execute($languages);
             }
             } else {
-                if(isset($check_setting["id"])){$PDO->query("DELETE FROM " . $this->table . " WHERE id='" . $check_setting["id"] . "'");}
+                if(isset($check_setting["id"])){$this->PDO->query("DELETE FROM " . $this->table . " WHERE id='" . $check_setting["id"] . "'");}
             }
         }
     }

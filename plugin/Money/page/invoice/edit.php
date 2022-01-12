@@ -1,6 +1,7 @@
 <?php
+	include_once(\system\Core::doc_root() . '/plugin/Person/php/Person.php');
 	$select = $PDO->query("SELECT * FROM invoice WHERE id LIKE '" . $_GET["id"] . "'")->fetch();
-	$Person = new \plugin\Person\php\Person($select["payer"]);
+	$Person = new \plugin\Person\Person($select["payer"]);
 ?>
 <div class="admin">
 <h2 class="text-center title"><?php echo $select["type"] == "bill" ? "Сметка " . $select["bill"] : "Фактура " . $select["invoice"];?></h2>

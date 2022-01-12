@@ -2,7 +2,7 @@
 $mass = explode(",", $_GET["id"]);
 $payments = array();
 for($a = 1; $a <= $_POST["payment-cnt"]; ++$a){
-	if($_POST["payment_" . $a]){
+	if(isset($_POST["payment_" . $a])){
 		$payments[] = $_POST["payment_" . $a];
 		\system\Database::update(array("case_id" => $_POST["case_id"]), $_POST["payment_" . $a], "id", "payment");
 	}

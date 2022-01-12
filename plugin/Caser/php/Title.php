@@ -1,5 +1,8 @@
 <?php
 namespace plugin\Caser;
+include_once(\system\Core::doc_root() . '/plugin/Reference/php/Bnb.php');
+include_once(\system\Core::doc_root() . '/plugin/Person/php/Person.php');
+include_once(\system\Core::doc_root() . '/web/php/dates.php');
 use \module\Setting\Setting as Setting;
 
 class Title{
@@ -15,10 +18,10 @@ class Title{
         $this->table = "caser_title";
         $this->plugin = "Caser"; //Full name of the plugin
         $this->link_id = 0;
-	$this->id = $id;
-	$this->item = $PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $id . "'")->fetch();
-	$this->case = $PDO->query("SELECT * FROM caser WHERE id='" . $this->item["case_id"] . "'")->fetch();
-	
+		$this->id = $id;
+		$this->item = $PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $id . "'")->fetch();
+		$this->case = $PDO->query("SELECT * FROM caser WHERE id='" . $this->item["case_id"] . "'")->fetch();
+		$this->type = $this->PDO->query("SELECT value FROM " . $Setting->table . " WHERE id='" . $this->item["type"] . "'")->fetch()["value"];
 	}
 
 	public function date(){
@@ -31,33 +34,54 @@ class Title{
 		return $titul_date;
 	}
 
+	public function data () {
+	?>
+		<div>Съд: <?php echo $this->item["court_id"] != 0 ? $this->PDO->query("SELECT name FROM person WHERE id='" . $this->item["court_id"] . "'")->fetch()["name"] : $this->item["court"];?></div>
+		<div>Тип: <?php echo $this->type;?></div>
+		<div>Номер: <?php echo $this->item["number"];?></div>
+		<div>Дата: <?php echo \web\dates::_($this->item["date"]);?></div>
+		<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/edit?id=<?php echo $this->id;?>">Редакция</a>
+	<?php
+	}
+
 	public function creditors(){
-		foreach (json_decode($this->item["creditor"]) as $person){
-		$pers = $this->PDO->query("SELECT * FROM person WHERE id='" . $person . "'")->fetch();
-		$Person = new \plugin\Person\php\Person($pers["id"]);
-		?>
-			<b><?php echo $pers["name"];?></b>
-			<br/>
-			<?php echo $this->pType($pers);?> <?php echo $pers["EGN_EIK"];?>
-			<div><?php echo $Person->edit();?></div>
-			<br/>
-			<br/>
-		<?php }
+		$creditor_data = json_decode($this->item["creditor"]);
+		if (is_array($creditor_data)) {
+			foreach (json_decode($this->item["creditor"]) as $person){
+			$pers = $this->PDO->query("SELECT * FROM person WHERE id='" . $person . "'")->fetch();
+			$Person = new \plugin\Person\Person($pers["id"]);
+			?>
+				<b><?php echo $pers["name"];?></b>
+				<br/>
+				<?php echo $this->pType($pers);?> <?php echo $pers["EGN_EIK"];?>
+				<div><?php echo $Person->edit();?></div>
+				<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/change-person?id=<?php echo $this->id;?>&type=creditor&person=<?php echo $pers["id"];?>">Смени взискател</a>
+				<br/>
+				<br/>
+			<?php
+			}
+		}
 	}
 
 	public function debtors($nap=false, $bank=false){
-		$Bnb = new \plugin\Reference\php\Bnb;
-		foreach (json_decode($this->item["debtor"]) as $person){
-		$pers = $this->PDO->query("SELECT * FROM person WHERE id='" . $person . "'")->fetch();
-		$Person = new \plugin\Person\php\Person($pers["id"]);
-		?>
-			<b><?php echo $pers["name"];?></b>
-			<?php if($bank !== false){ echo $Bnb->checkbox($pers, $this->case["id"]);} ?>
-			<br/><?php echo $this->pType($pers);?> <?php echo $pers["EGN_EIK"];?><br/>
-			<?php if($nap !== false){ $this->nap($pers["id"], $this->case["id"]);} ?>
-			<br/><br/>
-			<div><?php echo $Person->edit();?></div>
-		<?php }
+		$Bnb = new \plugin\Reference\Bnb;
+		$debtor_data = json_decode($this->item["debtor"]);
+		if (is_array($debtor_data)) {
+			foreach (json_decode($this->item["debtor"]) as $person){
+			$pers = $this->PDO->query("SELECT * FROM person WHERE id='" . $person . "'")->fetch();
+			$Person = new \plugin\Person\Person($pers["id"]);
+			?>
+				<b><?php echo $pers["name"];?></b>
+				<?php if($bank !== false){ echo $Bnb->checkbox($pers, $this->case["id"]);} ?>
+				<br/><?php echo $this->pType($pers);?> <?php echo $pers["EGN_EIK"];?><br/>
+				<?php if($nap !== false){ $this->nap($pers["id"], $this->case["id"]);} ?>
+				<div><?php echo $Person->edit();?></div>
+				<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/change-person?id=<?php echo $this->id;?>&type=debtor&person=<?php echo $pers["id"];?>">Смени длъжник</a>
+				<br/><br/>
+			<?php 
+			}
+		}
+		
 	}
 
 	public function pType($person){

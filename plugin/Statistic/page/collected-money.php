@@ -14,7 +14,7 @@ $creditors = [];
 foreach($PDO->query("SELECT creditor, case_id FROM caser_title") as $caser_title){
     $creditor = json_decode($caser_title["creditor"], true);
     $status = $PDO->query("SELECT status FROM caser WHERE id='" . $caser_title["case_id"] . "'")->fetch()["status"];
-    if(($status === "ВИСЯЩО" || $status === "ВЪЗОБНОВЕНО") && isset($creditor[0])){
+    if(($status === 55 || $status === 58) && isset($creditor[0])){
         $creditors[$creditor[0]] = isset($creditors[$creditor[0]]) ? $creditors[$creditor[0]] + 1 : 1;
     }
 }

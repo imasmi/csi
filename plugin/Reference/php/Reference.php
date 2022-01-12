@@ -60,7 +60,7 @@ class Reference{
 				if(strpos($pers["name"], "ПОЧИНАЛ") === false){
 					$rowNumb = $a . "_" . rand();
 					$title_date = $Caser->title_main["date"];
-					$caseActive = ($case["status"] == "ВИСЯЩО" || $case["status"] == "ВЪЗОБНОВЕНО") ? true : false;
+					$caseActive = ($case["status"] == 55 || $case["status"] == 58) ? true : false;
 			?>
 				<tr id="spravka<?php echo $rowNumb;?>">
 					<td><button type="button" onclick="$('#spravka<?php echo $rowNumb;?> #bnb_<?php echo $pers["EGN_EIK"];?>').prop('checked', false); S.hide('#spravka<?php echo $rowNumb;?>'); S('#startovi_<?php echo $case_id;?>').value=0; S.remove('#output_<?php echo $case_id;?>');">-</button></td>
