@@ -118,7 +118,7 @@ class Barcode{
 			<div>Входящ № <?php echo $doc["number"];?> / <?php echo date("d.m.Y", strtotime($doc["date"]));?>г</div>
 			<div>Изп.дело № <?php echo $case["number"];?></div>
 			<div class="barcodeWrap">
-				<img src="<?php \system\Core::doc_root() . "/temp/barcode.png";?>" class="barcode" alt="barcode" />
+				<img src="<?php echo \system\Core::url() . "temp/barcode.png";?>" class="barcode" alt="barcode" />
 				<div class="barNumber"><input type="text" onchange="S.post('<?php echo \system\Core::url();?>Document/query/barcode/create_barcode', {barcode: this.value, id: '<?php echo $id;?>'}, '#<?php echo $id;?>')" value="<?php echo $doc["barcode"];?>"/></div>
 			</div>
 		</div>

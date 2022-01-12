@@ -17,18 +17,18 @@ $list = $_GET["dir"];
 $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 $listDir = scandir($listConv);
 unset($listDir[0], $listDir[1]);
-$bar_check = array();
-$cnt;
+$bar_check = [];
+$cnt = 0;
 foreach($listDir as $f){
   ++$cnt;
   $barcode = NULL;
   $folder = iconv ( "windows-1251" , "UTF-8", $f );
   $name = str_replace($list, "", $folder);
   $case_numb = explode("_", $name)[0];
-  $case_id = $PDO->query("SELECT id FROM " . $Caser->table . " WHERE number='" . $case_numb . "'")->fetch();
+  $case_id = $PDO->query("SELECT id FROM " . $Caser->table . " WHERE number='" . $case_numb . "'")->fetch()["id"];
 
   $exclude = "";
-  if(isset($bar_check[$case_id])){
+  if(!empty($bar_check) && isset($bar_check[$case_id])){
     foreach($bar_check[$case_id] as $value){
       $exclude .= " AND id != '" . $value . "'";
     }

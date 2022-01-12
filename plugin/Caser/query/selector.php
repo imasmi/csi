@@ -1,4 +1,5 @@
 <?php 
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
 #FIND CASES BY NUMBER
 if($_POST["data"] == ""){
 	?>
@@ -17,8 +18,10 @@ if($finded_numb > 0){
 	<script> csi.selector('<?php echo $_POST["id"];?>', '<?php echo $fc["id"];?>', '<?php echo $fc["number"];?>')</script>
 	<?php
 	} else {
-		foreach($select_list as $fc){?>
-			<div class="select-item <?php echo $Caser->color($fc["status"]);?>" onclick="csi.selector('<?php echo $_POST["id"];?>', '<?php echo $fc["id"];?>', '<?php echo $fc["number"];?>')"><?php echo $fc["number"];?></div>
+		foreach($select_list as $fc){
+		$Caser = new \plugin\Caser\Caser($fc["id"]);	
+		?>
+			<div class="select-item <?php echo $Caser->color;?>" onclick="csi.selector('<?php echo $_POST["id"];?>', '<?php echo $fc["id"];?>', '<?php echo $fc["number"];?>')"><?php echo $fc["number"];?></div>
 		<?php 
 		} 
 	}

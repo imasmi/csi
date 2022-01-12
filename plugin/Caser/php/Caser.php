@@ -151,7 +151,7 @@ class Caser{
 		$titles = $id !== false ? $this->title($id) : $this->title;
 		$debtors = array();	
 		foreach($titles as $title){
-			$debtor_data = json_decode($title["creditor"]);
+			$debtor_data = json_decode($title["debtor"]);
 			if (is_array($debtor_data )) {
 				foreach($debtor_data as $debtor){
 					$debtors[] = $debtor;

@@ -15,7 +15,7 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 ?>
 <div id="caser">
 	<div class="clear">
-		<div class="column-6 padding-40 text-center">
+		<div class="column-3 padding-40 text-center">
 			<h3 class="<?php echo $Caser->color;?>"><?php echo $Caser->number;?></h3>
 			<div>Статус: <?php echo $Caser->status;?></div>
 			<div>Отговорник: <?php echo $Caser->charger;?></div>
@@ -23,7 +23,7 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 			<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/edit?id=<?php echo $_GET["id"];?>">Редакция</a>
 		</div>
 
-		<div class="column-6 admin paddingY-40">
+		<div class="column-9 admin paddingY-40">
 			<?php \plugin\Note\Note::listing(" WHERE case_id='" . $_GET["id"] . "' AND hide is NULL ORDER by period DESC, id DESC", $_GET["id"]);?>
 		</div>
 	</div>
