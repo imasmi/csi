@@ -1,4 +1,5 @@
 <?php
+include_once(\system\Core::doc_root() . '/web/php/dates.php');
 $pay_cnt = $_POST["payment_cnt"] + 1;
 foreach($PDO->query("SELECT * FROM payment WHERE amount='" . $_POST["data"] . "%' ORDER by date DESC") as $payment){
 	?>
@@ -8,7 +9,7 @@ foreach($PDO->query("SELECT * FROM payment WHERE amount='" . $_POST["data"] . "%
 				<input type="checkbox" id="add-payment-<?php echo $pay_cnt;?>" class="check-payment" checked/>
 				<button type="button" class="button hide" onclick="S.remove('#payment-<?php echo $pay_cnt;?>')">-</button>
 				<span><?php echo $payment["amount"];?> лева</span> -
-				<span><?php echo \web\php\dates::_($payment["date"]);?></span>
+				<span><?php echo \web\dates::_($payment["date"]);?></span>
 				<span>Платени от <?php echo $PDO->query("SELECT name FROM person WHERE id='" . $payment["person"] . "'")->fetch()["name"];?></span>
 				<span> (<?php echo $payment["description"];?>)</span>
 			</div>

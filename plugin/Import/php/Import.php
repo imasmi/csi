@@ -101,7 +101,7 @@ class Import{
 				<option value="taksi_ot_ASV">Такси от АСВ</option>
 				<option value="zasechka_postbank">Засечка пощенска - XML</option>
 				<option value="custom">Custom</option>
-				<option value="postbank">Пощенска банка с наши плащания</option>
+				<option value="postbank">Пощенска банка</option>
 			</select>
 		</form>
 		<?php

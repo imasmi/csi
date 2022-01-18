@@ -18,7 +18,7 @@ if(isset($_POST["DocRequestPe_case_date"]) && $_POST["DocRequestPe_case_date"] !
 
 
 #INSERT NOTE IF WAIT NAP IS CHECKED
-if($_POST["wait_nap"]){
+if(isset($_POST["wait_nap"])){
 	$array = array(
 		"note" => "Чака НАП - " . $_POST["NAP_number"],
 		"case_id" => $_GET["case"],

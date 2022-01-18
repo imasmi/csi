@@ -1,4 +1,5 @@
 <?php
+include_once(\system\Core::doc_root() . '/plugin/Document/php/Microsoft_office.php');
 $list = $_POST["dir"];
 $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 ?>
@@ -31,7 +32,7 @@ $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 		if($extension == "doc"){
 			$doc_191 = preg_replace("/[^a-zA-Z0-9\s\,\.\-\n\r\t@\/\_\(\)]/","",$doc_191);
 		} elseif($extension == "docx"){
-			$Ms_office = new \plugin\Document\php\Microsoft_office($list . '\\' . $f);
+			$Ms_office = new \plugin\Document\Microsoft_office($list . '\\' . $f);
 			$doc_191 = $Ms_office->_();
 		}
 

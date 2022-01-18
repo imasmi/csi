@@ -27,6 +27,9 @@ class Caser{
 			$this->status = $this->Setting->_($this->item["status"]);
 			$this->color = $this->Setting->_($this->item["status"], ["column" => "type"]);
 			$this->statistic = $this->Setting->_("statistic-" . $this->item["statistic"]);
+		} else {
+			$this->number = "";
+			$this->color = "";
 		}
     }
 
@@ -96,9 +99,9 @@ class Caser{
 	public function select($name, $array = array()){
 		if(isset($array["id"])){
 			$caser = $this->PDO->query("SELECT id, number FROM caser WHERE id='" . $array["id"] . "'")->fetch();
-		} elseif(isset($array["number"])){
+		} else if (isset($array["number"])){
 			$caser = $this->PDO->query("SELECT id, number FROM caser WHERE number='" . $array["number"] . "'")->fetch();
-		} elseif(isset($array["search"])){
+		} else if(isset($array["search"])){
 			$numbers = preg_replace("/[^0-9\/\s+]+/", "", $array["search"]);
 			$search = explode(" ", $numbers);
 			foreach($search as $key => $needle){if(trim($needle) == "" || $needle == "/"){unset($search[$key]);}}
@@ -119,6 +122,8 @@ class Caser{
 					}
 				}
 			}
+		} else if ( $this->id != 0 ) {
+			$caser = $this->item;
 		}
 	?>
 		<div class="selector">

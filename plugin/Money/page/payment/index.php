@@ -8,7 +8,7 @@ $array = array(
 	"Сума" => "amount",
 	"Дело" => array("case_id" => 'include_once(\system\Core::doc_root() . "/plugin/Caser/php/Caser.php"); $Caser = new \plugin\Caser\Caser($list["case_id"]); $Caser->open();'),
 	"Основание" => "reason",
-	"Бордеро" => "bordero",
+	"Бордеро" => "number",
 	"Платец" => array("person" => 'echo $this->PDO->query("SELECT name FROM person WHERE id=\'" . $list["person"] . "\'")->fetch()["name"];'),
 	"Банка" => array("bank"=>  'echo $this->PDO->query("SELECT IBAN FROM bank WHERE id=\'" . $list["bank"] . "\'")->fetch()["IBAN"];'),
 	"За разпределяне" => array("allocate" => 'echo $list["allocate"] > 0 ? $list["allocate"] : "Не";'),
@@ -31,14 +31,19 @@ $actions = array(
 	<select onchange="if(this.value){window.open(this.value, '_self');}">
 		<option value="">Банкова сметка</option>
 		<?php foreach($PDO->query("SELECT * FROM bank WHERE person_id=1") as $bank){?>
-			<option value="<?php echo $ListingAPP->replace_get(array("bank" => $bank["id"], "p" => 1));?>" <?php if(isset($_GET["bank"]) && $_GET["bank"] == $bank["id"]){ echo 'selected';}?>><?php echo $bank["IBAN"];?></option>
+			<option value="<?php echo \system\Core::url() . $ListingAPP->replace_get(array("bank" => $bank["id"], "p" => 1));?>" <?php if(isset($_GET["bank"]) && $_GET["bank"] == $bank["id"]){ echo 'selected';}?>><?php echo $bank["IBAN"];?></option>
 		<?php } ?>
 	</select>
+	<?php 
+	$get = $_GET;
+	unset($get["url"]);
+	?>
+	<a class="button" href="<?php echo \system\Core::this_path(0, -1) . '/print?' . http_build_query($get);?>">Печат</a>
 	</div>
     <?php 
 		$period = isset($_GET["end"]) && $_GET["end"] != "" ? " WHERE date >= '" . $_GET["start"] . "' AND date <= '" . $_GET["end"] . "'" : (isset($_GET["start"]) ? " WHERE date >= '" . $_GET["start"] . "'" : null);
         $bank = isset($_GET["bank"]) ? ($period ? " AND bank='" . $_GET["bank"] . "'" : " WHERE bank='" . $_GET["bank"] . "'") : null;
-		$ListingAPP->_($array, $actions, "payment", $period . $bank.  " ORDER by date DESC, transaction_date DESC");
+		$ListingAPP->_($array, $actions, "payment", $period . $bank.  " ORDER by date DESC, `datetime` DESC");
     ?>
 	<button type="button" class="button block center" onclick="history.go(-1)"><?php echo $Text->item("Back");?></button>
 </div>

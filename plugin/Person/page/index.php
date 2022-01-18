@@ -12,6 +12,7 @@ $fields = array(
 
 $dir = \system\Core::this_path(0, -1);
 $actions = array(
+	"add" => $dir . "/add",
 	"edit" => $dir . "/edit",
 	"bank" => \system\Core::url() . "Money/bank/index?person",
 	"notes" => $dir . "/notes"

@@ -30,8 +30,8 @@ $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 		if(count($matches) > 0) {
 			$egn = $matches[1];
 		} else {
-			preg_match('/ЕГН <\/span><\/div>(.*?)<div>/s', $grao, $matches);
-			$egn = $matches[2];
+			preg_match('/ЕГН<\/span><span>&nbsp;<\/span>(.*?)<span>/s', $grao, $matches);
+			$egn = $matches[1];
 		}
 
 		$person = $PDO->query("SELECT id FROM person WHERE EGN_EIK='" . trim($egn) . "'")->fetch();

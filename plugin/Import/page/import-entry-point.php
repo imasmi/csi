@@ -24,27 +24,26 @@ foreach($rows as $k=>$v){if(empty($v)){unset($rows[$k]);}}
 if($_POST["custom"] != "0"){
 	$csv = $Import->csv($file);
 	require_once("custom/" . $_POST["custom"] . ".php");
-	exit;
+} else {
+	#Дела
+	if(strpos($fRow, "Регистър на заведените дела") !== false){require_once("caser.php");}
+	#Входящ регистър
+	 else if(strpos($fRow, "Вх. №") !== false){require_once("incomings.php");}
+	#Изходящ регистър
+	else if(strpos($fRow, "Изх. №") !== false){require_once("outgoings.php");}
+	#Фактури
+	else if(strpos($fRow, "Сметка №") !== false){require_once("invoice.php");}
+	#Плащания
+	else if(strpos($fRow, "Платени") !== false){require_once("payment.php");}
+	#Разпределения
+	else if(strpos($fRow, "Дата на разпределение") !== false){require_once("distribution.php");}
+	#Пощенска банка проверка на сметка такси
+	else if(isset($rows[13]) && strpos($rows[13], "ЮРОБАНК България АД") !== false){require_once("custom/postbank.php");}
+	#Райфайзен банк проверка на сметка такси
+	else if(isset($rows[5]) && strpos($rows[5], "DAIS.eBank.Client.WEB.mvc") !== false){ require_once("raiffeisenbank.php");}
+	#Отчети
+	else if(mb_substr($file,0,7) == '"а","б"'){require_once("report.php");}
+	#Протоколи
+	else if(strpos($fRow, "Протокол №") !== false){require_once("protocols.php");}
 }
-
-#Дела
-if(strpos($fRow, "Регистър на заведените дела") !== false){require_once("caser.php");exit;}
-#Входящ регистър
-if(strpos($fRow, "Вх. №") !== false){require_once("incomings.php");exit;}
-#Изходящ регистър
-if(strpos($fRow, "Изх. №") !== false){require_once("outgoings.php");exit;}
-#Фактури
-if(strpos($fRow, "Сметка №") !== false){require_once("invoice.php");exit;}
-#Плащания
-if(strpos($fRow, "Платени") !== false){require_once("payment.php");exit;}
-#Разпределения
-if(strpos($fRow, "Дата на разпределение") !== false){require_once("distribution.php");exit;}
-#Пощенска банка проверка на сметка такси
-if(isset($rows[13]) && strpos($rows[13], "ЮРОБАНК България АД") !== false){require_once("custom/postbank.php");exit;}
-#Райфайзен банк проверка на сметка такси
-if(isset($rows[5]) && strpos($rows[5], "DAIS.eBank.Client.WEB.mvc") !== false){ require_once("raiffeisenbank.php");exit;}
-#Отчети
-if(mb_substr($file,0,7) == '"а","б"'){require_once("report.php");exit;}
-#Протоколи
-if(strpos($fRow, "Протокол №") !== false){require_once("protocols.php");exit;}
 ?>

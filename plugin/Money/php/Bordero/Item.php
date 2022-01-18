@@ -1,99 +1,86 @@
 <?php
-namespace plugin\Money;
+namespace plugin\Money\Bordero;
 
-class bordero{
-	public function __construct($xml){
-		global $PDO;
-		$this->PDO = $PDO;
-		$this->xml = $xml;
-		$payTypes = array();
-		$payTypes["transfer"] = array(
-			"Получен директен превод",
-			"Вътрешно банков левов превод",
-			"SEPA получен кредитен превод",
-			"Валутен превод - получен 1",
-			"Валутна сделка",
-			"Вътрешно банков левов превод м/у сметки на клиента",
-			"Издаден директен превод",
-			"Издаден директен превод за служебно плащане",
-			"Вътрешно банков левов превод от GroupSales с МП",
-			'Получен превод по RINGS',
-			"Издаден директен превод за служебно плащане от валутн"
-		);
-		
-		$payTypes["cash"] = array(
-			"Вноска на каса - сделка"
-		);
-		
-		$payTypes["budget"] = array(
-			"Получено бюд.плащане",
-			"Издадено бюд.плащане"
-		);
-		
-		$payTypes["received_budget"] = array(
-			"Получен превод бюджет"
-		);
-		
-		#CHECK FOR UNKNOWN OR PAYMENTS IN EURO
-		foreach($xml->ArrayOfAPAccounts->APAccount->BankAccount->Movements->ArrayOfMovements->BankAccountMovement as $pay){
-			$payKind = $pay->MovementKind->MovementKindNames->Items[0];
-			
-			echo '<center class="person">';
-			if(in_array($payKind, $payTypes["transfer"]) || in_array($payKind, $payTypes["cash"]) || in_array($payKind, $payTypes["budget"]) || in_array($payKind, $payTypes["received_budget"])){ 
-				if($payKind == "SEPA получен кредитен превод" || $payKind == "Валутна сделка"){ ?> 
-					<div class="attention" id="id_<?php echo $pay->DocRegNumber;?>">
-						<?php echo $payKind;?>
-						<button class="button" onclick="S.hide('#id_<?php echo $pay->DocRegNumber;?>');">X</button>
-					</div> 
-				<?php }	
-			} else { ?>
-				<div class="attention">
-					<div>НЕПОЗНАТ ВИД ПЛАЩАНЕ: <?php echo number_format((float)$pay->MovementAmount, 2,'.','') . ' лв. - ' . date("d.m.Y H:i:s", strtotime($pay->ProcessTimestamp));?></div>
-					<div><?php echo $payKind;?></div>
-				</div>
-			<?php
-			}
-			echo '</center>';
-		}
-		
-		#PREVIEW PAYMENTS FOR PRINTING
-		foreach($xml->ArrayOfAPAccounts->APAccount->BankAccount->Movements->ArrayOfMovements->BankAccountMovement as $pay){
-			$payKind = $pay->MovementKind->MovementKindNames->Items[0];
-			
-			echo '<center class="person">';
-			if(in_array($payKind, $payTypes["transfer"])){
-				if($payKind == "SEPA получен кредитен превод" || $payKind == "Валутна сделка"){ ?> 
-					<div class="attention" id="id_<?php echo $pay->DocRegNumber;?>">
-						<?php echo $payKind;?>
-						<button class="button" onclick="S.hide('#id_<?php echo $pay->DocRegNumber;?>');">X</button>
-					</div> 
-				
-				<?php }			
-				$this->transfer($pay);
-			} elseif(in_array($payKind, $payTypes["cash"])){
-				$this->cash($pay);
-			} elseif(in_array($payKind, $payTypes["budget"])){
-				$this->budget($pay);
-			} elseif(in_array($payKind, $payTypes["received_budget"])){
-				$this->received_budget($pay);
-			} else {?>
-				<div class="attention">
-					<div>НЕПОЗНАТ ВИД ПЛАЩАНЕ: <?php echo number_format((float)$pay->MovementAmount, 2,'.','') . ' лв. - ' . date("d.m.Y H:i:s", strtotime($pay->ProcessTimestamp));?></div>
-					<div><?php echo $payKind;?></div>
-				</div>
-			<?php
-			}
-			echo '</center>';
-		}
-	}
-	
-	private function logo($payerAccount){
+class Item {
+
+    
+    public function __construct ($pay, $data = []) {
+        
+        if (isset($data["type"]) && $data["type"] == "xml") { // ДАННИ НА ПЛАЩАНЕТО ОТ XML импорт
+            $this->type = $pay->MovementKind->MovementKindNames->Items[0];
+            $this->amount = number_format((float)$pay->MovementAmount, 2,'.','');
+            $this->datetime = date("d.m.Y H:i:s", strtotime($pay->ProcessTimestamp));
+            $this->execution_time = date("d.m.Y", strtotime($pay->ValDate));
+            $this->number = $pay->DocRegNumber;
+            $this->description = $pay->MovementDocument->Description;
+            $this->currency = $pay->CCY->SWIFTCode;
+
+            $this->sender = [
+                "name" => (string) $pay->MovementDocument->PayerName,
+                "bank" => (string) $pay->MovementDocument->PayerBAEName,
+                "IBAN" => (string) $pay->MovementDocument->PayerAccountNumber,
+                "BIC" => (string) $pay->MovementDocument->PayerBAE,
+            ];
+            $this->receiver = [
+                "name" => (string) $pay->MovementDocument->PayeeName,
+                "bank" => (string) $pay->MovementDocument->PayeeBAEName,
+                "IBAN" => (string) $pay->MovementDocument->PayeeAccountNumber,
+                "BIC" => (string) $pay->MovementDocument->PayeeBAE,
+            ];
+        } else { // ДАННИ НА ПЛАЩАНЕТО ОТ SQL
+            $this->type = $pay["type"];
+            $this->amount = $pay["amount"];
+            $this->datetime = date("d.m.Y H:i:s", strtotime($pay["datetime"]));
+            $this->execution_time = date("d.m.Y", strtotime($pay["execution_time"]));
+            $this->number = $pay["number"];
+            $this->description = $pay["description"];
+            $this->currency = $pay["currency"];
+            $this->sender = json_decode($pay["sender"], true);
+            $this->receiver = json_decode($pay["receiver"], true);
+            if (empty($this->receiver["IBAN"])) {
+                $this->receiver["IBAN"] = $GLOBALS["PDO"]->query("SELECT IBAN FROM bank WHERE id='" . $pay["bank"] . "'")->fetch()["IBAN"];
+            }
+        }
+
+
+        // ОБЩИ НЕЩА ЗА КЛАСА
+        $this->data = $data;
+        $this->description_extra = isset($data["case_number"]) ? "Дело: " . $data["case_number"] : "";
+        $this->pay_types = array();
+        $this->pay_types["transfer"] = array(
+            "Получен директен превод",
+            "Вътрешно банков левов превод",
+            "SEPA получен кредитен превод",
+            "Валутен превод - получен 1",
+            "Валутна сделка",
+            "Вътрешно банков левов превод м/у сметки на клиента",
+            "Издаден директен превод",
+            "Издаден директен превод за служебно плащане",
+            "Вътрешно банков левов превод от GroupSales с МП",
+            'Получен превод по RINGS',
+            "Издаден директен превод за служебно плащане от валутн"
+        );
+        
+        $this->pay_types["cash"] = array(
+            "Вноска на каса - сделка"
+        );
+        
+        $this->pay_types["budget"] = array(
+            "Получено бюд.плащане",
+            "Издадено бюд.плащане"
+        );
+        
+        $this->pay_types["received_budget"] = array(
+            "Получен превод бюджет"
+        );
+    }
+
+    private function logo(){
 		//return ($payerAccount == "BG81BPBI79301033376203") ? "" : '<img src="' . \system\Core::url() . 'web/file/postbank_logo.png" alt="" style="height: 95px;"/>';
-		return ($payerAccount == "BG81BPBI79301033376203") ? "" : '<img src="' . \system\Core::url() . 'web/file/postbank_new_logo.png" alt="" style="height: 95px;"/>';
+		return ($this->sender["IBAN"] == "BG81BPBI79301033376203") ? "" : '<img src="' . \system\Core::url() . 'web/file/postbank_new_logo.png" alt="" style="height: 95px;"/>';
 	}
 	
-	public function transfer($pay){ 
-		#print_r($pay);
+	public function transfer(){ 
 	?>
 		
 		<div class="out-text">Превод в лева</div>
@@ -107,7 +94,7 @@ class bordero{
 							<tr>
 								<td width="20" />
 								<td width="600" heigth="40" valign="middle">
-									<?php echo $this->logo($pay->MovementDocument->PayerAccountNumber);?>
+									<?php echo $this->logo();?>
 								</td>
 								<td width="20" />
 							</tr>
@@ -125,12 +112,12 @@ class bordero{
 														<td colspan="2" height="30">
 															<div style="width:80px;float:left">До/To</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $pay->MovementDocument->PayerBAEName;?></div>
+															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->sender["bank"];?></div>
 														</td>
 														<td colspan="3">
 															<div style="float:left; width:307px;">Уникален регистрационен номер/Unique registration number</div>
 															<br />
-															<div class="Payment_textbig5" align="right"><?php echo $pay->DocRegNumber;?></div>
+															<div class="Payment_textbig5" align="right"><?php echo $this->number;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
@@ -142,7 +129,7 @@ class bordero{
 														<td colspan="3">
 															<div style="float:left; width:440px;">Дата и час на представяне/Date and hour of submission</div>
 															<br />
-															<div class="Payment_textbig5" align="right"><?php echo date("d.m.Y H:i:s", strtotime($pay->ProcessTimestamp));?></div>
+															<div class="Payment_textbig5" align="right"><?php echo $this->datetime;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
@@ -157,27 +144,27 @@ class bordero{
 														<td colspan="5" height="30">
 															<div style="float:left">Платете на – име на получателя / Please pay to – name of the beneficiary</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $pay->MovementDocument->PayeeName;?></div>
+															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->receiver["name"];?></div>
 														</td>
 													</tr>
 													<tr valign="top" height="30">
 														<td colspan="2" width="50%">
 															<div style="float:left">IBAN на получателя / IBAN of the beneficiary</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $pay->MovementDocument->PayeeAccountNumber;?></div>
+															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->receiver["IBAN"];?></div>
 														</td>
 														<td width="5%"></td>
 														<td colspan="2" width="45%">
 															<div style="float:left; width:273px;">BIC на банката на получателя / BIC of the beneficiary bank</div>
 															<br />
-															<div class="Payment_textbig5" align="right"><?php echo $pay->MovementDocument->PayeeBAE;?></div>
+															<div class="Payment_textbig5" align="right"><?php echo $this->receiver["BIC"];?></div>
 														</td>
 													</tr>
 													<tr valign="top" height="30">
 														<td colspan="5">
 															<div nowrap="nowrap" style="float:left">При банка – име на банката на получателя / At bank – name of the bank of beneficiary</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px;"><?php echo $pay->MovementDocument->PayeeBAEName;?></div>
+															<div class="Payment_textbig5" style="padding-left:50px;"><?php echo $this->receiver["bank"];?></div>
 														</td>
 													</tr>
 													<tr valign="top">
@@ -192,52 +179,52 @@ class bordero{
 														<td colspan="1" align="center">
 															<div style="float:left;width:60px;">Вид валута / Currency</div>
 															<br />
-															<div class="Payment_textbig5"><?php echo $pay->CCY->SWIFTCode;?></div>
+															<div class="Payment_textbig5"><?php echo $this->currency;?></div>
 														</td>
 														<td width="25%">
 															<div style="float:left; width:120px;">Сума / Amount</div>
 															<br />
-															<div class="Payment_textbig6" align="right"><?php echo number_format((float)$pay->MovementAmount, 2,'.','');?></div>
+															<div class="Payment_textbig6" align="right"><?php echo $this->amount;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
 														<td colspan="5" height="30">
 															<div style="float:left">Основание за превод – информация за получателя / Reason for payment – information for the beneficiary</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo mb_substr($pay->MovementDocument->Description, 0, 35);?></div>
+															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->description;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
 														<td colspan="5" height="30">
 															<div style="float:left">Още пояснения / Additional comments</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo mb_substr($pay->MovementDocument->Description, 35);?></div>
+															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->description_extra;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
 														<td colspan="5" height="30">
 															<div style="float:left">Наредител – име / Ordering party – name</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $pay->MovementDocument->PayerName;?></div>
+															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->sender["name"];?></div>
 														</td>
 													</tr>
 													<tr valign="top">
 														<td colspan="2" height="30">
 															<div style="float:left">IBAN на наредителя / IBAN of the ordering party</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $pay->MovementDocument->PayerAccountNumber;?></div>
+															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->sender["IBAN"];?></div>
 														</td>
 														<td colspan="3">
 															<div style="float:left">BIC на банката на наредителя / BIC of the bank of the ordering party</div>
 															<br />
-															<div class="Payment_textbig5" align="right"><?php echo $pay->MovementDocument->PayerBAE;?></div>
+															<div class="Payment_textbig5" align="right"><?php echo $this->sender["BIC"];?></div>
 														</td>
 													</tr>
 													<tr valign="top">
 														<td height="30">
 															<div style="float:left">Платежна система / Payment System</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php if($pay->MovementKind->MovementKindNames->Items[0] == "Получен превод по RINGS"){?>РИНГС<?php } else {?>БИСЕРА</div><?php } ?>
+															<div class="Payment_textbig5" style="padding-left:50px"><?php if($this->type == "Получен превод по RINGS"){?>РИНГС<?php } else {?>БИСЕРА</div><?php } ?>
 														</td>
 														<td colspan="2" nowrap="nowrap">
 															<div style="float:left">Такси* / Fees*</div>
@@ -247,7 +234,7 @@ class bordero{
 														<td nowrap="nowrap" colspan="2">
 															<div style="float:left">Дата на изпълнение / Date of execution</div>
 															<br />
-															<div class="Payment_textbig5" align="right"><?php echo date("d.m.Y", strtotime($pay->ValDate));?></div>
+															<div class="Payment_textbig5" align="right"><?php echo $this->execution_time;?></div>
 														</td>
 													</tr>
 												</table>
@@ -287,7 +274,7 @@ class bordero{
 	<?php
 	}
 	
-	public function cash($pay){ ?>	
+	public function cash(){ ?>	
 		<div class="out-text">Вноска на каса</div>
 		<table width="820" border="1" class="colltable bordoTable">
 			<tr>
@@ -298,7 +285,7 @@ class bordero{
 						</tr>
 						<tr>
 							<td width="20" />
-							<td width="600" heigth="40" valign="middle"><?php echo $this->logo($pay->MovementDocument->PayerAccountNumber);?></td>
+							<td width="600" heigth="40" valign="middle"><?php echo $this->logo();?></td>
 							<td width="20" />
 						</tr>
 						<tr>
@@ -320,7 +307,7 @@ class bordero{
 													<td colspan="3">
 														<div style="float:left;">Уникален регистрационен номер/Unique registration number</div>
 														<br />
-														<div class="Payment_textbig5" align="right"><?php echo $pay->DocRegNumber;?></div>
+														<div class="Payment_textbig5" align="right"><?php echo $this->number;?></div>
 													</td>
 												</tr>
 												<tr valign="top">
@@ -332,7 +319,7 @@ class bordero{
 													<td colspan="3">
 														<div style="float:left">Дата и час на представяне/Date and hour of submission </div>
 														<br />
-														<div class="Payment_textbig5" align="right"><?php echo date("d.m.Y H:i:s", strtotime($pay->ProcessTimestamp));?></div>
+														<div class="Payment_textbig5" align="right"><?php echo $this->datetime;?></div>
 													</td>
 												</tr>
 												<tr valign="top">
@@ -351,14 +338,14 @@ class bordero{
 													<td colspan="5" height="30">
 														<div style="float:left">В полза на - име / In favor of - name</div>
 														<br />
-														<div class="Payment_textbig5" style="padding-left:50px"><?php echo $pay->MovementDocument->PayeeName;?></div>
+														<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->receiver["name"];?></div>
 													</td>
 												</tr>
 												<tr valign="top" height="30">
 													<td colspan="5" width="50%">
 														<div style="float:left">IBAN на получателя / IBAN of the beneficiary</div>
 														<br />
-														<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->xml->ArrayOfAPAccounts->APAccount->BankAccount->IBAN;?></div>
+														<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->receiver["IBAN"];?></div>
 													</td>
 												</tr>
 												<tr valign="top" height="30">
@@ -366,7 +353,7 @@ class bordero{
 														<div nowrap="nowrap" style="float:left">При банка – банка, клон / At bank – bank, branch</div>
 														<br />
 														<div class="Payment_textbig5" style="padding-left:50px">
-															ЮРОБАНК БЪЛГАРИЯ АД
+                                                        <?php echo $this->receiver["bank"];?>
 														</div>
 													</td>
 												</tr>
@@ -382,28 +369,36 @@ class bordero{
 													<td colspan="2" align="center">
 														<div style="float:left; width:163px;">Вид валута / Currency</div>
 														<br />
-														<div class="Payment_textbig5" style="float: left"><?php echo $pay->CCY->SWIFTCode;?></div>
+														<div class="Payment_textbig5" style="float: left"><?php echo $this->currency;?></div>
 													</td>
 													<td width="25%">
 														<div style="float:right; width:190px;">Сума / Amount</div>
 														<br />
-														<div class="Payment_textbig6" align="right"><?php echo number_format((float)$pay->MovementAmount, 2,'.','');?></div>
+														<div class="Payment_textbig6" align="right"><?php echo $this->amount;?></div>
 													</td>
 												</tr>
 												<tr valign="top">
 													<td colspan="5" height="30">
 														<div style="float:left">Вносител - име / Depositor - name</div>
 														<br />
-														<div class="Payment_textbig5" style="padding-left:50px"><?php echo $pay->MovementDocument->PayerName;?></div>
+														<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->sender["name"];?></div>
 													</td>
 												</tr>
 												<tr valign="top">
 													<td colspan="5" height="30">
 														<div style="float:left">Основание за внасяне / Reason for deposit</div>
 														<br />
-														<div class="Payment_textbig5" style="padding-left:50px"><?php echo $pay->MovementDocument->Description;?></div>
+														<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->description;?></div>
 													</td>
 												</tr>
+                                                <tr valign="top">
+                                                    <td colspan="5" height="30">
+                                                        <div style="float:left">Още пояснения / Additional comments</div>
+                                                            <br />
+                                                        <div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->description_extra;?></div>
+                                                        
+                                                    </td>
+                                                </tr>
 											</table>
 										</td>
 									</tr>
@@ -422,9 +417,8 @@ class bordero{
 	<?php
 	}
 	
-	public function budget($pay){
-		$amount = number_format((float)$pay->MovementAmount, 2,'.','');
-		$out = $this->PDO->query("SELECT * FROM payment_outgoing WHERE name='" . $pay->MovementDocument->PayeeName . "' AND IBAN='" . $pay->MovementDocument->PayeeAccountNumber . "' AND amount='" . $amount . "'")->fetch();
+	public function budget(){
+		$out = $this->PDO->query("SELECT * FROM payment_outgoing WHERE name='" . $this->receiver["name"] . "' AND IBAN='" . $this->receiver["IBAN"] . "' AND amount='" . $this->amount . "'")->fetch();
 	?>
 		<div class="out-text" >От/Към бюджета</div>
 			<table width="820" border="1" class="colltable bordoTable">
@@ -436,7 +430,7 @@ class bordero{
 							</tr>
 							<tr>
 								<td width="10" />
-								<td width="630" heigth="40" valign="middle"><?php echo $this->logo($pay->MovementDocument->PayerAccountNumber);?></td>
+								<td width="630" heigth="40" valign="middle"><?php echo $this->logo();?></td>
 								<td width="10" />
 							</tr>
 							<tr>
@@ -453,12 +447,12 @@ class bordero{
 														<td colspan="3" height="20">
 															<div style="width:80px;float:left">До/To</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $pay->MovementDocument->PayerBAEName;?></div>
+															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->sender["bank"];?></div>
 														</td>
 														<td colspan="7">
 															<div style="float:left">Уникален регистрационен номер/Unique registration number</div>
 															<br />
-															<div class="Payment_textbig5" align="right"><?php echo $pay->DocRegNumber;?></div>
+															<div class="Payment_textbig5" align="right"><?php echo $this->number;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
@@ -470,7 +464,7 @@ class bordero{
 														<td colspan="7">
 															<div style="float:left">Дата и час на представяне/Date and hour of submission </div>
 															<br />
-															<div class="Payment_textbig5" align="right"><?php echo date("d.m.Y H:i:s", strtotime($pay->ProcessTimestamp));?></div>
+															<div class="Payment_textbig5" align="right"><?php echo $this->datetime;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
@@ -480,7 +474,7 @@ class bordero{
 													<tr valign="top">
 														<td colspan="4">
 															Платете на – име на получателя / Please pay to – name of the beneficiary
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $pay->MovementDocument->PayeeName;?></div>
+															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $this->receiver["name"];?></div>
 														</td>
 														<td colspan="6">
 														</td>
@@ -488,18 +482,18 @@ class bordero{
 													<tr valign="top">
 														<td colspan="3">
 															IBAN на получателя / IBAN of the beneficiary
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $pay->MovementDocument->PayeeAccountNumber;?></div>
+															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $this->receiver["IBAN"];?></div>
 														</td>
 														<td />
 														<td colspan="6">
 															BIC на банката на получателя/BIC of the beneficiary bank
-															<div class="Payment_textbig5" align="right"><?php echo $pay->MovementDocument->PayeeBAE;?></div>
+															<div class="Payment_textbig5" align="right"><?php echo $this->receiver["BIC"];?></div>
 														</td>
 													</tr>
 													<tr valign="top">
 														<td colspan="4">
 															При банка – име на банката на получателя/At bank – name of the bank of beneficiary
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $pay->MovementDocument->PayeeBAEName;?></div>
+															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $this->receiver["bank"];?></div>
 														</td>
 														<td colspan="6">
 															Вид плащане*** / Type of payment ***
@@ -520,7 +514,7 @@ class bordero{
 														<td colspan="3" nowrap="nowrap">
 															Вид валута
 															<br />Type of currency
-															<div class="Payment_textbig5" align="center"><?php echo $pay->CCY->SWIFTCode;?></div>
+															<div class="Payment_textbig5" align="center"><?php echo $this->currency;?></div>
 														</td>
 														<td>
 															Сума /Amount
@@ -534,7 +528,7 @@ class bordero{
 															Основание за плащане / Reason for payment
 														</td>
 														<td colspan="9">
-															<div class="Payment_textbig5"><?php echo mb_substr($pay->MovementDocument->Description, 0, 35);?></div>
+															<div class="Payment_textbig5"><?php echo $this->description;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
@@ -542,7 +536,7 @@ class bordero{
 															Още пояснения / Additional comments
 														</td>
 														<td colspan="9">
-															<div class="Payment_textbig5"><?php echo mb_substr($pay->MovementDocument->Description, 35);?></div>
+															<div class="Payment_textbig5"><?php echo $this->description_extra;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
@@ -600,18 +594,18 @@ class bordero{
 													<tr valign="top">
 														<td colspan="10">
 															Наредител – наименование на юридическото лице или трите имена на физическото лице / Ordering party – name of the corporate or individual
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $pay->MovementDocument->PayerName;?></div>
+															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $this->sender["name"];?></div>
 														</td>
 													</tr>
 													<tr valign="top">
 														<td colspan="3">
 															IBAN на наредителя / IBAN of the ordering party
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $pay->MovementDocument->PayerAccountNumber;?></div>
+															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $this->sender["IBAN"];?></div>
 														</td>
 														<td />
 														<td colspan="6">
 															BIC на банката на наредителя / BIC of the bank of the ordering party
-															<div class="Payment_textbig5" align="right"><?php echo $pay->MovementDocument->PayerBAE;?></div>
+															<div class="Payment_textbig5" align="right"><?php echo $this->sender["BIC"];?></div>
 														</td>
 													</tr>
 													<tr valign="top">
@@ -624,7 +618,7 @@ class bordero{
 														</td>
 														<td colspan="4">Дата на изпълнение/Date of execution
 															<br />
-															<div class="Payment_textbig5" align="right"><?php echo date("d.m.Y", strtotime($pay->ValDate));?></div>
+															<div class="Payment_textbig5" align="right"><?php echo $this->execution_time;?></div>
 														</td>
 														<td />
 														<td colspan="2">Вид плащане***
@@ -681,7 +675,7 @@ class bordero{
 	<?php
 	}
 	
-	public function received_budget($pay){
+	public function received_budget(){
 	?>
 	<center xmlns:xsi="http://web.w3.org/2001/XMLSchema-instance">
 		<table width="630" border="1" class="colltable bordoTable">
@@ -695,7 +689,7 @@ class bordero{
 								</tr>
 								<tr>
 									<td width="20"></td>
-									<td width="600" heigth="40" valign="middle"><?php echo $this->logo($pay->MovementDocument->PayerAccountNumber);?></td>
+									<td width="600" heigth="40" valign="middle"><?php echo $this->logo();?></td>
 									<td width="20"></td>
 								</tr>
 								<tr>
@@ -721,7 +715,7 @@ class bordero{
 															<tbody>
 																<tr>
 																	<td>
-																		<div class="Payment_textbig5" align="center"><?php echo $pay->DocRegNumber;?> - <?php echo date("d.m.Y", strtotime($pay->ValDate));?></div>
+																		<div class="Payment_textbig5" align="center"><?php echo $this->number;?> - <?php echo $this->execution_time;?></div>
 																	</td>
 																</tr>
 																<tr>
@@ -777,7 +771,7 @@ class bordero{
 																<tr>
 																	<td width="15%">&nbsp;</td>
 																	<td>
-																		<div class="Payment_textbig5" width="85%"><?php echo $pay->MovementDocument->PayeeName;?></div>
+																		<div class="Payment_textbig5" width="85%"><?php echo $this->receiver["name"];?></div>
 																	</td>
 																</tr>
 															</tbody>
@@ -790,7 +784,7 @@ class bordero{
 														<br>&nbsp;IBAN of the beneficiary
 													</td>
 													<td colspan="6" height="30" class="Payment_textbig5">
-														<?php echo $pay->MovementDocument->PayeeAccountNumber;?></td>
+														<?php echo $this->receiver["IBAN"];?></td>
 												</tr>
 												<tr>
 													<td colspan="6" height="30">
@@ -801,7 +795,7 @@ class bordero{
 																</tr>
 																<tr>
 																	<td width="18%">&nbsp;</td>
-																	<td class="Payment_textbig5"><?php echo $pay->MovementDocument->PayeeBAEName;?></td>
+																	<td class="Payment_textbig5"><?php echo $this->receiver["bank"];?></td>
 																</tr>
 															</tbody>
 														</table>
@@ -836,7 +830,7 @@ class bordero{
 																</tr>
 																<tr>
 																	<td>
-																		<div class="Payment_textbig5" align="center"><?php echo $pay->CCY->SWIFTCode;?></div>
+																		<div class="Payment_textbig5" align="center"><?php echo $this->currency;?></div>
 																	</td>
 																</tr>
 															</tbody>
@@ -850,7 +844,7 @@ class bordero{
 																</tr>
 																<tr>
 																	<td>
-																		<div class="Payment_textbig5" align="right"><?php echo number_format((float)$pay->MovementAmount, 2,'.','');?></div>
+																		<div class="Payment_textbig5" align="right"><?php echo $this->amount;?></div>
 																	</td>
 																</tr>
 															</tbody>
@@ -868,7 +862,7 @@ class bordero{
 																</tr>
 																<tr>
 																	<td width="30%">&nbsp;</td>
-																	<td class="Payment_textbig5"><?php echo mb_substr($pay->MovementDocument->Description, 0, 35);?></td>
+																	<td class="Payment_textbig5"><?php echo $this->description;?></td>
 																</tr>
 															</tbody>
 														</table>
@@ -880,12 +874,12 @@ class bordero{
 															<tbody>
 																<tr>
 																	<td colspan="2">&nbsp; Още пояснения / Additional comments
-
+                                                                        <?php echo $this->description_extra;?>
 																	</td>
 																</tr>
 																<tr>
 																	<td width="30%">&nbsp;</td>
-																	<td class="Payment_textbig5"><?php echo mb_substr($pay->MovementDocument->Description, 35);?></td>
+																	<td class="Payment_textbig5"></td>
 																</tr>
 															</tbody>
 														</table>
@@ -900,7 +894,7 @@ class bordero{
 																</tr>
 																<tr>
 																	<td width="17%">&nbsp;</td>
-																	<td class="Payment_textbig5"><?php echo $pay->MovementDocument->PayerName;?></td>
+																	<td class="Payment_textbig5"><?php echo $this->sender["name"];?></td>
 																</tr>
 															</tbody>
 														</table>
@@ -931,7 +925,7 @@ class bordero{
 																</tr>
 																<tr>
 																	<td width="60%">&nbsp;</td>
-																	<td class="Payment_textbig5"><?php echo date("d.m.Y", strtotime($pay->ValDate));?></td>
+																	<td class="Payment_textbig5"><?php echo $this->execution_time;?></td>
 																</tr>
 															</tbody>
 														</table>
@@ -997,8 +991,34 @@ class bordero{
 	</center>
 	<?php
 	}
-	
+
+
+    public function _() {
+		#PREVIEW PAYMENTS FOR PRINTING
+        echo '<center class="person">';
+        if(in_array($this->type, $this->pay_types["transfer"])){
+            if($this->type == "SEPA получен кредитен превод" || $this->type == "Валутна сделка"){ ?> 
+                <div class="attention" id="id_<?php echo $this->number;?>">
+                    <?php echo $this->type;?>
+                    <button class="button" onclick="S.hide('#id_<?php echo $this->number;?>');">X</button>
+                </div> 
+            
+            <?php }			
+            $this->transfer();
+        } elseif(in_array($this->type, $this->pay_types["cash"])){
+            $this->cash();
+        } elseif(in_array($this->type, $this->pay_types["budget"])){
+            $this->budget();
+        } elseif(in_array($this->type, $this->pay_types["received_budget"])){
+            $this->received_budget();
+        } else {?>
+            <div class="attention">
+                <div>НЕПОЗНАТ ВИД ПЛАЩАНЕ: <?php echo $this->amount . ' лв. - ' . $this->datetime;?></div>
+                <div><?php echo $this->type;?></div>
+            </div>
+        <?php
+        }
+        echo '</center>';
+	}
 }
-
-
 ?>

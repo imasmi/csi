@@ -60,12 +60,11 @@ class Reference{
 				if(strpos($pers["name"], "ПОЧИНАЛ") === false){
 					$rowNumb = $a . "_" . rand();
 					$title_date = $Caser->title_main["date"];
-					$caseActive = ($case["status"] == 55 || $case["status"] == 58) ? true : false;
 			?>
 				<tr id="spravka<?php echo $rowNumb;?>">
 					<td><button type="button" onclick="$('#spravka<?php echo $rowNumb;?> #bnb_<?php echo $pers["EGN_EIK"];?>').prop('checked', false); S.hide('#spravka<?php echo $rowNumb;?>'); S('#startovi_<?php echo $case_id;?>').value=0; S.remove('#output_<?php echo $case_id;?>');">-</button></td>
 					<td><?php echo $a;?></td>
-					<td <?php echo ($caseActive) ? '' : 'class="color-2"';?>><?php echo $case["number"];?><?php echo ($caseActive) ? '' : '<br/>(' . $case["status"] . ')';?></td>
+					<td class="<?php echo $Caser->color;?>"><?php echo $case["number"];?></td>
 					<td <?php if($pers["EGN_EIK"] <= "5600000000" && substr($pers["EGN_EIK"], 0, 1) > "1" && $pers["type"] == "person"){ echo 'class="color-3-bg"';} elseif($pers["type"] == "firm"){echo 'class="color-2-bg"';}?>><?php echo $pers["EGN_EIK"];?></td>
 					<td><?php echo $this->Bnb->checkbox($pers, $case["id"], true);?></td>
 					<td><?php $this->nap_link($pers["id"], $case["id"], (isset($_POST["nap_type_" . $case_id]) ? $_POST["nap_type_" . $case_id] : false));?></td>

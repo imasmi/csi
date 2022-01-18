@@ -59,10 +59,10 @@ include_once(\system\Core::doc_root() . '/web/php/dates.php');
 						<?php echo ++$cnt;?>
 						<input type="hidden" name="invoice_<?php echo $cnt;?>" value="<?php echo $postbank["id"];?>"/>
 					</td>
-					<td><?php echo $postbank["bordero"];?></td>
+					<td><?php echo $postbank["number"];?></td>
 					<td><?php echo $postbank["amount"];?></td>
-					<td><?php echo $postbank["transaction_date"];?></td>
-					<td><?php echo $postbank["debtor"];?></td>
+					<td><?php echo $postbank["datetime"];?></td>
+					<td><?php echo $postbank["sender"];?></td>
 					<td><?php echo $postbank["description"];?></td>
 
 					<?php
