@@ -7,7 +7,7 @@ $Caser = new \plugin\Caser\Caser($_GET["case"]);
 		<table cellspacing="1" cellpadding="1" border="0" width="95%" class="form noborder" align="center">
 		<tbody>
 		<tr><td colspan="2">
-			<table class="center padding-40">
+			<table class="padding-40">
 				<tr>
 					<td style="vertical-align: top;"><input type="checkbox" name="wait_nap"/> Чака НАП</td>
 				</tr>

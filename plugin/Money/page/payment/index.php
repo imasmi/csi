@@ -15,7 +15,8 @@ $array = array(
 	"Разпределени" => array("partitioned" => 'echo $list["allocate"] > 0 ? $list["partitioned"] : "";'),
 	"Неразпределени" => array("unpartitioned" => 'echo $list["allocate"] > 0 ? $list["unpartitioned"] : "";'),
 	"Бележка" => "note",
-	"Сметка/фактура" => array("id" => 'foreach($this->PDO->query("SELECT bill, invoice FROM invoice WHERE payment LIKE \'%" . $list["id"] . "%\'") as $invoice){ echo $invoice["bill"] . "/" . $invoice["invoice"] . "<br>";}')
+	"Сметка/фактура" => array("id" => 'foreach($this->PDO->query("SELECT bill, invoice FROM invoice WHERE payment LIKE \'%" . $list["id"] . "%\'") as $invoice){ echo $invoice["bill"] . "/" . $invoice["invoice"] . "<br>";}'),
+	"Платежно" => ["id" => 'if ($list["number"] != null) { echo \'<a href="\' . \system\Core::url() . \'Money/payment/bordero?id=\' . $list["id"] . \'" class="button" target="_blank">Платежно</a>\'; }']
 
 );
 

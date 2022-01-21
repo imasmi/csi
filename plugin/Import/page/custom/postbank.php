@@ -50,7 +50,10 @@ $Postbank_xml = new \plugin\Money\Bordero\Postbank_xml($xml);
 					</td>
 					<td><button type="button" class="button" onclick="S.remove('#payrow_<?php echo $cnt;?>')">-</button></td>
 					<td><?php echo $Caser->select("case_id_" . $cnt, array("search" => $Item->description));?></td>
-					<td><textarea name="description_<?php echo $cnt;?>"><?php echo $Item->description;?></textarea></td>
+					<td>
+						<input type="hidden" name="description_<?php echo $cnt;?>" value='<?php echo $Item->description;?>'/>
+						<?php echo $Item->description;?>
+					</td>
 					<td><input type="number" name="amount_<?php echo $cnt;?>" value="<?php echo $Item->amount;?>" step="0.01"/></td>
 					<td><input type="text" name="datetime_<?php echo $cnt;?>" value="<?php echo $Item->datetime;?>"/></td>
 					<td>

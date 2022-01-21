@@ -33,6 +33,6 @@ for($a = 1; $a <= $_POST["cnt"]; ++$a){
 		}
 	}
 }
-$open = $_POST["reason"] == "Погaсяване на дълг" ? "payments" : "postbank-payments";
+$open = $_POST["reason"] == "Погaсяване на дълг" ? "payment/index" : "postbank-payments";
 ?>
 <script>window.open('<?php echo \system\Core::url();?>Money/<?php echo $open;?>', '_self');</script>

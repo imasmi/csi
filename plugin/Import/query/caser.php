@@ -98,9 +98,16 @@ foreach ($numbs as $a){ // SAVE PEOPLE AND CASES DATA
 		"debtor" => json_encode($debtors),
 	);
 
-	if($_POST["titul" . $a] == "Акт по чл.106/107 от ДОПК"){
+	if($_POST["titul" . $a] == "Акт по чл.106/107 от ДОПК" || $_POST["court" . $a] == "Акт по чл.106/107 от ДОПК"){
+		
 		$court_case = explode("/",$_POST["court_case" . $a]);
 		$title_array["date"] = date("Y-m-d", strtotime($court_case[1]));
+		/*
+		print_r($_POST["case_number" . $a]);
+		echo ' - ';
+		print_r($court_case[1]);
+		echo '<br>';
+		*/
 	}
 
 	$title_check = $PDO->query("SELECT * FROM caser_title WHERE case_id='" . $case_id . "' ORDER by id ASC");

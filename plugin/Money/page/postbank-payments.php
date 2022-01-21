@@ -17,6 +17,7 @@ include_once(\system\Core::doc_root() . '/web/php/dates.php');
 		<th>Възстановено платежно</th>
 		<th>Сума възстановено</th>
 		<th>Бележка</th>
+		<?php if(!isset($_GET["print"])){?><th>Платежно</th><?php } ?>
 		<th>Обща сума</th>
 	</tr>
 	<?php
@@ -148,6 +149,7 @@ include_once(\system\Core::doc_root() . '/web/php/dates.php');
 					</td>
 					<td rowspan="<?php echo $rowspan;?>"><?php echo $postbank["note"];?></td>
 					<?php $check_match = (string) $total_sum == (string) $postbank["amount"];?>
+					<?php if(!isset($_GET["print"])){?><td><a href="<?php echo \system\Core::url();?>Money/payment/bordero?id=<?php echo $postbank["id"];?>" class="button" target="_blank">Платежно</a></td><?php } ?>
 					<td class="<?php if(!$check_match){ echo 'color-2-bg';}?>" rowspan="<?php echo $rowspan;?>"><?php echo $total_sum;?></td>
 					<?php 
 					if(!$check_match){ $fast_match[] = $postbank;}

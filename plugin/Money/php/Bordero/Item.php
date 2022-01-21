@@ -5,7 +5,9 @@ class Item {
 
     
     public function __construct ($pay, $data = []) {
-        
+        global $PDO;
+		$this->PDO = $PDO;
+
         if (isset($data["type"]) && $data["type"] == "xml") { // ДАННИ НА ПЛАЩАНЕТО ОТ XML импорт
             $this->type = $pay->MovementKind->MovementKindNames->Items[0];
             $this->amount = number_format((float)$pay->MovementAmount, 2,'.','');
@@ -45,7 +47,14 @@ class Item {
 
         // ОБЩИ НЕЩА ЗА КЛАСА
         $this->data = $data;
-        $this->description_extra = isset($data["case_number"]) ? "Дело: " . $data["case_number"] : "";
+		if (isset($data["case_number"])) {
+			$this->description_extra = "Дело: " . $data["case_number"];
+		} else if (isset($pay["case_id"])) {
+			$this->description_extra = "Дело: " . $this->PDO->query("SELECT number FROM caser WHERE id='" . $pay["case_id"] . "'")->fetch()["number"];
+		} else {
+			$this->description_extra = "";
+		}
+
         $this->pay_types = array();
         $this->pay_types["transfer"] = array(
             "Получен директен превод",
@@ -274,7 +283,8 @@ class Item {
 	<?php
 	}
 	
-	public function cash(){ ?>	
+	public function cash(){ // Платени на каса в банката
+	?>	
 		<div class="out-text">Вноска на каса</div>
 		<table width="820" border="1" class="colltable bordoTable">
 			<tr>
@@ -353,7 +363,7 @@ class Item {
 														<div nowrap="nowrap" style="float:left">При банка – банка, клон / At bank – bank, branch</div>
 														<br />
 														<div class="Payment_textbig5" style="padding-left:50px">
-                                                        <?php echo $this->receiver["bank"];?>
+                                                        <?php echo $this->receiver["bank"] != "" ? $this->receiver["bank"] : "ЮРОБАНК БЪЛГАРИЯ АД";?>
 														</div>
 													</td>
 												</tr>
@@ -417,8 +427,8 @@ class Item {
 	<?php
 	}
 	
-	public function budget(){
-		$out = $this->PDO->query("SELECT * FROM payment_outgoing WHERE name='" . $this->receiver["name"] . "' AND IBAN='" . $this->receiver["IBAN"] . "' AND amount='" . $this->amount . "'")->fetch();
+	public function budget(){ // Бюджетно изходящо плащане
+		$out = $this->PDO->query("SELECT * FROM payment_outgoing WHERE name='" . $this->receiver["name"] . "' AND IBAN='" . $this->receiver["IBAN"] . "' AND amount='" . abs($this->amount) . "'")->fetch();
 	?>
 		<div class="out-text" >От/Към бюджета</div>
 			<table width="820" border="1" class="colltable bordoTable">
@@ -520,7 +530,7 @@ class Item {
 															Сума /Amount
 															<br />
 															<br />
-															<div class="Payment_textbig5" align="right"><?php echo $amount;?></div>
+															<div class="Payment_textbig5" align="right"><?php echo $this->amount;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
@@ -548,7 +558,7 @@ class Item {
 														</td>
 														<td colspan="6">
 															Дата (ддммгггг) на документа / Date (ddmmyyyy) of the document
-															<div class="Payment_textbig5" align="right"><?php if(isset($out["budget_date"])){echo date("d.m.Y", strtotime($out["budget_date"]));}?></div>
+															<div class="Payment_textbig5" align="right"><?php echo $this->datetime;?></div>
 														</td>
 													</tr>
 													<tr valign="top">

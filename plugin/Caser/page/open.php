@@ -30,6 +30,12 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 	
 	<div id="title" class="text-center">
 		<h3>Титули</h3>
+		<div>
+			Банка по делото: 
+			<?php 
+				echo $PDO->query("SELECT IBAN FROM bank b LEFT JOIN caser c ON b.id = c.prefBANK WHERE c.id ='" . $_GET["id"] . "'")->fetch()["IBAN"];
+			?>
+		</div>
 		<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/add?id=<?php echo $_GET["id"];?>">Добавяне на титул</a>
 		<?php foreach($Caser->title as $title){
 			$Title = new \plugin\Caser\Title($title["id"]);

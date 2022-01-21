@@ -17,7 +17,7 @@ $array = array();
 $start = (isset($_GET["start"])) ? $_GET["start"] : date("Y-m-d", strtotime("- 1 day"));
 $end = (isset($_GET["end"])) ? $_GET["end"] : date("Y-m-d", strtotime("- 1 day"));
 
-foreach ($PDO->query("SELECT * FROM payment WHERE date >= '" . $start . "' AND date <='" . $end . "' AND `case_id` !=0") as $payment){
+foreach ($PDO->query("SELECT * FROM payment WHERE (date BETWEEN '" . $start . "' AND '" . $end . "') AND `case_id` !=0 AND bank='175'") as $payment){
 	$Caser = new \plugin\Caser\Caser($payment["case_id"]);
 	$doc = $PDO->query("SELECT * FROM document WHERE case_id=" . $payment["case_id"] . " AND (" . $docs . ") ORDER by date DESC")->fetch();
 	$pay = $PDO->query("SELECT date FROM distribution WHERE `case_id`=" . $Caser->id . " ORDER by date DESC")->fetch();
