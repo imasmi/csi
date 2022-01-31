@@ -11,6 +11,7 @@ $Postbank_xml = new \plugin\Money\Bordero\Postbank_xml($xml);
 			<tr>
 				<th></th>
 				<th></th>
+				<th></th>
 				<th>Дело</th>
 				<th>Описание</th>
 				<th>Сума в лева</th>
@@ -44,6 +45,7 @@ $Postbank_xml = new \plugin\Money\Bordero\Postbank_xml($xml);
 				++$cnt;
 			?>
 				<tr id="payrow_<?php echo $cnt;?>">
+					<td><input type="checkbox" onclick="S.classToggle('#payrow_<?php echo $cnt;?>', 'color-1-bg')"/></td>
 					<td>
 						<?php echo $cnt;?>
 						<input type="hidden" name="type_<?php echo $cnt;?>" value='<?php echo $Item->type;?>'/>

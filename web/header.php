@@ -24,6 +24,7 @@
 			<li><a href="<?php echo \system\Core::url();?>Money/postbank-payments">Пощенска банка</a></li>
 			<li><a href="<?php echo \system\Core::url();?>Money/distribution">Разпределения</a></li>
 			<li><a href="<?php echo \system\Core::url();?>Money/proporcionalnost">Пропорционалност</a></li>
+			<li><a href="<?php echo \system\Core::url();?>Money/tax/index">Такси</a></li>
 			<li><a href="<?php echo \system\Core::url();?>Money/tax-pay">Плащане на такси</a></li>
 			<li><a href="<?php echo \system\Core::url();?>Money/bank/unit/index">Банки</a></li>
 		</ul>

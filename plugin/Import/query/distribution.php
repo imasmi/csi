@@ -22,7 +22,7 @@ foreach ($distribution as $a){ // SAVE DISTRIBUTIONS DATA
 	
 	$creditor_sums = array();
 	for($c = 0; $c < 10; ++$c){
-		if(isset($_POST[$c . "creditor" . $a])){		
+		if(isset($_POST[$c . "creditor" . $a]) && $_POST[$c . "creditor" . $a] != ""){		
 			$creditor_id = $PDO->query("SELECT id FROM person WHERE name='" . $_POST[$c . "creditor" . $a] . "'")->fetch()["id"];			
 			$creditor_sums[] = array($creditor_id => $_POST[$c . "sum" . $a]);
 		}

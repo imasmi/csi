@@ -2,11 +2,13 @@
 $sales = explode('"', $file);
 $maxCreditors = 0;
 
-for($a = 41; $a < count($sales); $a+=40){
-	$creditors = explode("лв.", $Import->clearEmpty($Import->removeOE($sales[$a + 14])));
-	if($maxCreditors < count($creditors)){ $maxCreditors = count($creditors);}
+for($a = 45; $a < count($sales); $a+=44){
+	$creditors_string = $Import->clearEmpty($Import->removeOE($sales[$a + 16]));
+	preg_match_all('/([0-9]*[.]?[0-9]+) лв. към ([^0-9]*)/', $creditors_string, $creditors);
+	if($maxCreditors < count($creditors[1])){ $maxCreditors = count($creditors[1]);}
 }
-$colspan = 6 + (($maxCreditors - 1) * 2);
+
+$colspan = 6 + ($maxCreditors * 2);
 ?>
 <form method="post" action="<?php echo $Import->qwdir;?>/distribution" target="_blank">
 	<table class="listTable" border="1px" cellpadding="0" cellspacing="0">
@@ -17,9 +19,9 @@ $colspan = 6 + (($maxCreditors - 1) * 2);
 			<th>Дата</th>
 			<th>Изготвено от</th>
 			<th>Разпределена сума</th>
-			<?php for($c = 1; $c < $maxCreditors; $c++){ ?>
-				<th>Взискател <?php echo $c;?></th>
-				<th>Сума за <?php echo $c;?></th>
+			<?php for($c = 0; $c < $maxCreditors; $c++){ ?>
+				<th>Взискател <?php echo $c + 1;?></th>
+				<th>Сума за <?php echo $c + 1;?></th>
 			<?php } ?>
 			<th>Общо за ЧСИ</th>
 			<th>Т.26</th>
@@ -33,17 +35,21 @@ foreach($sales as $key=>$value){
 	echo $key . '->' . $value . '<br>';
 }
 */
-for($a = 41; $a < count($sales); $a+=40){
+//print_r($sales);
+
+for($a = 45; $a < count($sales); $a+=44){
 
 	++$cnt;
 	$case_id = $Import->clearEmpty($Import->removeOE($sales[$a]));
 	$date = $Import->clearEmpty($Import->removeOE($sales[$a + 2]));
 	$user = $Import->clearEmpty($Import->removeOE($sales[$a + 4]));
 	$distributed = $Import->clearEmpty($Import->removeOE($sales[$a + 6]));
-	$creditors = explode("лв.", $Import->clearEmpty($Import->removeOE($sales[$a + 14])));
-	array_pop($creditors);
-	$csiTotal = $Import->clearEmpty($Import->removeOE($sales[$a + 16]));
-	$point = $Import->clearEmpty($Import->removeOE($sales[$a + 18]));
+	$creditors_string = $Import->clearEmpty($Import->removeOE($sales[$a + 16]));
+	preg_match_all('/([0-9]*[.]?[0-9]+) лв. към ([^0-9]*)/', $creditors_string, $creditors);
+	
+	//print_r($creditors);
+	$csiTotal = $Import->clearEmpty($Import->removeOE($sales[$a + 14]));
+	$point = $Import->clearEmpty($Import->removeOE($sales[$a + 22]));
 ?>
 		<tr>
 			<td><input type="text" name="case_id<?php echo $cnt;?>" value="<?php echo $case_id;?>"/></td>
@@ -51,22 +57,16 @@ for($a = 41; $a < count($sales); $a+=40){
 			<td><input type="text" name="user<?php echo $cnt;?>" value="<?php echo $user;?>"/></td>
 			<td><input type="text" name="distributed<?php echo $cnt;?>" value="<?php echo $distributed;?>"/></td>
 			<?php
-			$cred_array = array();
-			for($c = 0; $c < ($maxCreditors - 1); $c++){
-				if($c < count($creditors)){
-					$cred_data = explode(":", $creditors[$c]);
-					$creditor_name = $Import->clearEmpty($Import->removeOE($cred_data[0]));
-					$creditor_sum = $Import->clearEmpty($Import->removeOE($cred_data[1]));
+			$cred_array = array();			
+			for($i = 0; $i < $maxCreditors; $i++){
+					$creditor_name = isset($creditors[2][$i]) ? $creditors[2][$i] : null;
+					$creditor_sum = isset($creditors[1][$i]) ? $creditors[1][$i] : null;
 			?>
-					<td><input type="text" name="<?php echo $c;?>creditor<?php echo $cnt;?>" value="<?php echo $creditor_name;?>"/></td>
-					<td><input type="text" name="<?php echo $c;?>sum<?php echo $cnt;?>" value="<?php echo $creditor_sum;?>"/></td>
+					<td><input type="text" name="<?php echo $i;?>creditor<?php echo $cnt;?>" value="<?php echo $creditor_name;?>"/></td>
+					<td><input type="text" name="<?php echo $i;?>sum<?php echo $cnt;?>" value="<?php echo $creditor_sum;?>"/></td>
 			<?php
-				} else { ?>
-					<td></td>
-					<td></td>
-			<?php
-				}
 			}
+			
 			?>
 			<td><input type="text" name="csiTotal<?php echo $cnt;?>" value="<?php echo $csiTotal;?>"/></td>
 			<td><input type="text" name="point<?php echo $cnt;?>" value="<?php echo $point;?>"/></td>

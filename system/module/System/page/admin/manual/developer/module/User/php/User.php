@@ -118,7 +118,7 @@
                     <span>column (string): database column field to retrieve data from.</span>
                     <p>Example: $User->group</p>
                     <span>Example output: role</span>
-                    <p>Example: $User->_("id")</p>
+                    <p>Example: $User->id</p>
                     <span>Example output: 1</span>
                 </li>
             </ul>

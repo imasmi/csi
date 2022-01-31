@@ -3,7 +3,7 @@
 $User->control();
 
 #GET USER PROFILE DATA
-$profile = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $User->_("id") . "'")->fetch();
+$profile = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $User->id . "'")->fetch();
 ?>
 
 <div class="admin">

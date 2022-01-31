@@ -4,6 +4,7 @@ $ListingAPP = new \module\Listing\ListingAPP;
 $dir = \system\Core::this_path(0,-1);
 
 $array = array(
+	"" => ["id" => ' echo \'<input type="checkbox" onclick="S.classToggle(`#row-\' . $list["id"] . \'`, `color-1-bg`)"/></td>\';'],
 	"Дата" => array("date" => 'echo date("d.m.Y", strtotime($list["date"]));'),
 	"Сума" => "amount",
 	"Дело" => array("case_id" => 'include_once(\system\Core::doc_root() . "/plugin/Caser/php/Caser.php"); $Caser = new \plugin\Caser\Caser($list["case_id"]); $Caser->open();'),
@@ -17,7 +18,6 @@ $array = array(
 	"Бележка" => "note",
 	"Сметка/фактура" => array("id" => 'foreach($this->PDO->query("SELECT bill, invoice FROM invoice WHERE payment LIKE \'%" . $list["id"] . "%\'") as $invoice){ echo $invoice["bill"] . "/" . $invoice["invoice"] . "<br>";}'),
 	"Платежно" => ["id" => 'if ($list["number"] != null) { echo \'<a href="\' . \system\Core::url() . \'Money/payment/bordero?id=\' . $list["id"] . \'" class="button" target="_blank">Платежно</a>\'; }']
-
 );
 
 $actions = array(

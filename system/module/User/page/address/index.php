@@ -16,5 +16,5 @@ $actions = array(
 
 <div class="admin">
     <div class="title"><?php echo $Text->_("Addresses")?></div>
-    <?php $ListingAPP = new \module\Listing\ListingAPP; $ListingAPP->_($array, $actions, $Setting->table, "WHERE `fortable` = '" . $User->table . "' AND page_id='" . $User->_("id") . "' AND link_id='0' AND tag='address'");?>
+    <?php $ListingAPP = new \module\Listing\ListingAPP; $ListingAPP->_($array, $actions, $Setting->table, "WHERE `fortable` = '" . $User->table . "' AND page_id='" . $User->id . "' AND link_id='0' AND tag='address'");?>
 </div>

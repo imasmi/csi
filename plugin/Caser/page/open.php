@@ -6,6 +6,7 @@ include_once(\system\Core::doc_root() . '/plugin/Reference/php/Reference.php');
 include_once(\system\Core::doc_root() . '/plugin/Document/php/Document.php');
 include_once(\system\Core::doc_root() . '/plugin/Money/php/Money.php');
 include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
+include_once(\system\Core::doc_root() . '/web/php/dates.php');
 
 $Caser = new \plugin\Caser\Caser($_GET["id"]);
 $charger = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $Caser->charger . "'")->fetch();
@@ -43,7 +44,6 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 			<div class="clear">
 				<div class="column-4 clear text-center">
 					<?php $Title->data(); ?>
-					
 				</div>
 				
 				<div class="column-4 padding-10 text-center">
@@ -56,12 +56,33 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 					<div class="column-6">
 						<div class="title">Длъжници</div>
 						<div class="marginY-20"><a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/add-person?id=<?php echo $title["id"];?>&type=debtor">Добавяне на длъжник</a></div>
-						<?php $Title->debtors(); ?>
+						<?php $Title->debtors();?>
 					</div>
 				</div>
 
 				<div class="column-4 padding-10">
 					<div class="title">Дълг</div>
+					<h3>Такси</h3>
+					<table cellspacing="5">
+						<tr>
+							<th>Точка</th>
+							<th>Брой</th>
+							<th>Сума</th>
+							<th>Дата</th>
+							<th>Бележка</th>
+							<th>Длъжник</th>
+						</tr>
+						<?php foreach ($PDO->query("SELECT * FROM tax WHERE caser_id='" . $_GET["id"] . "' AND title_id='" . $title["id"] . "'") as $tax) { ?>
+						<tr>
+							<td>т.<?php echo $tax["point_number"];?></td>
+							<td><?php echo $tax["count"];?></td>
+							<td><?php echo $tax["sum"];?></td>
+							<td><?php echo web\dates::_($tax["date"]);?></td>
+							<td><?php echo $tax["note"];?></td>
+							<td><?php if ($tax["debtor_id"] != 0) { echo $PDO->query("SELECT name FROM person WHERE id='" . $tax["debtor_id"] . "'")->fetch()["name"];}?></td>
+						</tr>
+						<?php } ?>
+					</table>
 				</div>
 			</div>
 

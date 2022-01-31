@@ -41,6 +41,7 @@ class Title{
 		<div>Номер: <?php echo $this->item["number"];?></div>
 		<div>Дата: <?php echo \web\dates::_($this->item["date"]);?></div>
 		<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/edit?id=<?php echo $this->id;?>">Редакция</a>
+		<a class="button" href="<?php echo \system\Core::url();?>Money/tax/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>">Добави такса</a>
 	<?php
 	}
 
@@ -76,7 +77,8 @@ class Title{
 				<br/><?php echo $this->pType($pers);?> <?php echo $pers["EGN_EIK"];?><br/>
 				<?php if($nap !== false){ $this->nap($pers["id"], $this->case["id"]);} ?>
 				<div><?php echo $Person->edit();?></div>
-				<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/change-person?id=<?php echo $this->id;?>&type=debtor&person=<?php echo $pers["id"];?>">Смени длъжник</a>
+				<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/change-person?id=<?php echo $this->id;?>&type=debtor&person=<?php echo $pers["id"];?>&debtor">Смени длъжник</a>
+				<a class="button" href="<?php echo \system\Core::url();?>Money/tax/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>&debtor_id=<?php echo $pers["id"];?>">Добави такса</a>
 				<br/><br/>
 			<?php 
 			}

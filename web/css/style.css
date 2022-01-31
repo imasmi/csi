@@ -106,26 +106,31 @@ section.open .tag:before{content: "-";}
 /*spravki*/
 .napReorder input[type="text"]{width: 300px;}
 
-/*payment*/
-#Theader{font-size:36px}
-#Tbuttons{text-align:center}
-#Tbuttons input{margin:20px;margin:20px;padding:5px 10px;border-radius:10px}
-#Tbuttons input:first-child{background-color:#90ee90}
-#Tbuttons input:first-child:hover{background-color:green}
-#Tbuttons input:last-child{background-color:pink}
-#Tbuttons input:last-child:hover{background-color:red}
-#correct{display:inline-block;width:20px;height:20px;margin-left:20px}
-.directRow{display:table-row}
-.budgetROW{display:none}
-.emptyROW{background-color:red;display:table-row}
-.budgetTexts{width: 170px; height: 21px; line-height: 20px; margin: 0; display: inline-block; resize: vertical; padding: 0; vertical-align: bottom;}
-.budgetCodes{width:50px;margin-left:5px}
-.iban,.budgetIBAN{width:400px; border-bottom: 1px solid;}
-.iban,.budgetIBAN .iban{width:185px; }
-.napIBAN{background-color:#98cad1}
-.budgetAmount{width: 80px;}
-.budgetAmountWrapper{border-bottom: 1px solid; padding: 12px 0;}
-.vertical-middle{vertical-allign: middle;}
+/* MONEY */
+
+	/*payment*/
+	#Theader{font-size:36px}
+	#Tbuttons{text-align:center}
+	#Tbuttons input{margin:20px;margin:20px;padding:5px 10px;border-radius:10px}
+	#Tbuttons input:first-child{background-color:#90ee90}
+	#Tbuttons input:first-child:hover{background-color:green}
+	#Tbuttons input:last-child{background-color:pink}
+	#Tbuttons input:last-child:hover{background-color:red}
+	#correct{display:inline-block;width:20px;height:20px;margin-left:20px}
+	.directRow{display:table-row}
+	.budgetROW{display:none}
+	.emptyROW{background-color:red;display:table-row}
+	.budgetTexts{width: 170px; height: 21px; line-height: 20px; margin: 0; display: inline-block; resize: vertical; padding: 0; vertical-align: bottom;}
+	.budgetCodes{width:50px;margin-left:5px}
+	.iban,.budgetIBAN{width:400px; border-bottom: 1px solid;}
+	.iban,.budgetIBAN .iban{width:185px; }
+	.napIBAN{background-color:#98cad1}
+	.budgetAmount{width: 80px;}
+	.budgetAmountWrapper{border-bottom: 1px solid; padding: 12px 0;}
+	.vertical-middle{vertical-allign: middle;}
+
+	/* tax */
+	.admin .tax-chooser {width: 300px; overflow: hidden;}
 
 /*note*/
 .noteField{width: 400px; height: 70px;}

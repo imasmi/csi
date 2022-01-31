@@ -49,7 +49,7 @@ class Item {
         $this->data = $data;
 		if (isset($data["case_number"])) {
 			$this->description_extra = "Дело: " . $data["case_number"];
-		} else if (isset($pay["case_id"])) {
+		} else if (isset($pay["case_id"]) && $pay["case_id"] != 0) {
 			$this->description_extra = "Дело: " . $this->PDO->query("SELECT number FROM caser WHERE id='" . $pay["case_id"] . "'")->fetch()["number"];
 		} else {
 			$this->description_extra = "";

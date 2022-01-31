@@ -4,7 +4,7 @@ require_once(\system\Core::doc_root() . '/system/module/Setting/php/SettingAPP.p
 $SettingAPP = new \module\Setting\SettingAPP($User->id, array("fortable" => $User->table));
 
 if(isset($_POST["default"])){
-    foreach($PDO->query("SELECT * FROM " . $Setting->table . " WHERE `fortable` = '" . $User->table . "' AND page_id='" . $User->_("id") . "' AND link_id='0' AND tag='address'") as $setting){
+    foreach($PDO->query("SELECT * FROM " . $Setting->table . " WHERE `fortable` = '" . $User->table . "' AND page_id='" . $User->id . "' AND link_id='0' AND tag='address'") as $setting){
         \system\Database::update(array("value" => ""), $setting["id"], "id", $Setting->table);
     }
 }

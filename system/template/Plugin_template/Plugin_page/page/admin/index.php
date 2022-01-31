@@ -1,4 +1,5 @@
 <?php
+require_once(\system\Core::doc_root() . "/system/module/Listing/php/ListingAPP.php");
 $Object = $Plugin->object();
 $dir = \system\Core::this_path(0,-1);
 
@@ -17,7 +18,6 @@ $actions = array(
 <div class="admin">
     <h2 class="text-center"><?php echo $Plugin->_();?></h2>
     <?php 
-        require_once(\system\Core::doc_root() . "/system/module/Listing/php/ListingAPP.php");
         $ListingAPP = new \module\Listing\ListingAPP(array("row-order" => "ASC", "row-query" => "`tag` = '" . $Object->tag . "'")); 
         $ListingAPP->_($array, $actions, $Object->table, "WHERE `tag` = '" . $Object->tag . "' ORDER by `row` ASC, id ASC");
     ?>
