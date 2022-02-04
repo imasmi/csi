@@ -63,7 +63,13 @@ include_once(\system\Core::doc_root() . '/web/php/dates.php');
 					<td><?php echo $postbank["number"];?></td>
 					<td><?php echo $postbank["amount"];?></td>
 					<td><?php echo $postbank["datetime"];?></td>
-					<td><?php echo $postbank["sender"];?></td>
+					<td>
+						<?php $sender = json_decode($postbank["sender"], true);?>
+						<b><?php echo $sender["name"];?></b>
+						<div><b>Банка:</b> <?php echo $sender["bank"];?></div>
+						<div><b>IBAN:</b> <?php echo $sender["IBAN"];?></div>
+						<div><b>BIC:</b> <?php echo $sender["BIC"];?></div>
+					</td>
 					<td><?php echo $postbank["description"];?></td>
 
 					<?php
@@ -165,7 +171,7 @@ include_once(\system\Core::doc_root() . '/web/php/dates.php');
 	<tr>
 		<td colspan="2">Суми:</td>
 		<td><?php echo $amm;?></td>
-		<td colspan="10"></td>
+		<td colspan="11"></td>
 		<td><?php echo $total;?></td>
 	</tr>
 </table>
