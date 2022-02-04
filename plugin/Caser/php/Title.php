@@ -42,6 +42,7 @@ class Title{
 		<div>Дата: <?php echo \web\dates::_($this->item["date"]);?></div>
 		<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/edit?id=<?php echo $this->id;?>">Редакция</a>
 		<a class="button" href="<?php echo \system\Core::url();?>Money/tax/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>">Добави такса</a>
+		<a class="button" href="<?php echo \system\Core::url();?>Money/debt/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>">Добави дълг</a>
 	<?php
 	}
 

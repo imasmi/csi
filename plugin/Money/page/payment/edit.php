@@ -38,22 +38,12 @@ $Person = new \plugin\Person\Person($select["person"]);
 
         <tr>
             <td>Бордеро</td>
-            <td><input type="number" name="bordero" value="<?php echo $select["bordero"];?>"/></td>
+            <td><input type="number" name="number" value="<?php echo $select["number"];?>"/></td>
         </tr>
 
         <tr>
             <td>Описание</td>
             <td><textarea name="description" id="description"><?php echo $select["description"];?></textarea></td>
-        </tr>
-
-        <tr>
-            <td>Вносител</td>
-            <td><textarea name="debtor" id="debtor"><?php echo $select["debtor"];?></textarea></td>
-        </tr>
-
-        <tr>
-            <td>Получател</td>
-            <td><textarea name="creditor" id="creditor"><?php echo $select["creditor"];?></textarea></td>
         </tr>
 
         <tr>
@@ -65,11 +55,6 @@ $Person = new \plugin\Person\Person($select["person"]);
             ?>
             <td>Банка</td>
             <td><?php \system\Form::select("bank", $banks, ["select" => $select["bank"]]);?></td>
-        </tr>
-
-        <tr>
-            <td>Основание</td>
-            <td><?php \system\Form::select("reason", system\Database::column_group("reason", "payment"), ["select" => $select["reason"]]);?></td>
         </tr>
         
         <tr>

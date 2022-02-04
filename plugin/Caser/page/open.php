@@ -62,6 +62,40 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 
 				<div class="column-4 padding-10">
 					<div class="title">Дълг</div>
+					<h3>Дълг</h3>
+					<table cellspacing="5">
+						<tr>
+							<th>#</th>
+							<th>Вид</th>
+							<th>Сума</th>
+						</tr>
+						<?php 
+						$cnt = 0;
+						foreach ($PDO->query("SELECT * FROM debt WHERE caser_id='" . $_GET["id"] . "' AND title_id='" . $title["id"] . "'") as $debt) { 
+								$setting = $PDO->query("SELECT tag,`type` FROM " . $Setting->table . " WHERE id='" . $debt["setting_id"] . "'")->fetch();
+								$subsetting = $PDO->query("SELECT tag,`type` FROM " . $Setting->table . " WHERE id='" . $debt["subsetting_id"] . "'")->fetch();
+							?>
+						<tr>
+							<td><?php echo ++$cnt;?></td>
+							<td><?php echo $setting["type"];?>, <?php echo $subsetting["type"];?></td>
+							<td><?php echo $debt["sum"];?></td>
+						</tr>
+						<?php 
+						if ($setting["tag"] == "interest") {
+							foreach ($PDO->query("SELECT * FROM debt WHERE link_id='" . $debt["id"] . "' ORDER by start ASC") as $subdebt) { 
+								?>
+							<tr>
+								<td><?php echo ++$cnt;?></td>
+								<td>Законна лихва за <?php echo $subsetting["type"];?> върху <?php echo $subdebt["sum"];?> лева от <?php echo web\dates::_($subdebt["start"]);?></td>
+								<td><?php echo $Money->interest($subdebt);?></td>
+							</tr>
+							<?php
+							}
+						}
+					} ?>
+					</table>
+
+
 					<h3>Такси</h3>
 					<table cellspacing="5">
 						<tr>

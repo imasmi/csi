@@ -20,6 +20,13 @@ class Money{
 	public function sum($sum){
 		return number_format($sum, 2, ".", " ");
 	}
+	//["sum" => int, "start" => string(date), "end" => string(date)]
+	public static function interest($data) {
+		$now = isset($data["end"]) ? strtotime($data["end"]) : time();
+		$your_date = strtotime($data["start"]);
+		$datediff = ($now - $your_date)/ (60 * 60 * 24) + 1;
+		return number_format((($data["sum"]/10)/365.25) * $datediff, 2);
+	}
 	
 	public function payment(){
 	?>
