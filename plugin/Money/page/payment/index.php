@@ -8,6 +8,7 @@ $array = array(
 	"Дата" => array("date" => 'echo date("d.m.Y", strtotime($list["date"]));'),
 	"Сума" => "amount",
 	"Дело" => array("case_id" => 'include_once(\system\Core::doc_root() . "/plugin/Caser/php/Caser.php"); $Caser = new \plugin\Caser\Caser($list["case_id"]); $Caser->open();'),
+	"Описане" => "description",
 	"Основание" => "reason",
 	"Бордеро" => "number",
 	"Платец" => array("person" => 'echo $this->PDO->query("SELECT name FROM person WHERE id=\'" . $list["person"] . "\'")->fetch()["name"];'),
@@ -32,7 +33,7 @@ $actions = array(
 	<select onchange="if(this.value){window.open(this.value, '_self');}">
 		<option value="">Банкова сметка</option>
 		<?php foreach($PDO->query("SELECT * FROM bank WHERE person_id=1") as $bank){?>
-			<option value="<?php echo \system\Core::url() . $ListingAPP->replace_get(array("bank" => $bank["id"], "p" => 1));?>" <?php if(isset($_GET["bank"]) && $_GET["bank"] == $bank["id"]){ echo 'selected';}?>><?php echo $bank["IBAN"];?></option>
+			<option value="<?php echo $ListingAPP->replace_get(array("bank" => $bank["id"], "p" => 1));?>" <?php if(isset($_GET["bank"]) && $_GET["bank"] == $bank["id"]){ echo 'selected';}?>><?php echo $bank["IBAN"];?></option>
 		<?php } ?>
 	</select>
 	<?php 

@@ -243,7 +243,8 @@ class ListingAPP{
 
 
     public function replace_get($array){
-        $get = [];
+        $get = $_GET;
+        unset($get["url"]);
         foreach($array as $key => $value){
             if ($key != "url") { $get[$key] = $value; }
         }
