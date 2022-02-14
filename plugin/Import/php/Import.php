@@ -163,7 +163,7 @@ class Import{
 		$doc_type->execute(array($name));
 		if($doc_type->rowCount() > 0){
 			$docu = $doc_type->fetch();
-			\system\Database::update(array("type" => $type), $docu["id"], "id", "doc_types");
+			\system\Data::update(array("type" => $type), $docu["id"], "id", "doc_types");
 			$doc = $docu["id"];
 		} else {
 			$insertDoc = $this->PDO -> prepare("INSERT INTO doc_types (name,type) VALUES(:name, :type)");

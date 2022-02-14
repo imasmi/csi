@@ -11,7 +11,7 @@
         <h3>Array</h3>
             <span>An array with additional parameters to set object enviorment.</span>
             <ul>
-                <li>table => string(existing database table): set object related database table. Default is prefix_file received from \system\Database::table("file") function.</li>
+                <li>table => string(existing database table): set object related database table. Default is prefix_file received from \system\Data::table("file") function.</li>
                 <li>fortable => string(existing database table): set fortable to point database page_id links to specific table, different from default page table. This way you can bind your files connections to records in another tables and select them only when File object with fortable additional array key is specified.</li>
                 <li>plugin => string(name of plugin): set plugin enviorment.</li>
                 <li>path => string(directory): set default file records directory. Default is web/file/.</li>

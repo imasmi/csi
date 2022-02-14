@@ -12,7 +12,7 @@ if(empty($check)){
         "sum" => $_POST["sum"]
     ];
 
-    $insert = \system\Database::insert(["data" => $data, "table" => "debt"]);
+    $insert = \system\Data::insert(["data" => $data, "table" => "debt"]);
 
 
     if ($select["tag"] == "interest") {
@@ -22,7 +22,7 @@ if(empty($check)){
             "sum" => $_POST["sum"],
             "start" => $_POST["start"]
         ];
-        \system\Database::insert(["data" => $subdata, "table" => "debt"]);
+        \system\Data::insert(["data" => $subdata, "table" => "debt"]);
     }
 
     if($insert){

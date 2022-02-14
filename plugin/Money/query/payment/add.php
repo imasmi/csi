@@ -5,8 +5,8 @@ if(empty($check)){
 
 #INSERT IF ALL EVERYTHING IS FINE
 
-$insert = \system\Database::insert(["data" => $_POST, "table" => "payment"]);
-#\system\Database::insert($array, $table="module")
+$insert = \system\Data::insert(["data" => $_POST, "table" => "payment"]);
+#\system\Data::insert($array, $table="module")
 
 if($insert){
     ?><script>history.go(-1)</script><?php

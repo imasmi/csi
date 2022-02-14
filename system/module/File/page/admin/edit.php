@@ -15,7 +15,7 @@ $FileAPP = new \module\File\FileAPP($file["page_id"]);
     <div>Category</div>
     <?php
         $cats = array();
-        foreach($PDO->query("SELECT id, " . $Language->_() . " FROM " . $File->table . " WHERE link_id='" . \system\Database::top_id($file["link_id"], "link_id", "id") . "' AND type='gallery'") as $category){
+        foreach($PDO->query("SELECT id, " . $Language->_() . " FROM " . $File->table . " WHERE link_id='" . \system\Data::top_id($file["link_id"], "link_id", "id") . "' AND type='gallery'") as $category){
             $cats[$category["id"]] = $category[$Language->_()];
         }
         \system\Form::select("link_id_" . $_GET["id"], $cats, array("select" => $file["page_id"]));

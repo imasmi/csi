@@ -11,7 +11,7 @@ if(count($Page->scheme($_GET["id"])) == count(explode("/", $path)) && file_exist
     unlink($file);
     if(is_dir($dir)){$FileAPP->delete_dir($dir);}
 }
-\system\Database::cleanup($_GET["id"]);
+\system\Data::cleanup($_GET["id"]);
 #GO BACK
 ?><script>history.go(-2)</script><?php
 ?>

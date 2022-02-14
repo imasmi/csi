@@ -12,7 +12,7 @@ $actions = array(
 <div class="admin">
 <div class="title">Бележки</div>
 <?php
-echo \system\Database::listing("*", $actions, "note", "");
-#\system\Database::listing($array="*", $actions="*", $table="module", $where="")
+echo \system\Data::listing("*", $actions, "note", "");
+#\system\Data::listing($array="*", $actions="*", $table="module", $where="")
 ?>
 </div>

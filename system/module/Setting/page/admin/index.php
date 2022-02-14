@@ -64,6 +64,11 @@ $abbrevs = $Language->items;
             <td>Robots noindex</td>
             <td colspan="100%"><?php \system\Form::on_off("NOINDEX", $Setting->_("NOINDEX", array("type" => "value", "page_id" => "0", "link_id" => "0")));?></td>
         </tr>
+        
+        <tr>
+            <td>URL to open with no cache</td>
+            <td colspan="100%"><?php echo \system\Core::domain() . \system\Core::url();?>?Clear-Site-Data="cache"</td>
+        </tr>
 
         <tr>
             <td colspan="5" class="text-center">

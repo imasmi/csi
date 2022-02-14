@@ -1,7 +1,7 @@
 <div class="admin">
 <?php if(!empty($Theme->items)){ ?>
     <div>Your current theme is:</div>
-    <h2><?php echo $Theme->active;?></h2>
+    <h2><?php echo $Theme->name;?></h2>
     <div class="clear">
         <div class="column-6">Version</div>
         <div class="column-6"><?php echo $Theme->data["version"];?></div>

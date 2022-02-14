@@ -13,7 +13,7 @@ class Setting{
         global $Text;
         $this->Text = $Text;
         $this->page_id = $page_id !== false ? $page_id : $Page->_();
-        $this->table = (isset($array["table"])) ? $array["table"] : \system\Database::table("setting");
+        $this->table = (isset($array["table"])) ? $array["table"] : \system\Data::table("setting");
         $this->fortable = isset($array["fortable"]) ? $array["fortable"] : NULL;
         $this->plugin = isset($array["plugin"]) ? $array["plugin"] : NULL;
         $this->arr = $array;

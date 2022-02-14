@@ -5,7 +5,7 @@ if(empty($check)){
 
 #INSERT IF ALL EVERYTHING IS FINE
 
-$insert = \system\Database::insert(["data" => $data, "table" => $Page->table]);
+$insert = \system\Data::insert(["data" => $data, "table" => $Page->table]);
 
 if($insert){
     ?><script>history.go(-1)</script><?php

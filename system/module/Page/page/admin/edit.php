@@ -11,7 +11,7 @@ $PageAPP = new \module\Page\PageAPP;
     <table class="table">
         <tr>
             <td>Tag</td>
-            <td><?php echo \system\Form::select("tag",array("page" => "Page") + \system\Database::column_group("type"), array("select" => $select["tag"], "required" => true, "addon" => true));?></td>
+            <td><?php echo \system\Form::select("tag",array("page" => "Page") + \system\Data::column_group("type"), array("select" => $select["tag"], "required" => true, "addon" => true));?></td>
         </tr>
 
         <tr>
@@ -24,7 +24,7 @@ $PageAPP = new \module\Page\PageAPP;
 
         <tr>
             <td>Menu</td>
-            <td><?php echo \system\Form::select("menu", \system\Database::column_group("menu"), array("select" => $select["menu"], "addon" => true));?></td>
+            <td><?php echo \system\Form::select("menu", \system\Data::column_group("menu"), array("select" => $select["menu"], "addon" => true));?></td>
         </tr>
 
         <?php foreach($Language->items as $key=>$value){?>

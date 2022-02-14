@@ -3,7 +3,7 @@ include_once(\system\Core::doc_root() . "/system/php/Ini.php");
 include_once(\system\Core::doc_root() . "/system/module/File/php/ZipAPP.php");
 include_once(\system\Core::doc_root() . "/system/module/File/php/FileAPP.php");
 $FileAPP = new \module\File\FileAPP;
-$Theme->package($Theme->active);
+$Theme->package($Theme->name);
 $info = parse_ini_file(\system\Core::doc_root() . "/data/theme/" . $_GET["theme"] . "/theme.info", true, INI_SCANNER_RAW);
 $plugins = json_decode($info["plugins"], true);
 

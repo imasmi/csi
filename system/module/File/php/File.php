@@ -9,7 +9,7 @@ class File{
         global $Page;
         $this->Page = $Page;
         $this->empty_file = "system/module/File/file/camera.png";
-        $this->table = (isset($array["table"])) ? $array["table"] : \system\Database::table("file");
+        $this->table = (isset($array["table"])) ? $array["table"] : \system\Data::table("file");
         $this->fortable = isset($array["fortable"]) ? $array["fortable"] : NULL;
         $this->plugin = isset($array["plugin"]) ? $array["plugin"] : NULL;
         $this->arr = $array;
@@ -19,7 +19,7 @@ class File{
         $this->imagesize_default = array("S" => 768, "M" => 1280, "L" => 1920, "XL" => 2400);
         if(file_exists(\system\Core::doc_root() . "/web/ini/imagesize.ini")){
             $this->imagesize = array();
-            foreach(parse_ini_file(\system\Core::doc_root() . "/web/ini/imagesize.ini") as $size => $option){
+            foreach(parse_ini_file(\system\Core::doc_root() . "/web/ini/imagesize.ini", true) as $size => $option){
                 $this->imagesize[$size] = isset($option["width"]) ? $option["width"] : $this->imagesize_default[$size];
             }
         } else {
@@ -103,44 +103,53 @@ class File{
             } else {
                 $output = '<div class="File' . $fit_size . '">';
             }
-			if($file["type"] == "video"){
-			    $controls = (!\module\User\User::group("admin")) ? ' controls' : '';
-			    $autoplay = (!\module\User\User::group("admin") && $array["autoplay"]) ? " autoplay muted" : "";
-				$output .= '<video ' . $style . $controls . $autoplay . ' playsinline title="' . $file[\module\Language\Language::_()] . '" ' . $trigger_file . '>';
-				$output .= '<source src="' . \system\Core::url() . $file["path"] . '" type="video/mp4">';
-				$output .= 'Your browser does not support the video tag.';
-				$output .= '</video>';
-			} elseif($file["type"] == "image"){
-			    $output .= '<picture id="picture-' . $file["id"] . '">';
-			        if (isset($array["size"]) && file_exists($info["dirname"] . '/' . $info["filename"] . '_' . $array["size"] . '.' . $info["extension"])) {
-			            $output .= '<img ' . $style . ' src="' . \system\Core::url() . $info["dirname"] . '/' . $info["filename"] . '_' . $array["size"] . '.' . $info["extension"] . '" ' . $trigger_file . ' alt="' . $file[\module\Language\Language::_()] . '" title="' . $file[\module\Language\Language::_()] . '">';
-			        } else {
-			            if(isset($file["path"]) && $file["path"] != null && (!isset($array["resize"]) || $array["resize"] !== false)){
-        			        foreach($this->imagesize as $size => $pixels){
-                                $newName = $info["dirname"] . '/' . $info["filename"] . '_' . $size . '.' . $info["extension"];
-                                if(file_exists($newName)){$output .= '<source media="(max-width: ' . ($pixels - 200) . 'px)" srcset="' . \system\Core::url() . str_replace(" ", "%20", $newName) . '">';}
-                            }
+               
+               
+            if( isset($file["path"]) && is_file($file["path"]) ) {
+    			if($file["type"] == "video"){
+    			    $controls = (!\module\User\User::group("admin")) ? ' controls' : '';
+    			    $autoplay = (!\module\User\User::group("admin") && $array["autoplay"]) ? " autoplay muted" : "";
+    				$output .= '<video ' . $style . $controls . $autoplay . ' playsinline title="' . $file[\module\Language\Language::_()] . '" ' . $trigger_file . '>';
+    				$output .= '<source src="' . \system\Core::url() . $file["path"] . '" type="video/mp4">';
+    				$output .= 'Your browser does not support the video tag.';
+    				$output .= '</video>';
+    			} elseif($file["type"] == "image"){
+    			    $output .= '<picture id="picture-' . $file["id"] . '">';
+    			        if (isset($array["size"]) && file_exists($info["dirname"] . '/' . $info["filename"] . '_' . $array["size"] . '.' . $info["extension"])) {
+    			            $output .= '<img ' . $style . ' src="' . \system\Core::url() . $info["dirname"] . '/' . $info["filename"] . '_' . $array["size"] . '.' . $info["extension"] . '" ' . $trigger_file . ' alt="' . $file[\module\Language\Language::_()] . '" title="' . $file[\module\Language\Language::_()] . '">';
+    			        } else {
+    			            if((!isset($array["resize"]) || $array["resize"] !== false)){
+            			        foreach($this->imagesize as $size => $pixels){
+            			            $newName = $info["dirname"] . '/' . $info["filename"] . '_' . $size . '.webp';
+                                    if(file_exists($newName)){$output .= '<source media="(max-width: ' . $pixels . 'px)" srcset="' . \system\Core::url() . str_replace(" ", "%20", $newName) . '" type="image/webp">';}
+                                    $newName = $info["dirname"] . '/' . $info["filename"] . '_' . $size . '.' . $info["extension"];
+                                    if(file_exists($newName)){$output .= '<source media="(max-width: ' . $pixels . 'px)" srcset="' . \system\Core::url() . str_replace(" ", "%20", $newName) . '">';}
+            			        }
+        			        }
+        			        $newName = $info["dirname"] . '/' . $info["filename"] . '.webp';
+        			        if(file_exists($newName)){$output .= '<source srcset="' . \system\Core::url() . $newName . '" type="image/webp">';}
+                            $output .= '<img ' . $style . ' src="' . \system\Core::url() .$file["path"] . '" ' . $trigger_file . ' alt="' . $file[\module\Language\Language::_()] . '" title="' . $file[\module\Language\Language::_()] . '">';
     			        }
-                        $output .= '<img ' . $style . ' src="' . \system\Core::url() .$file["path"] . '" ' . $trigger_file . ' alt="' . $file[\module\Language\Language::_()] . '" title="' . $file[\module\Language\Language::_()] . '">';
-			        }
-			    $output .= '</picture>';
-			} elseif($file["type"] == "audio"){
-			    if($edit === false){
-    				$output .= '<div ' . $style . ' style="background-image: url(\'' . \system\Core::url() . 'system/module/File/file/notes.jpg\')" title="' . $name . '">' . $name . '</div>';
-			    } else {
-			        $output .= '<audio ' . $style . ' controls title="' . $file[\module\Language\Language::_()] . '">';
-    				$output .= '<source src="' . \system\Core::url() . $file["path"] . '" type="audio/ogg">';
-    				$output .= '<source src="' . \system\Core::url() . $file["path"] . '" type="audio/mpeg">';
-    				$output .= 'Your browser does not support the audio tag.';
-    				$output .= '</audio>';
-			    }
-			} elseif($file["type"] == "text" || $file["type"] == "application"){
-			    if($edit === false){
-    			    $output .= '<a href="' . \system\Core::url() . $file["path"] . '" target="blank" ' . $style . ' title="' . $name . '" download>' . $name . '</a>';
-			    } else {
-			        echo $info["filename"];
-			    }
-		    }
+    			    $output .= '</picture>';
+    			} elseif($file["type"] == "audio"){
+    			    if($edit === false){
+        				$output .= '<div ' . $style . ' style="background-image: url(\'' . \system\Core::url() . 'system/module/File/file/notes.jpg\')" title="' . $name . '">' . $name . '</div>';
+    			    } else {
+    			        $output .= '<audio ' . $style . ' controls title="' . $file[\module\Language\Language::_()] . '">';
+        				$output .= '<source src="' . \system\Core::url() . $file["path"] . '" type="audio/ogg">';
+        				$output .= '<source src="' . \system\Core::url() . $file["path"] . '" type="audio/mpeg">';
+        				$output .= 'Your browser does not support the audio tag.';
+        				$output .= '</audio>';
+    			    }
+    			} elseif($file["type"] == "text" || $file["type"] == "application"){
+    			    if($edit === false){
+        			    $output .= '<a href="' . \system\Core::url() . $file["path"] . '" target="blank" ' . $style . ' title="' . $name . '" download>' . $name . '</a>';
+    			    } else {
+    			        echo $info["filename"];
+    			    }
+    		    }
+            }
+            
 		    if(isset($file_setting["url-location"]) && !\module\User\User::group("admin")){
 			    $output .= '</a>';
 		    } else {

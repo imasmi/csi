@@ -31,7 +31,7 @@ $array = array(
             "created" => date("Y-m-d H:i:s")
         );
 
-$new_user = \system\Database::insert($array);
+$new_user = \system\Data::insert($array);
 
 if($new_user){
     ?><script>history.go(-1)</script><?php

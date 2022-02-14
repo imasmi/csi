@@ -13,7 +13,7 @@ if(empty($check)){
     include_once(\system\Core::doc_root() . "/system/module/File/php/ZipAPP.php");
     include_once(\system\Core::doc_root() . "/system/module/File/php/FileAPP.php");
     $FileAPP = new \module\File\FileAPP;
-    if ($Theme->active) { $Theme->package($Theme->active);}
+    if ($Theme->name) { $Theme->package($Theme->name);}
     $theme_ini = [];
     foreach ($Theme->items as $theme => $data) {
         $data["active"] = 0;
@@ -55,7 +55,7 @@ if(empty($check)){
         foreach ($page as $key => $value) {
             if (!in_array($key, $columns)) { unset($page[$key]);}
         }
-        \system\Database::insert($page, $Page->table);
+        \system\Data::insert($page, $Page->table);
     };
     ?>
     <script>window.open('<?php echo \system\Core::url();?>?Clear-Site-Data="cache"', '_self');</script>

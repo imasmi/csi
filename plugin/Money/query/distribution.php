@@ -39,7 +39,7 @@ if($_POST["type"] == "directPay"){
 		
 			$check_direct = $PDO->query("SELECT id FROM payment_outgoing WHERE `type`='direct' AND name='" . $direct["name"] . "' AND `IBAN`='" . $direct["IBAN"] .  "' AND amount='" . $direct["amount"] . "' AND description='" . $direct["description"] . "'");
 			if($check_direct->rowCount() == 0){
-				\system\Database::insert($direct, "payment_outgoing");
+				\system\Data::insert($direct, "payment_outgoing");
 			}
 		}
 	}
@@ -97,7 +97,7 @@ if($_POST["type"] == "directPay"){
 				
 					$check_budget = $PDO->query("SELECT id FROM payment_outgoing WHERE `type`='budget' AND name='" . $budget["name"] . "' AND `IBAN`='" . $budget["IBAN"] .  "' AND budget_code='" . $budget["budget_code"] . "' AND amount='" . $budget["amount"] . "' AND budget_eik='" . $budget["budget_eik"] . "' AND budget_egn='" . $budget["budget_egn"] . "'  AND description='" . $budget["description"] . "'");
 					if($check_budget->rowCount() == 0){
-						\system\Database::insert($budget, "payment_outgoing");
+						\system\Data::insert($budget, "payment_outgoing");
 					}
 				}
 			}

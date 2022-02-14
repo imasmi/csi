@@ -5,7 +5,7 @@ $PageAPP = new \module\Page\PageAPP;
 
 $text_edit = strip_tags($_POST["text"]) == NULL ? NULL : $_POST["text"];
 $array = array($_POST["lang"] => $text_edit);
-\system\Database::update($array, $_POST["id"], "id", $Text->table);
+\system\Data::update($array, $_POST["id"], "id", $Text->table);
 
 $output = array("text" => $text_edit);
 #CHECK FOR OTHER OPTIONS
@@ -29,7 +29,7 @@ if($_POST["options"] != "{}"){
                     $setting_array[$lang] = $select["tag"];
                 }
             }
-            \system\Database::insert($setting_array, $Setting->table);
+            \system\Data::insert($setting_array, $Setting->table);
         } else {
             $set = $check_setting->fetch();
             $setting_update = $PDO->prepare("UPDATE " . $Setting->table . " SET " . $_POST["lang"] . "=? WHERE id='" . $set["id"] . "'");
@@ -43,7 +43,7 @@ if($_POST["options"] != "{}"){
         $new_url = $PageAPP->url_format($text_edit);
         if($PDO->query("SELECT id FROM " . $Page->table . " WHERE " . $_POST["lang"] . "='" . $new_url  . "' AND id!='" . $select["page_id"] . "'")->rowCount() > 0){$new_url .= "-" . $select["page_id"];}
         $url = array($_POST["lang"] => mb_strtolower($new_url));
-        \system\Database::update($url, $select["page_id"], "id", $Page->table);
+        \system\Data::update($url, $select["page_id"], "id", $Page->table);
 
         #change url if changed url is on current lang and url oprions is change
         if($_POST["lang"] == $Language->_() && $options["url"] === true){

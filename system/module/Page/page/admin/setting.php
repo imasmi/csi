@@ -18,7 +18,7 @@ $Form = new \system\Form;
     <table class="table">
         <tr>
             <td>Tag</td>
-            <td><?php echo \system\Form::select("tag", array("theme" => "Theme") + \system\Database::column_group("tag"), array("select" => $select["tag"], "required" => true, "addon" => true));?></td>
+            <td><?php echo \system\Form::select("tag", array("theme" => "Theme") + \system\Data::column_group("tag"), array("select" => $select["tag"], "required" => true, "addon" => true));?></td>
         </tr>
 
         <tr>
@@ -28,7 +28,7 @@ $Form = new \system\Form;
 
         <tr>
             <td>Menu <?php echo \system\Info::_('<div>Select menu for the web page to appears in. If the page is attached to parent page, the parent page should also be included in the menu.</div>');?></td>
-            <td><?php echo \system\Form::select("menu", \system\Database::column_group("menu"), array("select" => $select["menu"], "addon" => true));?></td>
+            <td><?php echo \system\Form::select("menu", \system\Data::column_group("menu"), array("select" => $select["menu"], "addon" => true));?></td>
         </tr>
 
         <tr>

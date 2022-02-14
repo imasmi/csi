@@ -6,8 +6,7 @@ $select = $PDO->query("SELECT * FROM " . $File->table . " WHERE id='" . $_GET["i
 #UPDATE USER DATA IF ALL EVERYTHING IS FINE
 if(empty($check)){
     
-    $update = \system\Database::update($_POST, $_GET["id"], "id", $Object->table);
-    #\system\Database::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
+    $update = \system\Data::update(["data" => $_POST, "table" => $Object->table, "where" => "id='" . $_GET["id"] . "'"]);
     
     if($update){
         ?><script>history.go(-1)</script><?php

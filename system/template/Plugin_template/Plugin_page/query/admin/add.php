@@ -9,7 +9,7 @@ $plugin = isset($Object->plugin) ? $Object->plugin : NULL;
 
 #CHECK IF FILE ALREADY EXISTS IN THIS FOLDER
 if(isset($_POST["filename"]) && $_POST["filename"] != ""){
-    $check_file = $PDO->query("SELECT * FROM " . \system\Database::table() . " WHERE link_id='" . $_POST["link_id"]. "' AND filename='" . $_POST["filename"] . "'");
+    $check_file = $PDO->query("SELECT * FROM " . \system\Data::table() . " WHERE link_id='" . $_POST["link_id"]. "' AND filename='" . $_POST["filename"] . "'");
     if($check_file->rowCount() > 0){ $check["#filename"] = "There is a file with the same nema already.";}
 }
 
@@ -30,7 +30,7 @@ $array = array(
         "link_id" => isset($_POST["link_id"]) ? $_POST["link_id"] : $Object->link_id,
         "user_id" => $User->id,
         "plugin" => isset($Object->plugin) ? $Object->plugin : NULL,
-        "row" => \system\Database::new_id($Page->table, "row", " WHERE link_id='" . $_POST["link_id"] . "'"),
+        "row" => \system\Data::new_id($Page->table, "row", " WHERE link_id='" . $_POST["link_id"] . "'"),
         "menu" => isset($_POST["menu"]) ? $_POST["menu"] : NULL,
         "tag" => $Object->tag,
         "type" => isset($_POST["type"]) ? $_POST["type"] : NULL,
@@ -41,7 +41,7 @@ foreach($Language->items as $key=>$value){
     $array[$value] = (strpos($_POST[$value], "http") !== false) ? $_POST[$value] : $PageAPP->url_format($_POST[$value]);
 }
 
-$new_page = \system\Database::insert($array, $Object->table);
+$new_page = \system\Data::insert($array, $Object->table);
 
 if($new_page){
     $id = $PDO->lastInsertId();
@@ -77,7 +77,7 @@ if($new_page){
     foreach($Language->items as $lang=>$abbrev){
         $text_add[$abbrev] = $_POST[$abbrev];
     }
-    \system\Database::insert($text_add, $Text->table);
+    \system\Data::insert($text_add, $Text->table);
     ?>
     <script>window.open('<?php echo $Page->url($id);?>', '_self');</script>
     */

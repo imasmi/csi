@@ -1,5 +1,5 @@
 <?php
-namespace plugin\Plugin_setting\php;
+namespace plugin\Plugin_setting;
 use \module\Text\Text as Text;
 use \module\File\File as File;
 use \module\Setting\Setting as Setting;
@@ -22,7 +22,7 @@ class Plugin_setting{
 		$this->File = $File;
 		require_once(\system\Core::doc_root() . "/system/module/Listing/php/ListingAPP.php");
         $this->ListingAPP = new \module\Listing\ListingAPP;
-        $this->table = \system\Database::table('setting');
+        $this->table = \system\Data::table('setting');
         $this->tag = "plugin_setting"; //Database tag for setting table
         $this->plugin = "Plugin_setting"; //Full name of the plugin
         $this->page_id = 0;

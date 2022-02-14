@@ -26,10 +26,10 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		$checks = $PDO->query("SELECT * FROM invoice WHERE bill='" . $array["bill"] . "'");
 		if($checks->rowCount() > 0){
 			$check = $checks->fetch();
-			\system\Database::update($array, $check["id"], "id", "invoice");
+			\system\Data::update($array, $check["id"], "id", "invoice");
 			$updates++;
 		} else {
-			\system\Database::insert($array, "invoice");
+			\system\Data::insert($array, "invoice");
 			$inserts++;
 		}
 	} else {

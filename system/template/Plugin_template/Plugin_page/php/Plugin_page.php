@@ -18,7 +18,7 @@ class Plugin_page{
 		$this->File = $File;
 		require_once(\system\Core::doc_root() . "/system/module/Listing/php/ListingAPP.php");
         $this->ListingAPP = new \module\Listing\ListingAPP;
-        $this->table = \system\Database::table('page');
+        $this->table = \system\Data::table('page');
         $this->tag = "plugin_page"; //Database tag for page table
         $this->plugin = "Plugin_page"; //Full name of the plugin
         $this->link_id = 0;

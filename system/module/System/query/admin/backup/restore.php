@@ -47,7 +47,7 @@ if(file_exists( $_GET["path"] . "/database.sql")){
 if(file_exists($_GET["path"] . "/database.json")){
     
     if($_POST["type"] == "web"){
-        foreach(\system\Database::loop("SELECT * FROM " . $Page->table . " WHERE type='theme' OR filename!=''") as $table => $values){
+        foreach(\system\Data::loop("SELECT * FROM " . $Page->table . " WHERE type='theme' OR filename!=''") as $table => $values){
 	        foreach($values as $id => $field){
                 $PDO->query("DELETE FROM " . $table . " WHERE id='" . $field["id"] . "'");
 	        }
@@ -71,7 +71,7 @@ if(file_exists($_GET["path"] . "/database.json")){
                 $row["page_id"] = $json[$fortable][$row["page_id"]]["id"];
             }
             
-            \system\Database::insert($row, $database);
+            \system\Data::insert($row, $database);
             $json[$database][$id]["id"] = $PDO->lastInsertId();
             
             //if file table, rename file directory and update database to correspond to the new id
@@ -83,7 +83,7 @@ if(file_exists($_GET["path"] . "/database.json")){
                 }
                 $new_path = implode("/", $path);
                 if(rename(\system\Core::doc_root() . "/" . dirname($row["path"]) ,$new_path)){
-                    \system\Database::update(array("path" => $new_path . "/" . basename($row["path"])), $json[$database][$id]["id"], "id",  $database);
+                    \system\Data::update(array("path" => $new_path . "/" . basename($row["path"])), $json[$database][$id]["id"], "id",  $database);
                 }
             }
         }

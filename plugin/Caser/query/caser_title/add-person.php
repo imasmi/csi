@@ -15,7 +15,7 @@ if(empty($check)){
     }
     
 
-    $update = \system\Database::update(["data" => [$_GET["type"] => json_encode($persons)], "table" => "caser_title", "where" => "id='" . $_GET["id"] . "'"]);
+    $update = \system\Data::update(["data" => [$_GET["type"] => json_encode($persons)], "table" => "caser_title", "where" => "id='" . $_GET["id"] . "'"]);
     
     if($update){
         ?><script>history.back()</script><?php

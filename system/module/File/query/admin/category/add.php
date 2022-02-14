@@ -4,7 +4,7 @@ $FileAPP = new \module\File\FileAPP($file["page_id"]);
 $check = "";
 
 if($check == ""){
-    $add_gallery = \system\Database::insert($_POST);
+    $add_gallery = \system\Data::insert($_POST);
     if($add_gallery){
         ?><script>history.go(-2)</script><?php
     } else {

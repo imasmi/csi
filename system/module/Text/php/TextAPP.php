@@ -1,9 +1,9 @@
 <?php
 namespace module\Text;
 
-class TextAPP extends Text{
+class TextAPP {
 
-    public function wysiwyg(){
+    public static function wysiwyg(){
         /* SELECTED CONTENT FOR WYSIWYG */
 
 		echo '<input type="hidden" id="selected-content" value=""/>';
@@ -38,8 +38,8 @@ class TextAPP extends Text{
 			<img src="' . $files_dir . '/underline.png" onclick="TextAPP.wysiwyg(\'underline\')" title="underline" alt="underline">
 			<img src="' . $files_dir . '/strikethrough.png" onclick="TextAPP.wysiwyg(\'strikethrough\')" title="strikethrough"
 alt="strikethrough">
-			' . $this->color_picker('backcolor', 'wysiwyg') . '
-			' . $this->color_picker('forecolor', 'wysiwyg') . '
+			' . static::color_picker('backcolor', 'wysiwyg') . '
+			' . static::color_picker('forecolor', 'wysiwyg') . '
 			<img src="' . $files_dir . '/al.png" onclick="TextAPP.wysiwyg(\'justifyleft\')" title="left" alt="left">
 			<img src="' . $files_dir . '/ar.png" onclick="TextAPP.wysiwyg(\'justifyright\')" title="right" alt="right">
 			<img src="' . $files_dir . '/ac.png" onclick="TextAPP.wysiwyg(\'justifycenter\')" title="center" alt="center">
@@ -61,7 +61,7 @@ alt="strikethrough">
     }
 
     /* COLOR PICKER */
-	private function color_picker($id, $type, $value = ""){
+	private static function color_picker($id, $type, $value = ""){
 		$cnt = 1;
 		$files_dir = \system\Core::url() . 'system/module/Text/files';
 		$output = '<div class="color-wrapper">';
@@ -69,7 +69,7 @@ alt="strikethrough">
 			$output .= '<img src="' . $files_dir . '/' . $id . '.png" title="' . $value . '" alt="' . $value . '" onclick="S.show(\'#color-picker-' . $id . '\'); S.event(S(\'#color-selector-' . $id . '\'), \'mousedown\')">' ;
 		} else {
 			$output .= '<div id="settings-color' . $id . '" class="settings-color" style="background-color: ' . $value . ';" onclick="TextAPP.colorSelector(\'' . $id . '\')"></div>';
-			$output .= '<input type="hidden" name="' . $id . '" id="color-val-' . $id . '" value="' . $this->entities($value) . '"/>';
+			$output .= '<input type="hidden" name="' . $id . '" id="color-val-' . $id . '" value="' . $value . '"/>';
 		}
 		
 		$output .= '<div class="color-picker white-bg" id="color-picker-' . $id . '">';
@@ -107,7 +107,7 @@ alt="strikethrough">
     //start => int,
     //length => int,
     //search => string (if set start point is the start of the first founded occurence of the needle)
-    public function slice($text, $array=array()){
+    public static function slice($text, $array=array()){
         $start = isset($array["start"]) ? $array["start"] : 0;
         $words = explode(" ", $text);
 

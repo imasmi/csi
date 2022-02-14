@@ -24,8 +24,8 @@ if(empty($check) == true){
 		$array[$key] = isset($_POST[$key]) ? 1 : 0;
 	}
     
-    $update = \system\Database::update($array, $_GET["id"], "id", "note");
-    #\system\Database::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
+    $update = \system\Data::update($array, $_GET["id"], "id", "note");
+    #\system\Data::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
     
     if($update){
         ?><script>window.close();</script><?php

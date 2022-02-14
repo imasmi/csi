@@ -1,6 +1,6 @@
 <?php
-$insert = \system\Database::insert($_POST, "bank");
-#\system\Database::insert($array, $table="module")
+$insert = \system\Data::insert($_POST, "bank");
+#\system\Data::insert($array, $table="module")
 
 if($insert){
     ?> <script>history.back(-2)</script><?php

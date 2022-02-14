@@ -29,10 +29,10 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		if($checks->rowCount() > 0){
 			$check = $checks->fetch();
 			if($array["name"] == 4 || $array["name"] == 5){$array["note"] = $check["note"];}
-			\system\Database::update($array, $check["id"], "id", "document");
+			\system\Data::update($array, $check["id"], "id", "document");
 			$updates++;
 		} else {
-			\system\Database::insert($array, "document");
+			\system\Data::insert($array, "document");
 			$inserts++;
 		}
 	} else {

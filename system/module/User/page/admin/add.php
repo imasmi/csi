@@ -8,7 +8,7 @@ $Form = new \system\Form;
     <table class="table">
         <tr>
             <td><?php echo $Text->_("Role");?></td>
-            <td><?php echo \system\Form::select("role", \system\Database::column_group("role", $User->table), array("select" => "user", "reuqired" => true, "addon" => true));?></td>
+            <td><?php echo \system\Form::select("role", \system\Data::column_group("role", $User->table), array("select" => "user", "reuqired" => true, "addon" => true));?></td>
         </tr>
 
         <tr>

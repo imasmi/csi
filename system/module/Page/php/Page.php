@@ -9,7 +9,7 @@ class Page{
         $this->PDO = $PDO;
         global $Plugin;
         $this->Plugin = $Plugin;
-        $this->table = (isset($array["table"])) ? $array["table"] : \system\Database::table("page");
+        $this->table = (isset($array["table"])) ? $array["table"] : \system\Data::table("page");
         $this->items = $this->items($page_id);
         $this->arr = $array;
         // Change session language if page of other language is opened
@@ -183,25 +183,33 @@ class Page{
         return false;
     }
     
-    // Array possible values: ["favicon" => string (File->table tag), "og_image" => "string" (File->table tag)]
+    // Array possible values: ["favicon" => string (File->table tag), "og_image" => "string" (File->table tag)]...
     public function head($array = array()){
         global $Setting;
         global $File;
         $favicon = isset($array["favicon"]) ? $array["favicon"] : "Favicon";
         ?>
-        <title><?php echo (!empty($Setting->_("Title",  array("type" => \module\Language\Language::_(), "page_id" => $this->id)))) ? $Setting->_("Title",  array("type" => \module\Language\Language::_(), "page_id" => $this->id())) : $Setting->_("Title", array("type" => \module\Language\Language::_(), "page_id" => "0"));?></title>
+        <title>
+            <?php 
+                if(isset($array["title"])) {
+                    echo $array["title"];
+                } else {
+                    echo (!empty($Setting->_("Title",  array("type" => \module\Language\Language::_(), "page_id" => $this->id)))) ? $Setting->_("Title",  array("type" => \module\Language\Language::_(), "page_id" => $this->id())) : $Setting->_("Title", array("type" => \module\Language\Language::_(), "page_id" => "0"));   
+                }
+            ?>
+            </title>
         <?php if(isset($File->items[$favicon]) && $File->items[$favicon]["path"] !== ""){?><link rel="icon" href="<?php echo \system\Core::url() . $File->items[$favicon]["path"];?>" sizes="32x32"><?php }?>
         <?php if($Setting->_("NOINDEX", array("page_id" => 0, "link_id" => 0)) == 1){?>
             <meta name="robots" content="noindex, nofollow" />
         <?php } else {?>
             <meta name="robots" content="index,follow"/>
         <?php } ?>
-        <meta name="description" content="<?php echo $Setting->_("Description");?>">
-        <meta name="keywords" content="<?php echo $Setting->_("Keywords");?>">
-        <meta property="og:title" content="<?php echo $Setting->_("Title");?>" />
+        <meta name="description" content="<?php echo isset($array["description"]) ? $array["description"] : $Setting->_("Description");?>">
+        <meta name="keywords" content="<?php echo isset($array["keywords"]) ? $array["keywords"] : $Setting->_("Keywords");?>">
+        <meta property="og:title" content="<?php echo isset($array["og:title"]) ? $array["og:title"] : $Setting->_("Title");?>" />
         <meta property="og:type" content="website"/>
-        <meta property="og:url" content="<?php echo \system\Core::domain() . $_SERVER["REQUEST_URI"];?>" />
-        <meta property="og:description" content="<?php echo $Setting->_("Description");?>"/>
+        <meta property="og:url" content="<?php echo isset($array["og:url"]) ? $array["og:url"] : \system\Core::domain() . $_SERVER["REQUEST_URI"];?>" />
+        <meta property="og:description" content="<?php echo isset($array["og:description"]) ? $array["og:description"] : $Setting->_("Description");?>"/>
         <?php
         $og_image = isset($array["og_image"]) ? $array["og_image"] : "Og";
         $og = isset($File->items[$og_image]) ? $File->items[$og_image]["path"] : false;

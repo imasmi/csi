@@ -16,5 +16,5 @@ $actions["change password"] = \system\Core::this_path(0,-1) . "/change-password"
 
 
 <div class="admin">
-    <?php $ListingAPP->_($fields, $actions, \system\Database::table(), "WHERE deleted is NULL");?>
+    <?php $ListingAPP->_($fields, $actions, \system\Data::table(), "WHERE deleted is NULL");?>
 </div>

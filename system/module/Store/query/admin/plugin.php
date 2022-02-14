@@ -15,7 +15,7 @@ if (copy("http://web.imasmi.com/plugin/Webstore/plugin/" . $_GET["name"] . "/" .
         $ini = [$_GET["name"] => [
                 "active" => 1,
                 "admin-panel" => file_exists($plugin_dir . '/page/admin/index.php') ? 1 : 0,
-                "theme" => $Theme->active
+                "theme" => $Theme->name
             ]
         ];
         \system\Ini::save(\system\Core::doc_root() . "/web/ini/plugin.ini", $ini, FILE_APPEND);

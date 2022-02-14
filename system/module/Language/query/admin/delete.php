@@ -12,7 +12,7 @@ $abbreviation = $ini[$_GET["lang"]]["code"];
 
 #REMOVE LANGUAGE COLUMN FROM TABLES
 foreach($Language->table() as $table){
-    $delet_column = $PDO->query("ALTER TABLE `" . \system\Database::table($table) . "` DROP `" . $abbreviation . "`");
+    $delet_column = $PDO->query("ALTER TABLE `" . \system\Data::table($table) . "` DROP `" . $abbreviation . "`");
 }
 
 

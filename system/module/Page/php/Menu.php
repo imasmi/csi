@@ -41,7 +41,7 @@ class Menu{
 
     public function select($link_id){
         $pages = array();
-        $query = isset($this->arr["query"]) && $this->arr["query"] !== false && $link_id == $this->link_id ? $this->arr["query"] : "SELECT id, link_id, menu FROM " . $this->Page->table . " WHERE " . $this->like . " AND link_id='" . $link_id . "' AND theme LIKE '" . $GLOBALS["Theme"]->active . "' ORDER by `row` ASC, id ASC";
+        $query = isset($this->arr["query"]) && $this->arr["query"] !== false && $link_id == $this->link_id ? $this->arr["query"] : "SELECT id, link_id, menu FROM " . $this->Page->table . " WHERE " . $this->like . " AND link_id='" . $link_id . "' AND theme LIKE '" . $GLOBALS["Theme"]->name . "' ORDER by `row` ASC, id ASC";
         foreach($this->PDO->query($query) as $key=>$page){
             $multiple = explode(",", $page["menu"]);
             if(count($multiple) > 1){

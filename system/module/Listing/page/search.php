@@ -3,7 +3,7 @@ if(!$User->group("admin")){require_once(\system\Core::doc_root() . "/system/modu
 $TextAPP = new \module\Text\TextAPP;
 $search = array();
 $find = isset($_POST["find"]) ? $_POST["find"] : $_GET["find"];
-$setting_search = $PDO->prepare("SELECT * FROM " . $Setting->table . " WHERE fortable IS NULL AND " . $Language->_() . " LIKE :find");
+$setting_search = $PDO->prepare("SELECT page_id, " . $Language->_() . " FROM " . $Setting->table . " WHERE fortable IS NULL AND " . $Language->_() . " LIKE :find");
 $setting_search->execute(array("find" => "%" . $find . "%"));
 if($setting_search->rowCount() > 0){
     foreach($setting_search as $set_find){
@@ -11,7 +11,7 @@ if($setting_search->rowCount() > 0){
     }
 }
 
-$text_search = $PDO->prepare("SELECT * FROM " . $Text->table . " WHERE fortable IS NULL AND " . $Language->_() . " LIKE :find");
+$text_search = $PDO->prepare("SELECT page_id, " . $Language->_() . " FROM " . $Text->table . " WHERE fortable IS NULL AND " . $Language->_() . " LIKE :find");
 $text_search->execute(array("find" => "%" . $find . "%"));
 if($text_search->rowCount() > 0){
     foreach($text_search as $txt_find){

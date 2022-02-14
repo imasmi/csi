@@ -79,11 +79,11 @@ foreach ($numbs as $a){ // SAVE PEOPLE AND CASES DATA
 	$caser_check = $PDO -> query("SELECT * FROM caser WHERE number = '" .  $_POST["case_number" . $a] . "'");
 	if($caser_check->rowCount() > 0){
 		$case = $caser_check->fetch();
-		\system\Database::update($caser_array, $case["id"], "id", "caser");
+		\system\Data::update($caser_array, $case["id"], "id", "caser");
 		$case_id = $case["id"];
 		$updates++;
 	} else {
-		\system\Database::insert($caser_array, "caser");
+		\system\Data::insert($caser_array, "caser");
 		$case_id = $PDO->lastInsertId();
 		$inserts++;
 	}
@@ -113,9 +113,9 @@ foreach ($numbs as $a){ // SAVE PEOPLE AND CASES DATA
 	$title_check = $PDO->query("SELECT * FROM caser_title WHERE case_id='" . $case_id . "' ORDER by id ASC");
 	if($title_check->rowCount() > 0){
 		$title = $title_check->fetch();
-		\system\Database::update($title_array, $title["id"], "id", "caser_title");
+		\system\Data::update($title_array, $title["id"], "id", "caser_title");
 	} else {
-		\system\Database::insert($title_array, "caser_title");
+		\system\Data::insert($title_array, "caser_title");
 	}
 }
 echo 'CASES UPDATED: ' . $updates . '<br/>';

@@ -12,7 +12,7 @@
                 <span>array: an array with column names as keys and column values as values. Example: array("tag" => "web", "type" => "homepage")</span>
                 <span>table (optional): the table to select in. If left unfilled and the current url location is in some module or plugin, the system will automatically resolve the default module or plugin table. Example: web_page (will search for the selector value in table web_page)</span>
                 
-                <p>Example: \system\Database::insert(array("tag" => "web", "type" => "homepage"), "web_page");</p>
+                <p>Example: \system\Data::insert(array("tag" => "web", "type" => "homepage"), "web_page");</p>
                 <span>The above example will insert a row in web_page table with web value in column tag and homepage value in column type.</span>
             </li>
         </ul>
@@ -27,9 +27,9 @@
                 <span>table (optional): the table to select in. If left unfilled and the current url location is in some module or plugin, the system will automatically resolve the default module or plugin table. Example: web_page (will search for the selector value in table web_page)</span>
                 <span>selector type (optional): the symbol for the query selector.Default is =. Example: LIKE (will create LIKE selecting query)</span>
                 
-                <p>Example: \system\Database::update(array("tag" => "web", "type" => "homepage"), "3", "id", "web_page");</p>
+                <p>Example: \system\Data::update(array("tag" => "web", "type" => "homepage"), "3", "id", "web_page");</p>
                 <span>Will update a row with id = '3' in web_page table with web value in column tag and homepage value in column type.</span>
-                <p>Example: \system\Database::update(array("tag" => "web", "type" => "homepage"), "new", "type", "web_page", "LIKE");</p>
+                <p>Example: \system\Data::update(array("tag" => "web", "type" => "homepage"), "new", "type", "web_page", "LIKE");</p>
                 <span>Will update a row with type LIKE 'new' in web_page table with web value in column tag and homepage value in column type.</span>
             </li>
         </ul>
@@ -42,7 +42,7 @@
                 <span>start selector query: a query for start loop selecting point. Example: SELECT * FROM web_page WHERE tag='web'</span>
                 <span>table (optional): this function will auto detect the start selecting table for one table queries. In case in more complex queries where more than one table is selected the start selecting table must be specified. Default is id. Example: web_page</span>
                 
-                <p>Example: \system\Database::loop("SELECT * FROM web_page WHERE tag='web'");</p>
+                <p>Example: \system\Data::loop("SELECT * FROM web_page WHERE tag='web'");</p>
                 <span>Will return an array with all linked rows to all rows in web_page table where tag='web' from the system tables.</span>
             </li>
         </ul>
@@ -57,9 +57,9 @@
                 <span>table (optional): the table to select in as an start point. If left unfilled and the current url location is in some module or plugin, the system will automatically resolve the default module or plugin table. Example: web_page (will search for the selector value in table web_page)</span>
                 <span>selector type (optional): the symbol for the query selector.Default is =. Example: LIKE (will create LIKE selecting query)</span>
                 
-                <p>Example: \system\Database::cleanup("3", "id", "web_page");</p>
+                <p>Example: \system\Data::cleanup("3", "id", "web_page");</p>
                 <span>Will perform a loop cleanup of the system tables with the following query as starting point: DELETE FROM web_page WHERE id='3'.</span>
-                <p>Example: \system\Database::cleanup("homepage", "type", "web_page", "LIKE");</p>
+                <p>Example: \system\Data::cleanup("homepage", "type", "web_page", "LIKE");</p>
                 <span>Will perform a loop cleanup of the system tables with the following query as starting point: DELETE FROM web_page WHERE type LIKE 'homepage'.</span>
             </li>
         </ul>
@@ -71,7 +71,7 @@
                 <span>column: a column to fecth row values from. Example: type</span>
                 <span>table (optional): the table to select in as an start point. If left unfilled and the current url location is in some module or plugin, the system will automatically resolve the default module or plugin table. Example: web_page (will search for the selector value in table web_page)</span>
                 
-                <p>Example: \system\Database::column_group("type", "web_page");</p>
+                <p>Example: \system\Data::column_group("type", "web_page");</p>
                 <span>Will return an array with all unique values from column type in web_page table.</span>
             </li>
         </ul>
@@ -80,9 +80,9 @@
         <ul>
             <li>
                 <h4>Query->table(name=false)</h4>
-                <p>Example: \system\Database::table("page");</p>
+                <p>Example: \system\Data::table("page");</p>
                 <span>Will return prefix_page.</span>
-                <p>Example: \system\Database::table();</p>
+                <p>Example: \system\Data::table();</p>
                 <span>Will return default table name if current url is located in module or plugin.</span>
             </li>
         </ul>
@@ -97,7 +97,7 @@
                 <span>column (optional): the column where the top integer value will be searched. Default is id. Exaple: row</span>
                 <span>table (optional): the table to select in the top id. If left unfilled and the current url location is in some module or plugin, the system will automatically resolve the default module or plugin table. Example: web_page (will search top value in table web_page)</span>
                 
-                <p>Example: \system\Database::top_id(3, "link_id", "id", "web_page");</p>
+                <p>Example: \system\Data::top_id(3, "link_id", "id", "web_page");</p>
                 <span>Will return top id value of all linked parent rows of start row with id='3'. The link column will be link_id in web_page table.</span>
             </li>
         </ul>

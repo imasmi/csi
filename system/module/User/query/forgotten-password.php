@@ -6,12 +6,12 @@ if(\system\Mail::validate($_POST["email"]) === false){$check["#email"] =  $Text-
 if(!empty($check)){\system\Form::validate($check);exit;}
 
 #CHECK IF EMAIL IS USED IN THE SYSTEM
-$check_email = $PDO -> query("SELECT * FROM " . \system\Database::table() . " WHERE email='" . $_POST["email"] . "'");
+$check_email = $PDO -> query("SELECT * FROM " . \system\Data::table() . " WHERE email='" . $_POST["email"] . "'");
 if($check_email->rowCount() === 0){echo $Text->_("This email is not registred"); exit;}
 
 $new_pass = uniqid();
 #CHANGE PASSWORD TO USER
-$update_password = $PDO->prepare("UPDATE " . \system\Database::table() . " SET password = ? WHERE email LIKE '" . $_POST["email"] . "'");
+$update_password = $PDO->prepare("UPDATE " . \system\Data::table() . " SET password = ? WHERE email LIKE '" . $_POST["email"] . "'");
 $update_password->execute(
     array(
         password_hash($new_pass, PASSWORD_DEFAULT)

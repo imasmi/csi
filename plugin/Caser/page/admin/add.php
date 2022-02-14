@@ -6,12 +6,12 @@
     <table class="table">
         <tr>
             <td>Type</td>
-            <td><?php echo $Form->select("type", \system\Database::column_group("type", $Object->table), array("addon" => true));?></td>
+            <td><?php echo $Form->select("type", \system\Data::column_group("type", $Object->table), array("addon" => true));?></td>
         </tr>
         
         <tr>
             <td>Menu</td>
-            <td><?php echo $Form->select("menu", \system\Database::column_group("menu", $Object->table), array("addon" => true));?></td>
+            <td><?php echo $Form->select("menu", \system\Data::column_group("menu", $Object->table), array("addon" => true));?></td>
         </tr>
         
         <?php foreach($Language->items as $key=>$value){?>

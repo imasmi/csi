@@ -31,7 +31,7 @@ if(isset($_POST["wait_nap"])){
 		"payment" => 1
 	);
 
-	$insert = \system\Database::insert($array, "note");
+	$insert = \system\Data::insert($array, "note");
 }
 
 echo '<script>close()</script>';

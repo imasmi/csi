@@ -24,10 +24,10 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 		$checks = $PDO->query("SELECT * FROM payment WHERE amount='" . $array["amount"] . "' AND date='" . $array["date"] . "' AND case_id='" . $array["case_id"] . "'");
 		if($checks->rowCount() > 0){
 			$check = $checks->fetch();
-			\system\Database::update($array, $check["id"], "id", "payment");
+			\system\Data::update($array, $check["id"], "id", "payment");
 			$updates++;
 		} else {
-			\system\Database::insert($array, "payment");
+			\system\Data::insert($array, "payment");
 			$inserts++;
 		}
 	} else {

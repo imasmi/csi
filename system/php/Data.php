@@ -1,7 +1,9 @@
 <?php
 namespace system;
 
-class Database{
+class Data{
+    
+//Input functions
     //$input as array ["data" => array, "table" => string]
 	public static function insert($input, $table="module"){
 	    if(isset($input["data"])) {
@@ -46,6 +48,34 @@ class Database{
         return $update->execute($array);
     }
 
+    //$input as array ["query" => string]
+    public static function cleanup($input,  $selector="id", $table="module", $delimeter="="){
+        require_once(\system\Core::doc_root() . "/system/module/File/php/FileAPP.php");
+        $FileAPP = new \module\File\FileAPP;
+        
+        if(isset($input["query"])) {
+            $query = $input["query"];
+	    } else {
+	        $table = ($table === "module") ? static::table() : $table;
+	        $query = "SELECT * FROM " . $table . " WHERE " . $selector . $delimeter . "'" . $input . "'";
+	    }
+        
+        
+	    $table = ($table === "module") ? static::table() : $table;
+
+	    foreach(static::loop($query) as $table => $values){
+	        foreach($values as $id => $field){
+	            if($table == $FileAPP->table){
+                    $fileDir = $FileAPP->files_dir($field["id"]);
+                    if(is_dir($fileDir)){$FileAPP->delete_dir($fileDir);}
+                }
+                $GLOBALS["PDO"]->query("DELETE FROM " . $table . " WHERE id='" . $field["id"] . "'");
+	        }
+	    }
+    }
+ 
+ 
+//Output functions   
     public static function loop($query, $table=false){
         if($table === false){
             preg_match('/FROM\s(.*)\sWHERE/', $query, $matches);
@@ -82,32 +112,6 @@ class Database{
             }
         }
         return $array;
-    }
-
-    //$input as array ["query" => string]
-    public static function cleanup($input,  $selector="id", $table="module", $delimeter="="){
-        require_once(\system\Core::doc_root() . "/system/module/File/php/FileAPP.php");
-        $FileAPP = new \module\File\FileAPP;
-        
-        if(isset($input["query"])) {
-            $query = $input["query"];
-	    } else {
-	        $table = ($table === "module") ? static::table() : $table;
-	        $query = "SELECT * FROM " . $table . " WHERE " . $selector . $delimeter . "'" . $input . "'";
-	    }
-        
-        
-	    $table = ($table === "module") ? static::table() : $table;
-
-	    foreach(static::loop($query) as $table => $values){
-	        foreach($values as $id => $field){
-	            if($table == $FileAPP->table){
-                    $fileDir = $FileAPP->files_dir($field["id"]);
-                    if(is_dir($fileDir)){$FileAPP->delete_dir($fileDir);}
-                }
-                $GLOBALS["PDO"]->query("DELETE FROM " . $table . " WHERE id='" . $field["id"] . "'");
-	        }
-	    }
     }
 
     public static function column_group($column, $table=false){

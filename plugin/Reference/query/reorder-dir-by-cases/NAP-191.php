@@ -2,6 +2,7 @@
 include_once(\system\Core::doc_root() . '/plugin/Document/php/Microsoft_office.php');
 $list = $_POST["dir"];
 $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
+$PDF2Text = false;
 ?>
 <form class="form" id="form" accept-charset="UTF-8" method="post" action="<?php echo \system\Core::this_path(0,-1);?>/rename-NAP-191" target="_blank">
 <input type="hidden" name="dir" value="<?php echo $list;?>"/>
@@ -31,9 +32,21 @@ $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
 
 		if($extension == "doc"){
 			$doc_191 = preg_replace("/[^a-zA-Z0-9\s\,\.\-\n\r\t@\/\_\(\)]/","",$doc_191);
-		} elseif($extension == "docx"){
+		} else if($extension == "docx"){
 			$Ms_office = new \plugin\Document\Microsoft_office($list . '\\' . $f);
 			$doc_191 = $Ms_office->_();
+		} else if ( $extension == "pdf" ) {
+			$prepare_name = str_replace(".pdf", "_old.pdf", $list . '\\' . $f);
+			rename($list . '\\' . $f, $prepare_name);
+			$output = shell_exec( 'gswin32 -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dNOPAUSE -dQUIET -dBATCH -sOutputFile="'.$list . '\\' . $f.'" "'. $prepare_name. '"'); 
+			unlink($prepare_name);
+			if(!$PDF2Text) {
+				include_once(\system\Core::doc_root() . '/plugin/Reference/php/PDF2text.php');
+				$PDF2Text = new \plugin\Reference\PDF2Text();
+			}
+			$PDF2Text->setFilename($list . '\\' . $f); 
+			$PDF2Text->decodePDF();
+			$doc_191 = $PDF2Text->output(); 
 		}
 
 		foreach(explode(" ", $doc_191) as $value){

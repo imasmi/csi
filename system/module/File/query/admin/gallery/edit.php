@@ -5,7 +5,7 @@ if($_POST["tag"] == ""){ $check["#tag"] = "Please insert gallery tag";}
 
 #UPDATE USER DATA IF ALL EVERYTHING IS FINE
 if($check == ""){
-    $update = \system\Database::update($_POST, $_GET["id"]);
+    $update = \system\Data::update($_POST, $_GET["id"]);
     
     if($update){
         ?><script>history.go(-1)</script><?php

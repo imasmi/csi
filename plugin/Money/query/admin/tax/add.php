@@ -14,8 +14,8 @@ $data = [
 ];
 
 
-$insert = \system\Database::insert(["data" => $data, "table" => $Setting->table]);
-#\system\Database::insert($array, $table="module")
+$insert = \system\Data::insert(["data" => $data, "table" => $Setting->table]);
+#\system\Data::insert($array, $table="module")
 
 if($insert){
     ?><script>history.go(-1)</script><?php

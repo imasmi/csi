@@ -15,7 +15,7 @@ foreach($array as $row => $values){
 	);
 	
 	if($report){
-		\system\Database::update($array,$report["id"], "id", "report");
+		\system\Data::update($array,$report["id"], "id", "report");
 	} else {
 		$insert = array(
 			"year" => $_GET["year"],
@@ -24,7 +24,7 @@ foreach($array as $row => $values){
 			"row" => $row,
 			"value" => serialize($values)
 		);
-		\system\Database::insert($insert, "report");
+		\system\Data::insert($insert, "report");
 	}
 }
 ?>

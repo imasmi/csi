@@ -14,7 +14,7 @@ if(empty($check) && !empty($_POST)){
     
     if(file_put_contents($Language->ini_path, $output, FILE_APPEND)){
         foreach($Language->table() as $table){
-            $add_column = $PDO->query("ALTER TABLE `" . \system\Database::table($table) ."` ADD `" . $_POST["language"] . "` " . ($table == "text" ? "MEDIUMTEXT" : "TEXT") . " NULL");
+            $add_column = $PDO->query("ALTER TABLE `" . \system\Data::table($table) ."` ADD `" . $_POST["language"] . "` " . ($table == "text" ? "MEDIUMTEXT" : "TEXT") . " NULL");
         }
     }
     ?><script>history.go(-1)</script><?php

@@ -15,10 +15,10 @@ foreach($Language->items as $value){
 #UPDATE USER DATA IF ALL EVERYTHING IS FINE
 if(empty($check)){
     $_POST["filename"] = $PageAPP->url_format($_POST["filename"]);
-    if($select["menu"] != $_POST["menu"]){ $_POST["row"] = \system\Database::new_id($Page->table, "row", " WHERE menu='" . $_POST["menu"] . "'");}
+    if($select["menu"] != $_POST["menu"]){ $_POST["row"] = \system\Data::new_id($Page->table, "row", " WHERE menu='" . $_POST["menu"] . "'");}
     
     if($_POST["homepage"] == "on"){
-        $PDO->query("UPDATE " . \system\Database::table() . " SET `type`='' WHERE `type`='homepage'");
+        $PDO->query("UPDATE " . \system\Data::table() . " SET `type`='' WHERE `type`='homepage'");
         unset($_POST["homepage"]);
         $_POST["type"] = "homepage";
     }
@@ -27,7 +27,7 @@ if(empty($check)){
         $_POST[$value] = (strpos($_POST[$value], "http") !== false) ? $_POST[$value] : $PageAPP->url_format($_POST[$value]);
     }
     
-    $update = \system\Database::update($_POST, $_GET["id"]);
+    $update = \system\Data::update($_POST, $_GET["id"]);
     
     if($update){
         #ADD FILE IF NOT EXISTS

@@ -76,7 +76,7 @@ if(empty($check)){
                 $json_query = "SELECT * FROM " . $json_table . " WHERE plugin='" . $_POST["plugin"] . "' AND link_id='0'";
             }
             
-            file_put_contents($backup_dir . "database.json", json_encode(\system\Database::loop($json_query)));
+            file_put_contents($backup_dir . "database.json", json_encode(\system\Data::loop($json_query)));
         }
         ?>
             <h1>Database backup was successfully created.</h1>

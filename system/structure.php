@@ -62,7 +62,7 @@ if(file_exists($file)){
 <?php } ?>
 
 <?php
-if($User->group("admin") && $Theme->active){require_once("admin-panel.php");}
+if($User->group("admin") && $Theme->name){require_once("admin-panel.php");}
 
 //get layout files
 $layouts = array();

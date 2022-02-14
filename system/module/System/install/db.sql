@@ -1,8 +1,8 @@
--- MySQL dump 10.19  Distrib 10.3.32-MariaDB, for Linux (x86_64)
+-- MySQL dump 10.19  Distrib 10.3.33-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: gtarlyov_web
 -- ------------------------------------------------------
--- Server version	10.3.32-MariaDB-log
+-- Server version	10.3.33-MariaDB-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -137,4 +137,4 @@ CREATE TABLE `web_user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-31 21:11:23
+-- Dump completed on 2022-02-13 22:28:58

@@ -27,9 +27,9 @@ for($a = 1; $a <= $_POST["cnt"]; ++$a){
 		
 		if ( $check->rowCount() > 0) {
 			$payment_id = $check->fetch()["id"];
-			\system\Database::update( ["data" => $array, "table" => "payment", "where" => "id='" . $payment_id . "'"] );
+			\system\Data::update( ["data" => $array, "table" => "payment", "where" => "id='" . $payment_id . "'"] );
 		} else {
-			\system\Database::insert( ["data" => $array, "table" => "payment"] );
+			\system\Data::insert( ["data" => $array, "table" => "payment"] );
 		}
 	}
 }

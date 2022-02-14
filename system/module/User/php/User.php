@@ -3,11 +3,11 @@ namespace module\User;
 
 class User{
     public function __construct($id = false) {
-        $this->table = \system\Database::table("user");
+        $this->table = \system\Data::table("user");
         $this->module = "User";
         if($id === false && isset($_SESSION["id"])){ $id = $_SESSION["id"];}
         $this->id = $id;
-        $this->column_group = \system\Database::column_group("group", $this->table);
+        $this->column_group = \system\Data::column_group("group", $this->table);
         if($this->id !== false){
             $this->item = $this->item();
             $this->groups = $this->item["group"];

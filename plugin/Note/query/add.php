@@ -24,8 +24,8 @@ foreach(\plugin\Note\Note::places() as $key=>$value){
 	$array[$key] = isset($_POST[$key]) ? 1 : 0;
 }
 
-$insert = \system\Database::insert($array, "note");
-#\system\Database::insert($array, $table="module")
+$insert = \system\Data::insert($array, "note");
+#\system\Data::insert($array, $table="module")
 
 if($insert){
 	if(!isset($_POST["where"])){ ?><script>history.go(-1)</script><?php }

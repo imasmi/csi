@@ -5,8 +5,8 @@ class Theme{
 
     public function __construct(){
         $this->items = file_exists(\system\Core::doc_root() . "/web/ini/theme.ini") ? parse_ini_file(\system\Core::doc_root() . "/web/ini/theme.ini", true) : array();
-        $this->active = $this->active();
-        $this->data = $this->items[$this->active];
+        $this->name = $this->active();
+        $this->data = $this->items[$this->name];
     }
     
     private function active() {

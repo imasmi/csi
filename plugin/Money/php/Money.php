@@ -96,8 +96,8 @@ class Money{
 			"Дата" => array("date", 'echo date("d.m.Y", strtotime($list["date"]));'),
 			"Вид" => array("type", 'echo $list["type"] == "bill" ? "Сметка" : "Фактура";'),
 			"Сума" => "sum",
-			"Дело" => array("case_id", '$caser = \system\Database::select($list["case_id"], "id", "caser"); echo $caser["number"];'),
-			"Задължено лице" => array("payer", '$person = \system\Database::select($list["payer"], "id", "person"); echo $person["name"];'),
+			"Дело" => array("case_id", '$caser = \system\Data::select($list["case_id"], "id", "caser"); echo $caser["number"];'),
+			"Задължено лице" => array("payer", '$person = \system\Data::select($list["payer"], "id", "person"); echo $person["name"];'),
 			"Данъчна основа" => "tax_base",
 			"Данък" => "vat",
 			"Сметка №" => "bill",
@@ -136,7 +136,7 @@ class Money{
 					<td><?php echo  $invoice["type"] == "bill" ? "Сметка" : "фактура";?></td>
 					<td><?php echo $this->sum($invoice["sum"]);?></td>
 					<td><a href="" class="caseNumber"><?php echo $Caser->number;?></a></td>
-					<td><?php echo \system\Database::select($invoice["payer"], "id", "person")["name"];?></td></td>
+					<td><?php echo \system\Data::select($invoice["payer"], "id", "person")["name"];?></td></td>
 					<td><?php echo $this->sum($invoice["tax_base"]);?></td>
 					<td><?php echo $this->sum($invoice["vat"]);?></td>
 					<td><?php echo $invoice["bill"];?></td>

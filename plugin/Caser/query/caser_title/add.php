@@ -4,8 +4,8 @@ $check = array();
 if(empty($check)){
 
 #INSERT IF ALL EVERYTHING IS FINE
-$insert = \system\Database::insert(["data" => $_POST, "table" => "caser_title"]);
-#\system\Database::insert($array, $table="module")
+$insert = \system\Data::insert(["data" => $_POST, "table" => "caser_title"]);
+#\system\Data::insert($array, $table="module")
 
 if($insert){
     ?><script>history.back();</script><?php

@@ -3,7 +3,7 @@
 $User->control();
 
 #MAKE USER DELETED
-$PDO->query("UPDATE " . \system\Database::table() . " SET deleted=NOW() WHERE id='" . $User->id . "'");
+$PDO->query("UPDATE " . \system\Data::table() . " SET deleted=NOW() WHERE id='" . $User->id . "'");
 
 #UNSET CURRENT SESSION USER
 unset($_SESSION["user"]);

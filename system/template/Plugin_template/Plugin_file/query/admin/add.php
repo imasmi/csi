@@ -6,22 +6,22 @@ if(empty($check)){
 
 #ADD NEW PAGE
 
-$array = array(
+$data = array(
         "page_id" => $Object->page_id,
         "link_id" => 0,
         "user_id" => $User->id,
         "plugin" => isset($Object->plugin) ? $Object->plugin : NULL,
-        "row" => \system\Database::new_id($Object->table, "row", " WHERE `tag`='" . $Object->type . "'"),
-        "tag" => $Object->type,
+        "row" => \system\Data::new_id(["query" => "SELECT row FROM " . $Object->table . " WHERE `tag`='" . $Object->tag . "'", "column" => "row"]),
+        "tag" => $Object->tag,
         "type" => "image",
         "created" => date("Y-m-d H:i:s")
 );
 
 foreach($Language->items as $lang=>$abbrev){
-    $array[$abbrev] = $_POST[$abbrev];
+    $data[$abbrev] = $_POST[$abbrev];
 }
 
-$newItem = \system\Database::insert($array, $Object->table);
+$newItem = \system\Data::insert(["data" => $data, "table" => $Object->table]);
 $id = $PDO->lastInsertId();
 
 if($newItem){

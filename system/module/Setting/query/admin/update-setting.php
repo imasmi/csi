@@ -9,11 +9,11 @@ $result = false;
 $check_exists = $PDO->query("SELECT id FROM " . $Setting->table . " WHERE tag='" . $_POST["tag"] . "' AND page_id='" . $_POST["page_id"] . "' AND link_id='" . $_POST["link_id"] . "'");
 if($check_exists->rowCount() == 0){
     unset($_POST["id"]);
-    if(\system\Database::insert($_POST, $Setting->table) === true){ $result = true;}
+    if(\system\Data::insert($_POST, $Setting->table) === true){ $result = true;}
 } else {
     $finded_setting = $check_exists->fetch();
     
-    if(\system\Database::update($sliced, $finded_setting["id"], "id", $Setting->table) === true) {$result = true;}
+    if(\system\Data::update($sliced, $finded_setting["id"], "id", $Setting->table) === true) {$result = true;}
     if(empty($_POST[$first_slice_key])){
         $langs = "";
         foreach($Language->items as $lang=>$abbrev){

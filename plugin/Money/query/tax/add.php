@@ -17,7 +17,7 @@ $data = [
 ];
 
 
-$insert = \system\Database::insert(["data" => $data, "table" => "tax"]);
+$insert = \system\Data::insert(["data" => $data, "table" => "tax"]);
 
 if($insert){
     ?><script>history.go(-1)</script><?php

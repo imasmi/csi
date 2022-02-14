@@ -1,6 +1,6 @@
 <?php
 if($User->group("admin")){
-    echo $TextAPP->wysiwyg();
+    echo \module\Text\TextAPP::wysiwyg();
     echo '<input type="hidden" id="lang" value="' . $Language->_() . '"/>';
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-namespace plugin\Plugin_file\php;
+namespace plugin\Plugin_file;
 use \module\Text\Text as Text;
 use \module\File\File as File;
 use \module\Setting\Setting as Setting;

@@ -31,7 +31,7 @@ if(empty($check)){
     foreach($Language->items as $key=>$value){
         $data[$value] = (strpos($_POST[$value], "http") !== false) ? $_POST[$value] : $PageAPP->url_format($_POST[$value]);
     }
-    $update = \system\Database::update(["data" => $data, "table" => $Object->table, "where" => "id='" . $_GET["id"] . "'"]);
+    $update = \system\Data::update(["data" => $data, "table" => $Object->table, "where" => "id='" . $_GET["id"] . "'"]);
     
     if($update){
         $posts = array();

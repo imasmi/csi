@@ -6,7 +6,7 @@ foreach($_POST as $key => $post){
 
 
     if($data != "payment"){
-        \system\Database::update(["payment" => json_encode(array($_POST[$cnt . "_payment"]))], $data, "id", "invoice");
+        \system\Data::update(["payment" => json_encode(array($_POST[$cnt . "_payment"]))], $data, "id", "invoice");
         echo $data . '=' . json_encode(array($_POST[$cnt . "_payment"]));
         echo '<br>';
     }

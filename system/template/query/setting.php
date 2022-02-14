@@ -4,8 +4,8 @@ $check = array();
 #UPDATE USER DATA IF ALL EVERYTHING IS FINE
 if(empty($check)){
     
-    $update = \system\Database::update($_POST, $_GET["id"]);
-    #\system\Database::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
+    $update = \system\Data::update($_POST, $_GET["id"]);
+    #\system\Data::update($array, $identifier="-1", $selector="id", $table="module", $delimeter="=")
     
     if($update){
         ?><script>history.go(-1)</script><?php

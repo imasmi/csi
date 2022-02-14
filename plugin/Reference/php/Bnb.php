@@ -159,7 +159,7 @@ class Bnb{
 	}
 	
 	public function caser($id){
-		$person = \system\Database::select($id, "EGN_EIK", "person", "id");
+		$person = \system\Data::select($id, "EGN_EIK", "person", "id");
 		foreach($this->PDO->query("SELECT c.number FROM caser_title t, caser c WHERE c.id=t.case_id AND t.debtor LIKE '%\"" . $person["id"] . "\"%'") as $case){
 			echo '<div>' . $case["number"] . '</div>';
 		}

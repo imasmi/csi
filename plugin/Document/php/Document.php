@@ -248,7 +248,7 @@ class Document{
 					<td><?php echo  $protocol["number"];?></td>
 					<td><?php $Caser->open();?></td>
 					<td><?php echo  $incomeDate;?></td>
-					<td><?php echo  \system\Database::select($protocol["name"], "id", "doc_types", "name")["name"];?></td>
+					<td><?php echo  \system\Data::select($protocol["name"], "id", "doc_types", "name")["name"];?></td>
 					<td><?php echo  $protocol["note"];?></td>
 					<?php if(!$this->case_id){?><td><?php echo  $this->User->item($Caser->charger)["email"];?></td><?php } ?>
 				</tr>	

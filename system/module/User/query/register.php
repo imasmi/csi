@@ -32,7 +32,7 @@ $array = array(
             "status" => $activate_code,
             "created" => date("Y-m-d H:i:s")
         );
-$newUser = \system\Database::insert($array, \system\Database::table());
+$newUser = \system\Data::insert($array, \system\Data::table());
 
 if($newUser){
     $subject = $Text->item("Successful registration");

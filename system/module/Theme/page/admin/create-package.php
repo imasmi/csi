@@ -7,7 +7,7 @@ $FileAPP = new \module\File\FileAPP(array("fortable" => "plugin"));
         <h2>Create theme package</h2>
         <div class="clear marginY-10">
             <div class="column-6">Name</div>
-            <div class="column-6"><input type="text" name="name" value="<?php echo $Theme->active;?>"/></div>
+            <div class="column-6"><input type="text" name="name" value="<?php echo $Theme->name;?>"/></div>
         </div>
         
         <div class="clear marginY-10">
@@ -35,7 +35,7 @@ $FileAPP = new \module\File\FileAPP(array("fortable" => "plugin"));
             <div class="column-6">
                 <?php 
                 foreach ($Plugin->items as $plugin => $data) {
-                    if ($data["theme"] == $Theme->active) {
+                    if ($data["theme"] == $Theme->name) {
                         echo $plugin . '<br>';
                     }
                 }

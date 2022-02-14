@@ -10,13 +10,13 @@ $data = [
     "user_id" => $User->id,
     "fortable" => "debt",
     "tag" => isset($_POST["tag"]) ? $_POST["tag"] : "sub",
-    "row" => \system\Database::new_id(["query" => "SELECT row FROM " . $Setting->table . " WHERE fortable='debt' AND link_id='" . $link_id . "' ORDER by row DESC", "column" => "row"]),
+    "row" => \system\Data::new_id(["query" => "SELECT row FROM " . $Setting->table . " WHERE fortable='debt' AND link_id='" . $link_id . "' ORDER by row DESC", "column" => "row"]),
     "type" => $_POST["type"]
 ];
 
 
-$insert = \system\Database::insert(["data" => $data, "table" => $Setting->table]);
-#\system\Database::insert($array, $table="module")
+$insert = \system\Data::insert(["data" => $data, "table" => $Setting->table]);
+#\system\Data::insert($array, $table="module")
 
 if($insert){
     ?><script>history.go(-1)</script><?php

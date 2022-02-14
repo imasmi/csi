@@ -112,7 +112,7 @@ class FileAPP extends File{
             unset($file_key[count($file_key) - 1]);
             $file_key = implode("_", $file_key);
             $page_id = isset($array["page_id"]) ? $array["page_id"] : (isset($_POST["gallery_" . $file_key]) ? $_POST["gallery_" . $file_key] : $this->page_id);
-            $top_gallery_id = isset($_POST["gallery_" . $file_key]) ? \system\Database::top_id($_POST["gallery_" . $file_key], "link_id", "id", $this->table) : 0;
+            $top_gallery_id = isset($_POST["gallery_" . $file_key]) ? \system\Data::top_id($_POST["gallery_" . $file_key], "link_id", "id", $this->table) : 0;
             $accept = isset($array["accept"]) ? isset($array["accept"]) : array_keys($this->accept_ini);
             if($top_gallery_id != 0){ $top_gallery = $this->PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $top_gallery_id . "'")->fetch();}
             if(isset($array["link_id"])){
@@ -153,7 +153,7 @@ class FileAPP extends File{
                     if($error == "0"){
                         $mime = explode("/", $type);
                         if(in_array($type, $accept) || in_array($mime[0] . "/*", $accept)) {
-                            $id = \system\Database::new_id($this->table);
+                            $id = \system\Data::new_id($this->table);
                             $new_filePath = (isset($array["path"])) ? $array["path"] : $this->files_dir($id, $link_id); //$this->files_dir($file_dir) is the default value, use $array[path] only for custom file tables
                             $unique_file_path = $this->unique_file_name($new_filePath,$choosed_name);
                             $curFile = array("name" => $name, "path" => $unique_file_path, "error" => $error, "type" => $type, "tmp_name" => $tmp_name, "size" => $size);
@@ -167,11 +167,11 @@ class FileAPP extends File{
                             } elseif($top_gallery_id != 0 && $top_gallery["plugin"] !== NULL){
                                 $file_input["plugin"] = $top_gallery["plugin"];
                             }
-                            if($link_id != 0){$file_input["row"] = \system\Database::new_id($this->table, "row", " WHERE link_id='" . $link_id . "'");}
+                            if($link_id != 0){$file_input["row"] = \system\Data::new_id($this->table, "row", " WHERE link_id='" . $link_id . "'");}
                             foreach($GLOBALS["Language"]->items as $language=>$abbreviation){
                                 if(isset($_POST[$path . "_" . $abbreviation])){$file_input[$abbreviation] = $_POST[$path . "_" . $abbreviation];}
                             }
-                            $insert_file = \system\Database::insert($file_input, $this->table);
+                            $insert_file = \system\Data::insert($file_input, $this->table);
 
                         } else {
                             echo 'Not accepted filetype - ' . $type;
@@ -281,7 +281,7 @@ class FileAPP extends File{
                         $new_file["path"] = $file["path"];
                         $this->upload_file($new_file);
 
-                	    \system\Database::update($file, $id, "id", $this->table);
+                	    \system\Data::update($file, $id, "id", $this->table);
                 	    
                 	    //Update file settings
                         $this->setting_update($id);
@@ -306,7 +306,7 @@ class FileAPP extends File{
     				$file["path"] = ((isset($_POST['path_' . $id])) ?  $_POST['path_' . $id] : $dir) . "/" . $file["name"];
     				rename($file_select["path"], $file["path"]);
                 }
-                //if(count($file) > 0){\system\Database::update($file, $id, "id", $this->table);}
+                //if(count($file) > 0){\system\Data::update($file, $id, "id", $this->table);}
                 
                 //Update file settings
                 $this->setting_update($id);
@@ -324,7 +324,7 @@ class FileAPP extends File{
     }
 
 
-    private function make_thumbnail($file, $new_name, $max_width=false, $max_height=false){
+    public function make_thumbnail($file, $new_name, $max_width=false, $max_height=false){
         $source_file= $file['tmp_name'];
 		$type= $file['type'];
         // Takes the sourcefile (path/to/image.jpg) and makes a thumbnail from it
@@ -335,11 +335,14 @@ class FileAPP extends File{
         //
         switch($type){
         	case'image/png':
-    		$img = imagecreatefrompng($source_file);
-    		break;
+        		$img = imagecreatefrompng($source_file);
+        		break;
     		case'image/jpeg':
-    		$img = imagecreatefromjpeg($source_file);
-    		break;
+        		$img = imagecreatefromjpeg($source_file);
+        		break;
+    		case'image/gif':
+        		$img = imagecreatefromgif($source_file);
+        		break;
     		default :
     		return 'Unsupported format';
         }
@@ -359,28 +362,18 @@ class FileAPP extends File{
 
         // Create a new temporary image.
         $tmp_img = imagecreatetruecolor( $new_width, $new_height );
-
-            imagealphablending($tmp_img, false);
-            imagesavealpha($tmp_img, true);
+        if($type == "image/png" || $type == "image/gif") {
+            $colour = imagecolorallocate($tmp_img,255,255,255);
+            imagefill($tmp_img , 0, 0, $colour);
+        }
+        imagealphablending($tmp_img, true);
+        imagesavealpha($tmp_img, true);
         // Copy and resize old image into new image.
         imagecopyresampled( $tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
         // Save thumbnail into a file.
         //compressing the file
-
-
-        switch($type){
-        	case'image/png':
-        		imagepng($tmp_img, $new_name);
-        		break;
-        	case'image/jpeg':
-        		imagejpeg($tmp_img, $new_name);
-        		break;
-        	case'image/gif':
-        		imagegif($tmp_img, $new_name);
-        		break;
-        }
-
+        imagewebp($tmp_img, $new_name);
         // release the memory
            imagedestroy($tmp_img);
            imagedestroy($img);
@@ -393,8 +386,9 @@ class FileAPP extends File{
             $img_size = getimagesize($file["tmp_name"]);
             copy($file["tmp_name"], $file["path"]);
             foreach($this->imagesize as $size => $pixels){
-                if($img_size[0] > $pixels){$this->make_thumbnail($file, pathinfo($file["path"])["dirname"] . "/" . pathinfo($file["path"])["filename"] . "_" . $size . "." . pathinfo($file["path"])["extension"], $pixels);}
+                if($img_size[0] > $pixels){$this->make_thumbnail($file, $info["dirname"] . "/" . $info["filename"] . "_" . $size . ".webp", $pixels);}
             }
+            $this->make_thumbnail($file, $info["dirname"] . "/" . $info["filename"] . ".webp", $img_size[0]);
             move_uploaded_file($file["tmp_name"], $file["path"]);
         } else {
             move_uploaded_file($file["tmp_name"], $file["path"]);
