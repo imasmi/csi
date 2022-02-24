@@ -2,13 +2,15 @@
 include_once(\system\Core::doc_root() . '/system/php/Form.php');
 include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
 include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
-$Caser = new \plugin\Caser\Caser($_GET["case_id"]);
+$case_id = isset($_GET["case_id"]) ? $_GET["case_id"] : 0;
+$Caser = new \plugin\Caser\Caser($case_id);
 ?>
 <div class="admin">
 <div class="title">Добавяне на бележкa</div>
 <div class="errorMessage" id="errorMessage"></div>
 <form class="form" id="form" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#form'), '#errorMessage')">
-    <table class="table">
+    <input type="hidden" name="person_id" value="<?php echo isset($_GET["person_id"]) ? $_GET["person_id"] : 0;?>"/>
+	<table class="table">
         <tr>
             <td>Бележка</td>
             <td><textarea type="text" name="note" id="note" class="noteField" onchange="csi.trim(this)" required></textarea>
@@ -18,7 +20,7 @@ $Caser = new \plugin\Caser\Caser($_GET["case_id"]);
             <td>Дело номер</td>
             <td>
 				<?php 
-				$Caser->select("case", array("id" => $_GET["case_id"]));?>
+				$Caser->select("case", ["id" => $case_id]);?>
 				<input type="hidden" name="case_id" id="case_id" value="<?php if(isset($_GET['case_id'])){echo $_GET['case_id'];}?>"/>
 				<script>
 					document.getElementById("case_selector").addEventListener("click", function(){

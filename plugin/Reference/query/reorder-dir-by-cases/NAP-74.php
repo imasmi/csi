@@ -31,7 +31,7 @@ $PDF2Text = false;
 			$rtf = iconv ( "windows-1251" , "UTF-8", $doc_74 );
 			$extension = pathinfo($rtf)["extension"];
 				
-			if($extension == "rtf" || $extension == "doc" || $extension == "docx" || strpos($doc_74, "printcertificate145") !== false){
+			if($extension == "rtf" || $extension == "doc" || $extension == "docx" || $extension == "pdf" || strpos($doc_74, "printcertificate145") !== false){
 				$file_name = $listConv . '\\' . $f . '\\' . $doc_74;
 				if ($extension == "pdf") {
 					$prepare_name = str_replace(".pdf", "_old.pdf", $file_name);
