@@ -40,8 +40,8 @@
 	$reversed = array_reverse($Caser->type(), true);
 	foreach($reversed as $row => $name){
 		$fields = $PDO->query("SELECT * FROM report WHERE year='" . $_GET["year"] . "' AND period='" . $_GET["period"] . "' AND type='sum' AND row='" . $row . "'")->fetch();
-		$array[$fields["row"]] = unserialize($fields["value"]);
-		$x = $array[$row];
+		$array[$fields["row"]] = json_decode($fields["value"], true);
+		$x = isset($array[$row]) ? $array[$row] : [0,0,0,0,0,0,0,0,0,0];
 		for($a = 1; $a < 10; $a++){
 			if($a == 3){
 				$x[3] = $x[1] + $x[2];
@@ -62,7 +62,7 @@
 			} elseif($a == 4){
 				$x[$a] = $x[5] + $x[6] + $x[7];
 			} else {}
-			$array[$row][$a] = $x[$a];
+			$array[$row][$a] = isset($x[$a]) ? $x[$a] : 0;
 		}
 	}
 
@@ -84,7 +84,8 @@
 				} else {
 					if($_GET["period"] == "2" && $a != 9){
 						$previous = $PDO->query("SELECT * FROM report WHERE type='sum' AND period = '1' AND year='" . $_GET["year"] . "' AND row='" . $row ."'")->fetch()["value"];
-						$previous = unserialize($previous)[$a];
+						$row_data = json_decode($previous, true);
+						$previous = isset($row_data[$a]) ? $row_data[$a] : 0;
 						if($previous > 0 && $previous > $x[$a]){ echo $previous;}
 					} else {
 						$previous = 0;
@@ -92,7 +93,7 @@
 					$sum_value = isset($x[$a]) &&  $x[$a] != ""? $x[$a] : 0;
 					if(isset($_GET["fill"])){ $sum_value = number_format($sum_value, 2, ",", "");}
 				?>
-					<input type="<?php echo $_GET["fill"] ? "text" : "number";?>" step="0.01" class="report-cell" value="<?php echo $sum_value;?>" name="<?php echo isset($_GET["fill"]) ? 'view:_id1:' .  ($row == 1310 ? "inputText" . $a : $cis_names[$a] . '_' . $row_cnt)  : 'row_' . $row . '_' . $a;?>" <?php if($previous > 0 && $previous > $x[$a]){?> style="background-color: red;" <?php }?>/>
+					<input type="<?php echo isset($_GET["fill"]) ? "text" : "number";?>" step="0.01" class="report-cell" value="<?php echo $sum_value;?>" name="<?php echo isset($_GET["fill"]) ? 'view:_id1:' .  ($row == 1310 ? "inputText" . $a : $cis_names[$a] . '_' . $row_cnt)  : 'row_' . $row . '_' . $a;?>" <?php if($previous > 0 && $previous > $x[$a]){?> style="background-color: red;" <?php }?>/>
 				<?php } ?>
 			</td>
 		<?php }?>

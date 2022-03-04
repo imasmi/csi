@@ -1,16 +1,17 @@
 <?php
+include_once(\system\Core::doc_root() . "/system/php/Form.php");
 	$type = count(explode(',', $rows[1])) > 15 ? "case" : "sum";
 ?>
 <div class="admin">
 	<form  method="post" action="<?php echo \system\Core::this_path(0, -1);?>/query/report">
-		<input type="hidden" name="rows" value='<?php echo serialize($rows);?>'/>
+		<input type="hidden" name="rows" value='<?php echo json_encode($rows);?>'/>
 		<div class="title">ОТЧЕТ ЗА ДЕЙНОСТТА НА ЧСИ</div>
 		<table class="admin">
 			<tr>
 				<td>Тип</td>
 				<td>
 					<?php $array = array("case" => "Изпълнителни дела", "sum" => "Суми");
-						$Form->select("type", $array, array("select" => $type));
+						\system\Form::select("type", $array, array("select" => $type));
 					?>
 				</td>
 			</tr>

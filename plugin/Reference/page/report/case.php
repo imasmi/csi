@@ -1,3 +1,18 @@
+<?php
+/* Transform old serialized values to JSON
+foreach ($PDO->query("SELECT * FROM report WHERE year='2021' AND period='1' AND `type`='case'") as $report) {
+	$value = unserialize($report["value"]);
+	$data = ["value" => json_encode($value)];
+	\system\Data::update([
+		"data" => $data,
+		"table" => "report",
+		"where" => "id='" . $report["id"] . "'"
+	]);
+}
+exit;
+*/
+?>
+
 <form method="post" action="<?php echo \system\Core::query_path(0, -1);?>/case_and_sum?type=case&year=<?php echo $_GET["year"];?>&period=<?php echo $_GET["period"];?>">
 <table border="1px" class="report">
 	<tr>
@@ -51,8 +66,8 @@
 	$reversed = array_reverse($Caser->type(), true);
 	foreach($reversed as $row => $name){
 		$fields = $PDO->query("SELECT * FROM report WHERE year='" . $_GET["year"] . "' AND period='" . $_GET["period"] . "' AND type='case' AND row='" . $row . "'")->fetch();
-		$array[$fields["row"]] = unserialize($fields["value"]);
-		$x = $array[$row];
+		$array[$fields["row"]] = json_decode($fields["value"], true);
+		$x = isset($array[$row]) ? $array[$row] : [];
 		for($a = 1; $a < 15; $a++){
 			if($a == 3){
 				$x[3] = $x[1] + $x[2];
@@ -93,7 +108,8 @@
 				} else {
 					if($_GET["period"] == "2"){
 						$previous = $PDO->query("SELECT * FROM report WHERE type='case' AND period = '1' AND year='" . $_GET["year"] . "' AND row='" . $row ."'")->fetch()["value"];
-						$previous = unserialize($previous)[$a];
+						$row_data = json_decode($previous, true);
+						$previous = isset($row_data[$a]) ? $row_data[$a] : 0;
 						if($previous > 0 && $previous > $x[$a]){ echo $previous;}
 					} else {
 						$previous = 0;

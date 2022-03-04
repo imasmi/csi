@@ -4,7 +4,7 @@
 .color-wrapper .settings-color{width:100px;height:20px;display:block;cursor:pointer}
 .color-wrapper .settings-color{width:100px;height:20px;display:block;cursor:pointer}
 .color-wrapper .color-selector{width: 80px; display: inline-block; margin-right: 10px;}
-#wysiwyg{border:1px solid #000;width:395px;margin:0 auto;position:fixed;top:0;right:0;z-index:999;background-color:#f0f0f0;padding:5px}
+#wysiwyg{border:1px solid #000; font-size: 16px; width:395px;margin:0 auto;position:fixed;top:0;right:0;z-index:999;background-color:#f0f0f0;padding:5px}
 #wysiwyg img{height:16px; width: auto; display: inline-block;}
 #wysiwyg .Htag{height:14px}
 #wysiwyg select{width: auto; padding: 0; margin: 0; border-radius: 3px;}

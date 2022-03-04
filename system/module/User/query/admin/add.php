@@ -1,7 +1,8 @@
 <?php
+include_once(\system\Core::doc_root() . "/system/php/Mail.php");
 $check = array();
 
-if($_POST["role"] === "0" || empty($_POST["role"])){ $check["#role"] = $Text->_("Please select role");}
+if($_POST["role"] === "0" || empty($_POST["group"])){ $check["#group"] = $Text->_("Please select group");}
 
 #CHECK IF USERNAME IS FREE
 if($PDO->query("SELECT id FROM " . $User->table . " WHERE username='" . $_POST["username"] . "'")->rowCount() > 0){ $check["#username"] = $Text->_("This username is already in use");}
@@ -22,8 +23,8 @@ if(empty($check)){
 
 #CREATE NEW USERS IF ALL EVERYTHING IS FINE
 $activate_code = md5(rand());
-$array = array(
-            "role" => $_POST["role"],
+$data = array(
+            "group" => $_POST["group"],
             "username" => $_POST["username"],
             "email" => $_POST["email"],
             "password" => password_hash($_POST["password"], PASSWORD_DEFAULT),
@@ -31,7 +32,7 @@ $array = array(
             "created" => date("Y-m-d H:i:s")
         );
 
-$new_user = \system\Data::insert($array);
+$new_user = \system\Data::insert(["data" => $data, "table" => $User->table]);
 
 if($new_user){
     ?><script>history.go(-1)</script><?php
@@ -40,6 +41,7 @@ if($new_user){
 }
 
 } else {
+    include_once(\system\Core::doc_root() . "/system/php/Form.php");
     \system\Form::validate($check);    
 }
 

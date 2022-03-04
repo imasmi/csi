@@ -1,4 +1,5 @@
 <?php
+include_once(\system\Core::doc_root() . "/system/php/Mail.php");
 $check = array();
 $profile = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 

@@ -11,7 +11,7 @@ foreach($_POST as $key => $value){
 foreach($array as $row => $values){
 	$report = $PDO->query("SELECT * FROM report WHERE year='" . $year . "' AND period='" . $period . "' AND type='" . $_GET["type"] . "' AND row='" . $row . "'")->fetch();
 	$array = array(
-		"value" => serialize($values)
+		"value" => json_encode($values)
 	);
 	
 	if($report){
@@ -22,7 +22,7 @@ foreach($array as $row => $values){
 			"period" => $_GET["period"],
 			"type" => $_GET["type"],
 			"row" => $row,
-			"value" => serialize($values)
+			"value" => json_encode($values)
 		);
 		\system\Data::insert($insert, "report");
 	}

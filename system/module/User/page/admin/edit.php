@@ -9,8 +9,8 @@ $profile = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $_GET["
 <form class="form" id="edit-user" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>', S.serialize('#edit-user'), '#error-message')">
     <table class="table">
         <tr>
-            <td><?php echo $Text->_("Role");?></td>
-            <td><?php echo \system\Form::select("role", \system\Data::column_group("role", $User->table), array("select" => $profile["role"], "reuqired" => true, "addon" => true));?></td>
+            <td><?php echo $Text->_("Group");?></td>
+            <td><?php echo \system\Form::select("group", \system\Data::column_group("group", $User->table), array("select" => $profile["group"], "reuqired" => true, "addon" => true));?></td>
         </tr>
 
         <tr>

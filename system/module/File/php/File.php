@@ -110,7 +110,7 @@ class File{
     			    $controls = (!\module\User\User::group("admin")) ? ' controls' : '';
     			    $autoplay = (!\module\User\User::group("admin") && $array["autoplay"]) ? " autoplay muted" : "";
     				$output .= '<video ' . $style . $controls . $autoplay . ' playsinline title="' . $file[\module\Language\Language::_()] . '" ' . $trigger_file . '>';
-    				$output .= '<source src="' . \system\Core::url() . $file["path"] . '" type="video/mp4">';
+    				$output .= '<source src="' . \system\Core::url() . $file["path"] . '#t=0.001" type="video/mp4">';
     				$output .= 'Your browser does not support the video tag.';
     				$output .= '</video>';
     			} elseif($file["type"] == "image"){

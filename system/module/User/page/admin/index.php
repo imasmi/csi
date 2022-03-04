@@ -5,7 +5,7 @@ $ListingAPP = new \module\Listing\ListingAPP;
 $fields = array(
         "#" => "id",
         "Username" => "username",
-        "Role" => "role",
+        "Group" => "group",
         "Email" => "email",
         "Status" => "status"
 );

@@ -1,5 +1,5 @@
 <?php
-$rows = unserialize($_POST["rows"]);
+$rows = json_decode($_POST["rows"], true);
 $year = date("Y", strtotime($_POST["date"]));
 $period = date("m-d", strtotime($_POST["date"])) < "07-01" ? 1 : 2;
 $array = array();
@@ -28,7 +28,7 @@ foreach($array as $row => $values){
 	if($check->rowCount() > 0){
 		$report = $check->fetch();
 		$array = array(
-			"value" => serialize($values)
+			"value" => json_encode($values)
 		);
 		\system\Data::update($array,$report["id"], "id", "report");
 	} else {
@@ -37,7 +37,7 @@ foreach($array as $row => $values){
 			"period" => $period,
 			"type" => $_POST["type"],
 			"row" => $row,
-			"value" => serialize($values)
+			"value" => json_encode($values)
 		);
 
 		\system\Data::insert($array,"report");

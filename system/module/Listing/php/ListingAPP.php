@@ -174,7 +174,7 @@ class ListingAPP{
 			$output = array();
             if(is_array($array)){
             foreach($array as $key=>$value){
-                if(is_array($value)){$output[] = key($value);} else { $output[] = $value;}
+                if(is_array($value)){$output[] = '`' . key($value) . '`';} else { $output[] = '`' . $value . '`';}
             $cnt++;
             }}
             $output[] = "id"; // Add ID to be always in selected columns
@@ -186,7 +186,6 @@ class ListingAPP{
             $pp = $page["pp"];
             $cnt = (($p - 1) * $pp) + 1;
             $query = (strpos($query, "SELECT") !== false) ? $query :  "SELECT " . $output . " FROM " . $table . " " . $query;
-
             $list_all_selected = $this->PDO->query($query);
             if(isset($_GET["search"]) && !empty($_GET["search"])){
                 $lists = array();

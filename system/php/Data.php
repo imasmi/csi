@@ -18,10 +18,10 @@ class Data{
 	    $outputs = "";
 	    
 	    foreach($array as $key=>$value){
-            $names .= $key . ",";
+            $names .= "`" . $key . "`,";
             $outputs .= ":" . $key . ",";
         }
-
+        
 	    $insert = $GLOBALS["PDO"]->prepare("INSERT INTO " . $table . " (" . rtrim($names, ",") . ") VALUES (" . rtrim($outputs, ",") . ")");
         return $insert->execute($array);
 	}
@@ -145,17 +145,17 @@ class Data{
     }
     
     //$input as array ["column" => string, "value" => string, "select" => string, "table" => string]
-    public static function top_id($value, $selector="link_id", $returnField="id", $table=false){
+    public static function top_id ($value, $selector="link_id", $returnField="id", $table=false) {
         if(is_array($value)) {
 	        $value = $value["value"];
-	        $selector = $value["select"] ? $value["select"] : "link_id";
-	        $this_table = $value["table"] ? $value["table"] : static::table();
-	        $returnField = $value["column"] ? $value["column"] : "id";
+	        $selector = isset($value["select"]) ? $value["select"] : "link_id";
+	        $table = isset($value["table"]) ? $value["table"] : static::table();
+	        $returnField = isset($value["column"]) ? $value["column"] : "id";
 	    } else {
-	        $this_table = ($table === false) ? static::table() : $table;
+	        $table = ($table === false) ? static::table() : $table;
 	    }
-        
-        $top_id = $GLOBALS["PDO"]->query("SELECT " . $selector . " FROM " . $this_table . " WHERE " .  $returnField . "='" . $value . "'")->fetch();
+	    
+        $top_id = $GLOBALS["PDO"]->query("SELECT " . $selector . " FROM " . $table . " WHERE " .  $returnField . "='" . $value . "'")->fetch();
         if($top_id[$selector] == 0){
             return $value;
         }else {
