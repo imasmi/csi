@@ -93,22 +93,16 @@ class Item {
 	?>
 		
 		<div class="out-text">Превод в лева</div>
-			<table width="820" border="1" class="colltable bordoTable">
+			<table border="1" class="colltable bordoTable">
 				<tr>
 					<td>
 						<table width="100%" cellpadding="1" cellspacing="1" border="0">
 							<tr>
-								<td colspan="3" height="12" />
-							</tr>
-							<tr>
-								<td width="20" />
-								<td width="600" heigth="40" valign="middle">
+								<td/>
+								<td heigth="40" valign="middle">
 									<?php echo $this->logo();?>
 								</td>
-								<td width="20" />
-							</tr>
-							<tr>
-								<td colspan="3" height="12" />
+								<td />
 							</tr>
 							<tr>
 								<td />
@@ -116,24 +110,24 @@ class Item {
 									<table cellpadding="0" cellspacing="0" border="0" width="100%">
 										<tr>
 											<td align="center" bgcolor="#ffffff">
-												<table cellpadding="2" cellspacing="4" width="820" border="0" class="bpb">
+												<table cellpadding="2" cellspacing="4" border="0" class="bpb">
 													<tr valign="top">
 														<td colspan="2" height="30">
-															<div style="width:80px;float:left">До/To</div>
+															<div style="float:left">До/To</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->sender["bank"];?></div>
+															<div class="Payment_textbig5"><?php echo $this->sender["bank"];?></div>
 														</td>
 														<td colspan="3">
-															<div style="float:left; width:307px;">Уникален регистрационен номер/Unique registration number</div>
+															<div style="float:left;">Уникален регистрационен номер/Unique registration number</div>
 															<br />
 															<div class="Payment_textbig5" align="right"><?php echo $this->number;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
 														<td colspan="2" height="30">
-															<div style="width:80px;float:left">Клон/Branch</div>
+															<div style="float:left">Клон/Branch</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px" />
+															<div class="Payment_textbig5" />
 														</td>
 														<td colspan="3">
 															<div style="float:left; width:440px;">Дата и час на представяне/Date and hour of submission</div>
@@ -153,18 +147,18 @@ class Item {
 														<td colspan="5" height="30">
 															<div style="float:left">Платете на – име на получателя / Please pay to – name of the beneficiary</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->receiver["name"];?></div>
+															<div class="Payment_textbig5"><?php echo $this->receiver["name"];?></div>
 														</td>
 													</tr>
 													<tr valign="top" height="30">
 														<td colspan="2" width="50%">
 															<div style="float:left">IBAN на получателя / IBAN of the beneficiary</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->receiver["IBAN"];?></div>
+															<div class="Payment_textbig5"><?php echo $this->receiver["IBAN"];?></div>
 														</td>
 														<td width="5%"></td>
 														<td colspan="2" width="45%">
-															<div style="float:left; width:273px;">BIC на банката на получателя / BIC of the beneficiary bank</div>
+															<div style="float:left">BIC на банката на получателя / BIC of the beneficiary bank</div>
 															<br />
 															<div class="Payment_textbig5" align="right"><?php echo $this->receiver["BIC"];?></div>
 														</td>
@@ -173,7 +167,7 @@ class Item {
 														<td colspan="5">
 															<div nowrap="nowrap" style="float:left">При банка – име на банката на получателя / At bank – name of the bank of beneficiary</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px;"><?php echo $this->receiver["bank"];?></div>
+															<div class="Payment_textbig5"><?php echo $this->receiver["bank"];?></div>
 														</td>
 													</tr>
 													<tr valign="top">
@@ -186,12 +180,12 @@ class Item {
 																<br />for credit transfer</div>
 														</td>
 														<td colspan="1" align="center">
-															<div style="float:left;width:60px;">Вид валута / Currency</div>
+															<div style="float:left;">Вид валута / Currency</div>
 															<br />
 															<div class="Payment_textbig5"><?php echo $this->currency;?></div>
 														</td>
 														<td width="25%">
-															<div style="float:left; width:120px;">Сума / Amount</div>
+															<div style="float:left;">Сума / Amount</div>
 															<br />
 															<div class="Payment_textbig6" align="right"><?php echo $this->amount;?></div>
 														</td>
@@ -200,28 +194,28 @@ class Item {
 														<td colspan="5" height="30">
 															<div style="float:left">Основание за превод – информация за получателя / Reason for payment – information for the beneficiary</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->description;?></div>
+															<div class="Payment_textbig5"><?php echo $this->description;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
 														<td colspan="5" height="30">
 															<div style="float:left">Още пояснения / Additional comments</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->description_extra;?></div>
+															<div class="Payment_textbig5"><?php echo $this->description_extra;?></div>
 														</td>
 													</tr>
 													<tr valign="top">
 														<td colspan="5" height="30">
 															<div style="float:left">Наредител – име / Ordering party – name</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->sender["name"];?></div>
+															<div class="Payment_textbig5"><?php echo $this->sender["name"];?></div>
 														</td>
 													</tr>
 													<tr valign="top">
 														<td colspan="2" height="30">
 															<div style="float:left">IBAN на наредителя / IBAN of the ordering party</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->sender["IBAN"];?></div>
+															<div class="Payment_textbig5"><?php echo $this->sender["IBAN"];?></div>
 														</td>
 														<td colspan="3">
 															<div style="float:left">BIC на банката на наредителя / BIC of the bank of the ordering party</div>
@@ -233,7 +227,7 @@ class Item {
 														<td height="30">
 															<div style="float:left">Платежна система / Payment System</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php if($this->type == "Получен превод по RINGS"){?>РИНГС<?php } else {?>БИСЕРА</div><?php } ?>
+															<div class="Payment_textbig5"><?php if($this->type == "Получен превод по RINGS"){?>РИНГС<?php } else {?>БИСЕРА</div><?php } ?>
 														</td>
 														<td colspan="2" nowrap="nowrap">
 															<div style="float:left">Такси* / Fees*</div>
@@ -286,20 +280,14 @@ class Item {
 	public function cash(){ // Платени на каса в банката
 	?>	
 		<div class="out-text">Вноска на каса</div>
-		<table width="820" border="1" class="colltable bordoTable">
+		<table border="1" class="colltable bordoTable">
 			<tr>
 				<td>
 					<table width="100%" cellpadding="1" cellspacing="1" border="0">
 						<tr>
-							<td colspan="3" height="12" />
-						</tr>
-						<tr>
-							<td width="20" />
-							<td width="600" heigth="40" valign="middle"><?php echo $this->logo();?></td>
-							<td width="20" />
-						</tr>
-						<tr>
-							<td colspan="3" height="12" />
+							<td />
+							<td heigth="40" valign="middle"><?php echo $this->logo();?></td>
+							<td />
 						</tr>
 						<tr>
 							<td />
@@ -307,12 +295,12 @@ class Item {
 								<table cellpadding="0" cellspacing="0" border="0" width="100%">
 									<tr>
 										<td align="center" bgcolor="#ffffff">
-											<table cellpadding="2" cellspacing="4" width="820" border="0" class="bpb">
+											<table cellpadding="2" cellspacing="4" border="0" class="bpb">
 												<tr valign="top">
 													<td colspan="2" height="30">
-														<div style="width:80px;float:left">До/To</div>
+														<div style="float:left">До/To</div>
 														<br />
-														<div class="Payment_textbig5" style="padding-left:50px">Юробанк България АД</div>
+														<div class="Payment_textbig5">Юробанк България АД</div>
 													</td>
 													<td colspan="3">
 														<div style="float:left;">Уникален регистрационен номер/Unique registration number</div>
@@ -322,9 +310,9 @@ class Item {
 												</tr>
 												<tr valign="top">
 													<td colspan="2" height="30">
-														<div style="width:80px;float:left">Клон/Branch</div>
+														<div style="float:left">Клон/Branch</div>
 														<br />
-														<div class="Payment_textbig5" style="padding-left:50px"></div>
+														<div class="Payment_textbig5"></div>
 													</td>
 													<td colspan="3">
 														<div style="float:left">Дата и час на представяне/Date and hour of submission </div>
@@ -336,7 +324,7 @@ class Item {
 													<td colspan="2" height="40">
 														<div style="float:left">Адрес/Address</div>
 														<br />
-														<div class="Payment_textbig5" style="padding-left:50px"></div>
+														<div class="Payment_textbig5"></div>
 													</td>
 													<td colspan="3">
 														<br />
@@ -348,21 +336,21 @@ class Item {
 													<td colspan="5" height="30">
 														<div style="float:left">В полза на - име / In favor of - name</div>
 														<br />
-														<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->receiver["name"];?></div>
+														<div class="Payment_textbig5"><?php echo $this->receiver["name"];?></div>
 													</td>
 												</tr>
 												<tr valign="top" height="30">
 													<td colspan="5" width="50%">
 														<div style="float:left">IBAN на получателя / IBAN of the beneficiary</div>
 														<br />
-														<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->receiver["IBAN"];?></div>
+														<div class="Payment_textbig5"><?php echo $this->receiver["IBAN"];?></div>
 													</td>
 												</tr>
 												<tr valign="top" height="30">
 													<td colspan="5">
 														<div nowrap="nowrap" style="float:left">При банка – банка, клон / At bank – bank, branch</div>
 														<br />
-														<div class="Payment_textbig5" style="padding-left:50px">
+														<div class="Payment_textbig5">
                                                         <?php echo $this->receiver["bank"] != "" ? $this->receiver["bank"] : "ЮРОБАНК БЪЛГАРИЯ АД";?>
 														</div>
 													</td>
@@ -377,12 +365,12 @@ class Item {
 															<br />We deposited in cash</div>
 													</td>
 													<td colspan="2" align="center">
-														<div style="float:left; width:163px;">Вид валута / Currency</div>
+														<div style="float:left;">Вид валута / Currency</div>
 														<br />
 														<div class="Payment_textbig5" style="float: left"><?php echo $this->currency;?></div>
 													</td>
 													<td width="25%">
-														<div style="float:right; width:190px;">Сума / Amount</div>
+														<div style="float:right;">Сума / Amount</div>
 														<br />
 														<div class="Payment_textbig6" align="right"><?php echo $this->amount;?></div>
 													</td>
@@ -391,21 +379,21 @@ class Item {
 													<td colspan="5" height="30">
 														<div style="float:left">Вносител - име / Depositor - name</div>
 														<br />
-														<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->sender["name"];?></div>
+														<div class="Payment_textbig5"><?php echo $this->sender["name"];?></div>
 													</td>
 												</tr>
 												<tr valign="top">
 													<td colspan="5" height="30">
 														<div style="float:left">Основание за внасяне / Reason for deposit</div>
 														<br />
-														<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->description;?></div>
+														<div class="Payment_textbig5"><?php echo $this->description;?></div>
 													</td>
 												</tr>
                                                 <tr valign="top">
                                                     <td colspan="5" height="30">
                                                         <div style="float:left">Още пояснения / Additional comments</div>
                                                             <br />
-                                                        <div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->description_extra;?></div>
+                                                        <div class="Payment_textbig5"><?php echo $this->description_extra;?></div>
                                                         
                                                     </td>
                                                 </tr>
@@ -431,33 +419,27 @@ class Item {
 		$out = $this->PDO->query("SELECT * FROM payment_outgoing WHERE name='" . $this->receiver["name"] . "' AND IBAN='" . $this->receiver["IBAN"] . "' AND amount='" . abs($this->amount) . "'")->fetch();
 	?>
 		<div class="out-text" >От/Към бюджета</div>
-			<table width="820" border="1" class="colltable bordoTable">
+			<table border="1" class="colltable bordoTable">
 				<tr>
 					<td>
-						<table width="100%" cellpadding="1" cellspacing="1" border="0">
+						<table cellpadding="1" cellspacing="1" border="0">
 							<tr>
-								<td colspan="3" height="12" />
-							</tr>
-							<tr>
-								<td width="10" />
-								<td width="630" heigth="40" valign="middle"><?php echo $this->logo();?></td>
-								<td width="10" />
-							</tr>
-							<tr>
-								<td colspan="3" height="10" />
+								<td />
+								<td heigth="40" valign="middle"><?php echo $this->logo();?></td>
+								<td />
 							</tr>
 							<tr>
 								<td />
 								<td>
-									<table cellpadding="0" cellspacing="0" width="100%">
+									<table cellpadding="0" cellspacing="0">
 										<tr>
 											<td align="center" bgcolor="#ffffff">
-												<table cellpadding="2" cellspacing="4" width="930" border="0" class="bpb">
+												<table cellpadding="2" cellspacing="4" border="0" class="bpb">
 													<tr valign="top">
-														<td colspan="3" height="20">
-															<div style="width:80px;float:left">До/To</div>
+														<td colspan="3">
+															<div style="float:left">До/To</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px"><?php echo $this->sender["bank"];?></div>
+															<div class="Payment_textbig5"><?php echo $this->sender["bank"];?></div>
 														</td>
 														<td colspan="7">
 															<div style="float:left">Уникален регистрационен номер/Unique registration number</div>
@@ -466,10 +448,10 @@ class Item {
 														</td>
 													</tr>
 													<tr valign="top">
-														<td colspan="3" height="20">
-															<div style="width:80px;float:left">Клон/Branch</div>
+														<td colspan="3">
+															<div style="float:left">Клон/Branch</div>
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px" />
+															<div class="Payment_textbig5" />
 														</td>
 														<td colspan="7">
 															<div style="float:left">Дата и час на представяне/Date and hour of submission </div>
@@ -478,13 +460,13 @@ class Item {
 														</td>
 													</tr>
 													<tr valign="top">
-														<td colspan="3" height="50">Адрес/Address</td>
+														<td colspan="3">Адрес/Address</td>
 														<td colspan="7" valign="bottom">Подпис на наредителя / Signature of the ordering party</td>
 													</tr>
 													<tr valign="top">
 														<td colspan="4">
 															Платете на – име на получателя / Please pay to – name of the beneficiary
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $this->receiver["name"];?></div>
+															<div class="Payment_textbig5"><?php echo $this->receiver["name"];?></div>
 														</td>
 														<td colspan="6">
 														</td>
@@ -492,7 +474,7 @@ class Item {
 													<tr valign="top">
 														<td colspan="3">
 															IBAN на получателя / IBAN of the beneficiary
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $this->receiver["IBAN"];?></div>
+															<div class="Payment_textbig5"><?php echo $this->receiver["IBAN"];?></div>
 														</td>
 														<td />
 														<td colspan="6">
@@ -503,7 +485,7 @@ class Item {
 													<tr valign="top">
 														<td colspan="4">
 															При банка – име на банката на получателя/At bank – name of the bank of beneficiary
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $this->receiver["bank"];?></div>
+															<div class="Payment_textbig5"><?php echo $this->receiver["bank"];?></div>
 														</td>
 														<td colspan="6">
 															Вид плащане*** / Type of payment ***
@@ -513,7 +495,7 @@ class Item {
 														</td>
 													</tr>
 													<tr valign="top">
-														<td align="center" nowrap="nowrap" width="30%">
+														<td align="center" nowrap="nowrap">
 															<div class="Payment_textbig5">ПЛАТЕЖНО НАРЕЖДАНЕ/ВНОСНА БЕЛЕЖКА
 																<br /> за плащане от/към бюджета</div>
 														</td>
@@ -583,7 +565,7 @@ class Item {
 														<td colspan="4">
 															Задължено лице – наименование на юридическото лице или трите имена на физическото лице
 															<br />Liable person – name of the corporate or individual
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $out["budget_debtor"];?></div>
+															<div class="Payment_textbig5"><?php echo $out["budget_debtor"];?></div>
 														</td>
 														<td colspan="6">
 														</td>
@@ -591,11 +573,11 @@ class Item {
 													<tr valign="top">
 														<td colspan="3">
 															БУЛСТАТ на задълженото лице / BULSTAT of the liable person
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $out["budget_eik"];?></div>
+															<div class="Payment_textbig5"><?php echo $out["budget_eik"];?></div>
 														</td>
 														<td colspan="4">
 															ЕГН на задълженото лице / UCN of the liable person
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $out["budget_egn"];?></div>
+															<div class="Payment_textbig5"><?php echo $out["budget_egn"];?></div>
 														</td>
 														<td colspan="3">
 															ЛНЧ на задълженото лице / UFN of the liable person
@@ -604,13 +586,13 @@ class Item {
 													<tr valign="top">
 														<td colspan="10">
 															Наредител – наименование на юридическото лице или трите имена на физическото лице / Ordering party – name of the corporate or individual
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $this->sender["name"];?></div>
+															<div class="Payment_textbig5"><?php echo $this->sender["name"];?></div>
 														</td>
 													</tr>
 													<tr valign="top">
 														<td colspan="3">
 															IBAN на наредителя / IBAN of the ordering party
-															<div class="Payment_textbig5" style="padding-left:80px"><?php echo $this->sender["IBAN"];?></div>
+															<div class="Payment_textbig5"><?php echo $this->sender["IBAN"];?></div>
 														</td>
 														<td />
 														<td colspan="6">
@@ -621,7 +603,7 @@ class Item {
 													<tr valign="top">
 														<td>Платежна система / Payment System
 															<br />
-															<div class="Payment_textbig5" style="padding-left:50px">БИСЕРА</div>
+															<div class="Payment_textbig5">БИСЕРА</div>
 														</td>
 														<td colspan="2" nowrap="nowrap">Такси** / Fees**
 															<div class="Payment_textbig5" align="right">002</div>
@@ -650,7 +632,7 @@ class Item {
 					<td>
 						<table class="Payment_textsml4" cellpadding="4" width="100%" border="0">
 							<tr valign="top">
-								<td width="20" />
+								<td />
 								<td width="40%"><span class="Payment_textsml5">* Вид документ / Type of document</span>
 									<br />
 									<br />1 – декларация / declaration;
@@ -675,7 +657,7 @@ class Item {
 									<br />Попълва се за сметки на администратори на приходи и на Централния бюджет
 									<br />
 									<br />Filled in for accounts of administrators of income and of Central budget</td>
-								<td width="20" />
+								<td />
 							</tr>
 						</table>
 					</td>
@@ -695,19 +677,13 @@ class Item {
 						<table width="100%" cellpadding="1" cellspacing="1" border="0">
 							<tbody>
 								<tr>
-									<td colspan="3" height="12"></td>
-								</tr>
-								<tr>
-									<td width="20"></td>
-									<td width="600" heigth="40" valign="middle"><?php echo $this->logo();?></td>
-									<td width="20"></td>
-								</tr>
-								<tr>
-									<td colspan="3" height="12"></td>
+									<td></td>
+									<td heigth="40" valign="middle"><?php echo $this->logo();?></td>
+									<td></td>
 								</tr>
 								<tr>
 									<td colspan="3">
-										<table cellspacing="4" cellpadding="2" width="600" border="0" class="bpb">
+										<table cellspacing="4" cellpadding="2" border="0" class="bpb">
 											<tbody>
 												<tr valign="top">
 													<td colspan="4" width="50%">
@@ -997,7 +973,7 @@ class Item {
 				</tr>
 			</tbody>
 		</table>
-		<div class="Payment_textsml2" style="width:645px;padding:0px;margin:0px;text-align:right">отпечатано от e-postbank.bg</div>
+		<div class="Payment_textsml2" style="padding:0px;margin:0px;text-align:right">отпечатано от e-postbank.bg</div>
 	</center>
 	<?php
 	}

@@ -1,8 +1,10 @@
 <?php
+include_once(\system\Core::doc_root() . '/plugin/Import/php/Import.php');
+$Import = new \plugin\Import\Import;
 $names = $Import->fields()["protocol"];
 $updates = 0;
 $inserts = 0;
-	
+
 for($a = 0; $a < $_POST["rows"]; ++$a){
 	$array = array("type" => "protocol");
 	foreach($names as $key=>$name){

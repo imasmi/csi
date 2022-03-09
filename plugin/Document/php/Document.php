@@ -28,6 +28,7 @@ class Document{
 		<div class="admin">
 			<table class="listTable" border="1px" cellpadding="0" cellspacing="0">
 				<tr>
+					<th></th>
 					<th>Вх. номер</th>
 					<?php if(!$this->case_id){?><th>Дело</th><?php } ?>
 					<th>Длъжници</th>
@@ -55,7 +56,7 @@ class Document{
 				
 				<?php
 				$incomings = array();
-				$period = isset($_GET["end"]) && !empty($_GET["end"]) ? " AND date >= '" . $_GET["start"] . "' AND date <= '" . $_GET["end"] . "'" : (isset($_GET["start"]) ? " AND date='" . $_GET["start"] . "'"  : " AND date>='" . date("Y-m-d", strtotime(" -7 days")) . "'");
+				$period = isset($_GET["end"]) && !empty($_GET["end"]) ? " AND date >= '" . $_GET["start"] . "' AND date <= '" . $_GET["end"] . "'" : (isset($_GET["start"]) ? " AND date='" . $_GET["start"] . "'"  : "");
 				$case_id = $this->case_id ? " AND case_id='" . $this->case_id . "'" : "";
 				$charger = isset($_GET["charger"]) && $_GET["charger"] != "all" ? $this->User->item($_GET["charger"]) : false;
 				foreach($this->PDO->query("SELECT * FROM document WHERE type='incoming' " . $case_id .  ($this->case_id ? "" : $period) . " ORDER by date DESC, number DESC") as $incoming){
@@ -76,6 +77,7 @@ class Document{
 				$incomeDate = date("d.m.Y", strtotime($incoming["date"]));
 				?>
 				<tr>
+					<td><a href="openODT://D:/enforcer_documents/share-proxy/d55b818538c9ee4c953c9e6f61610d7e-symfony/2017/00001/protocol-1718-30.06.2017.odt">Отвори</a></td>
 					<td><?php echo  $incoming["number"];?></td>
 					<?php if(!$this->case_id){?><td><?php $Caser->open();?></td><?php } ?>
 					<td>
@@ -143,7 +145,7 @@ class Document{
 					<?php 
 
 					$outgoings = array();
-						$period = isset($_GET["end"]) && !empty($_GET["end"]) ? " AND date >= '" . $_GET["start"] . "' AND date <= '" . $_GET["end"] . "'" : (isset($_GET["start"]) ? " AND date='" . $_GET["start"] . "'"  : " AND date>='" . date("Y-m-d", strtotime(" -7 days")) . "'");
+						$period = isset($_GET["end"]) && !empty($_GET["end"]) ? " AND date >= '" . $_GET["start"] . "' AND date <= '" . $_GET["end"] . "'" : (isset($_GET["start"]) ? " AND date='" . $_GET["start"] . "'"  : "");
 						$case_id = $this->case_id ? " AND case_id='" . $this->case_id . "'" : "";
 						$charger = isset($_GET["charger"]) && $_GET["charger"] != "all" ? $this->User->item($_GET["charger"]) : false;
 						foreach($this->PDO->query("SELECT * FROM document WHERE type='outgoing' " . $case_id .  ($this->case_id ? "" : $period) . " ORDER by date DESC, number DESC") as $outgoing){
@@ -202,6 +204,7 @@ class Document{
 		<div class="admin">
 			<table class="listTable" border="1px" cellpadding="0" cellspacing="0">
 				<tr>
+					<th></th>
 					<th>Протокол номер</th>
 					<?php if(!$this->case_id){?><th>Дело</th><?php } ?>
 					<th>Дата на създаване</th>
@@ -225,7 +228,7 @@ class Document{
 				
 				<?php
 				$protocols = array();
-				$period = isset($_GET["end"]) && !empty($_GET["end"]) ? " AND date >= '" . $_GET["start"] . "' AND date <= '" . $_GET["end"] . "'" : (isset($_GET["start"]) ? " AND date='" . $_GET["start"] . "'"  : " AND date>='" . date("Y-m-d", strtotime(" -7 days")) . "'");
+				$period = isset($_GET["end"]) && !empty($_GET["end"]) ? " AND date >= '" . $_GET["start"] . "' AND date <= '" . $_GET["end"] . "'" : (isset($_GET["start"]) ? " AND date='" . $_GET["start"] . "'"  : "");
 				$case_id = $this->case_id ? " AND case_id='" . $this->case_id . "'" : "";
 				$charger = isset($_GET["charger"]) && $_GET["charger"] != "all" ? $this->User->item($_GET["charger"]) : false;
 				foreach($this->PDO->query("SELECT * FROM document WHERE type='protocol' " . $case_id .  ($this->case_id ? "" : $period) . " ORDER by date DESC, number DESC") as $protocol){
@@ -233,7 +236,7 @@ class Document{
 					if($charger !== false){
 						if($_GET["charger"] == $Caser->charger){$protocols[] = $protocol;}
 					} else {
-						if($this->User->role == "пчси" || $this->User->role == "деловодител"){ 
+						if($this->User->group("пчси") || $this->User->group("деловодител")){ 
 							if($this->User->id == $Caser->charger){$protocols[] = $protocol;}
 						} else {
 							$protocols[] = $protocol;	
@@ -243,12 +246,15 @@ class Document{
 				foreach(( $this->case_id ? $protocols : $this->ListingAPP->page_slice($protocols) ) as $protocol){
 				$Caser = new Caser($protocol["case_id"]);
 				$incomeDate = date("d.m.Y", strtotime($protocol["date"]));
+				$split_number = $Caser->split_number($Caser->number);
+				$protocol_file = "D:/enforcer_documents/share-proxy/d55b818538c9ee4c953c9e6f61610d7e-symfony/". $split_number["year"] . '/' . sprintf('%05d', $split_number["number"]) . '/protocol-' . $protocol["number"] . '-' . $incomeDate . '.odt';
 				?>
 				<tr>
+					<td><?php if (file_exists($protocol_file)) {?><a href="openODT://<?php echo $protocol_file;?>" class="button">Отвори</a><?php } ?></td>
 					<td><?php echo  $protocol["number"];?></td>
 					<td><?php $Caser->open();?></td>
 					<td><?php echo  $incomeDate;?></td>
-					<td><?php echo  \system\Data::select($protocol["name"], "id", "doc_types", "name")["name"];?></td>
+					<td><?php echo  $this->PDO->query("SELECT name FROM doc_types WHERE id='" . $protocol["name"] . "'")->fetch()["name"];?></td>
 					<td><?php echo  $protocol["note"];?></td>
 					<?php if(!$this->case_id){?><td><?php echo  $this->User->item($Caser->charger)["email"];?></td><?php } ?>
 				</tr>	

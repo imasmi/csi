@@ -146,12 +146,13 @@ section.open .tag:before{content: "-";}
 
 /*bordero*/
 #bordero{vertical-align: middle; width: 100%; padding-top: 100px;}
-#bordero .person{width: 840px;}
-#bordero .out-text{width:820px;padding:0px;margin:0px auto;text-align:right; }
+#bordero .person{width: min-content;}
+#bordero * {font-size: 11px;}
+#bordero .out-text{width:100%;padding:0px;margin:0px auto;text-align:right; }
 #bordero .bordoTable{border-collapse: collapse; font-family: arial, sans-serif; margin: 0 auto;}
 #bordero .bordoTable tr{border: none;}
 #bordero .Payment_textbig5{font-weight: bold;}
-#bordero .Payment_textbig6{font-size: 18px; font-weight: bold;}
+#bordero .Payment_textbig6{font-size: 14x; font-weight: bold;}
 
 /*barcode html print*/
 .grao-print #printer_short{display: none;}

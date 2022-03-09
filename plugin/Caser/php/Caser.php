@@ -30,6 +30,7 @@ class Caser{
 		} else {
 			$this->number = "";
 			$this->color = "";
+			$this->charger = 0;
 		}
     }
 
