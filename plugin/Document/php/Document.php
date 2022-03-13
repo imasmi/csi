@@ -21,6 +21,20 @@ class Document{
 		$this->link_id = 0;
 		$this->case_id = $case_id;
 		$this->ListingAPP = new \module\Listing\ListingAPP;
+		$this->openODT = "openODT://";
+		$this->url = "C:/Users/1/Downloads/enforcer_documents/share-proxy/d55b818538c9ee4c953c9e6f61610d7e-symfony/";
+	}
+
+	public function add_button($type){
+		?>
+			<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/add?type=<?php echo $type?>">Добави</a>
+		<?php
+	}
+
+	public function edit_button($id){
+		?>
+			<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/edit?id=<?php echo $id?>">Редактирай</a>
+		<?php
 	}
 
 	public function incoming(){
@@ -28,10 +42,10 @@ class Document{
 		<div class="admin">
 			<table class="listTable" border="1px" cellpadding="0" cellspacing="0">
 				<tr>
-					<th></th>
+					<th><?php echo $this->add_button("incoming");?></th>
 					<th>Вх. номер</th>
 					<?php if(!$this->case_id){?><th>Дело</th><?php } ?>
-					<th>Длъжници</th>
+					<th>Длъжник</th>
 					<th class="iban">RegiX</th>
 					<th>Дата на входиране</th>
 					<th>Подател</th>
@@ -60,6 +74,8 @@ class Document{
 				$case_id = $this->case_id ? " AND case_id='" . $this->case_id . "'" : "";
 				$charger = isset($_GET["charger"]) && $_GET["charger"] != "all" ? $this->User->item($_GET["charger"]) : false;
 				foreach($this->PDO->query("SELECT * FROM document WHERE type='incoming' " . $case_id .  ($this->case_id ? "" : $period) . " ORDER by date DESC, number DESC") as $incoming){
+					$incomings[] = $incoming;
+					/*
 					$Caser = new Caser($incoming["case_id"]);
 					if($charger !== false){
 						if($_GET["charger"] == $Caser->charger){$incomings[] = $incoming;}
@@ -70,6 +86,7 @@ class Document{
 							$incomings[] = $incoming;	
 						}
 					}
+					*/
 				}
 
 				foreach(( $this->case_id ? $incomings : $this->ListingAPP->page_slice($incomings) ) as $incoming){
@@ -77,27 +94,10 @@ class Document{
 				$incomeDate = date("d.m.Y", strtotime($incoming["date"]));
 				?>
 				<tr>
-					<td><a href="openODT://D:/enforcer_documents/share-proxy/d55b818538c9ee4c953c9e6f61610d7e-symfony/2017/00001/protocol-1718-30.06.2017.odt">Отвори</a></td>
+					<td><?php echo $this->edit_button($incoming["id"]);?></td>
 					<td><?php echo  $incoming["number"];?></td>
 					<?php if(!$this->case_id){?><td><?php $Caser->open();?></td><?php } ?>
-					<td>
-					<?php
-					if(!empty($Caser->debtor)){
-						foreach ($Caser->debtor as $person){
-							$pers = $this->PDO -> query("SELECT * FROM person WHERE id = " . $person)->fetch();
-							if($pers["type"] == "person"){ 
-								$type = 'ЕГН';
-								$bnb_code = 100;
-							} else { 
-								$type = 'ЕИК';
-								$bnb_code = 200;
-							}
-					?>
-							<b><?php echo  $pers["name"];?></b>
-							<br/><?php echo  $type;?> <?php echo $pers["EGN_EIK"];?><br/>
-							<br/>
-					<?php }} ?>
-					</td>
+					<td><?php if ($incoming["person"] != 0) { echo $this->PDO->query("SELECT name FROM person WHERE id='" . $incoming["person"] . "'")->fetch()["name"];}?></td>
 					<td>Вх. № <?php echo  $incoming["number"] . '/' . $incomeDate;?></td>
 					<td><?php echo  $incomeDate;?></td>
 					<td><?php echo  $this->PDO->query("SELECT name FROM person WHERE id='" .$incoming["sender_receiver"] . "'")->fetch()["name"];?></td>
@@ -118,6 +118,8 @@ class Document{
 		<div class="admin">
 			<table class="listTable" border="1px" cellpadding="0" cellspacing="0">
 					<tr>
+						<th><?php echo $this->add_button("outgoing");?></th>
+						<th></th>
 						<th>Изх. номер</th>
 						<?php if(!$this->case_id){?><th>Дело</th><?php } ?>
 						<th>Длъжници</th>
@@ -148,7 +150,10 @@ class Document{
 						$period = isset($_GET["end"]) && !empty($_GET["end"]) ? " AND date >= '" . $_GET["start"] . "' AND date <= '" . $_GET["end"] . "'" : (isset($_GET["start"]) ? " AND date='" . $_GET["start"] . "'"  : "");
 						$case_id = $this->case_id ? " AND case_id='" . $this->case_id . "'" : "";
 						$charger = isset($_GET["charger"]) && $_GET["charger"] != "all" ? $this->User->item($_GET["charger"]) : false;
+						
 						foreach($this->PDO->query("SELECT * FROM document WHERE type='outgoing' " . $case_id .  ($this->case_id ? "" : $period) . " ORDER by date DESC, number DESC") as $outgoing){
+							$outgoings[] = $outgoing;
+							/*
 							$Caser = new Caser($outgoing["case_id"]);
 							if($charger !== false){
 								if($_GET["charger"] == $Caser->charger){$outgoings[] = $outgoing;}
@@ -159,12 +164,19 @@ class Document{
 									$outgoings[] = $outgoing;	
 								}
 							}
+							*/
 						}
 						foreach(( $this->case_id ? $outgoings : $this->ListingAPP->page_slice($outgoings) ) as $outgoing){
 						$Caser = new Caser($outgoing["case_id"]);
+						$outgoing_name = $this->PDO->query("SELECT name FROM doc_types WHERE id='" . $outgoing["name"] . "'")->fetch()["name"];
+						$outgoin_date = date("d.m.Y", strtotime($outgoing["date"]));
+						$split_number = $Caser->split_number($Caser->number);
+						$outgoing_file = $this->url . $split_number["year"] . "/" . sprintf("%05d", $split_number["number"]). "/". $outgoing["number"] . ' от ' . $outgoin_date . ' ' . $outgoing_name . '.odt';
 					?>
 					<tr>
-						<td><?php echo  $outgoing["number"];?></td>
+						<td><?php echo $this->edit_button($outgoing["id"]);?></td>
+						<td><?php if (file_exists($outgoing_file)) {?><a href="<?php echo $this->openODT . $outgoing_file;?>" class="button">Отвори</a><?php } ?></td>
+						<td><?php echo $outgoing["number"];?></td>
 						<?php if(!$this->case_id){?><td><?php $Caser->open();?></td><?php } ?>
 						<td>
 						<?php
@@ -185,9 +197,8 @@ class Document{
 						<?php }} ?>
 						</td>
 						<td><?php echo  date("d.m.Y", strtotime($outgoing["date"]));?></td>
-
 						<td><?php echo  $this->PDO->query("SELECT name FROM person WHERE id='" .$outgoing["sender_receiver"] . "'")->fetch()["name"];?></td>
-						<td><?php echo  $this->PDO->query("SELECT name FROM doc_types WHERE id='" . $outgoing["name"] . "'")->fetch()["name"];?></td>
+						<td><?php echo  $outgoing_name;?></td>
 						<td><?php echo  $outgoing["note"];?></td>
 						<td><?php echo  $this->User->item($outgoing["user"])["email"];?></td>
 						<?php if(!$this->case_id){?><td><?php echo  $this->User->item($Caser->charger)["email"];?></td><?php } ?>
@@ -204,6 +215,7 @@ class Document{
 		<div class="admin">
 			<table class="listTable" border="1px" cellpadding="0" cellspacing="0">
 				<tr>
+					<th><?php echo $this->add_button("protocol");?></th>
 					<th></th>
 					<th>Протокол номер</th>
 					<?php if(!$this->case_id){?><th>Дело</th><?php } ?>
@@ -232,6 +244,8 @@ class Document{
 				$case_id = $this->case_id ? " AND case_id='" . $this->case_id . "'" : "";
 				$charger = isset($_GET["charger"]) && $_GET["charger"] != "all" ? $this->User->item($_GET["charger"]) : false;
 				foreach($this->PDO->query("SELECT * FROM document WHERE type='protocol' " . $case_id .  ($this->case_id ? "" : $period) . " ORDER by date DESC, number DESC") as $protocol){
+					$protocols[] = $protocol;
+					/*
 					$Caser = new Caser($protocol["case_id"]);
 					if($charger !== false){
 						if($_GET["charger"] == $Caser->charger){$protocols[] = $protocol;}
@@ -242,15 +256,17 @@ class Document{
 							$protocols[] = $protocol;	
 						}
 					}
+					*/
 				}
 				foreach(( $this->case_id ? $protocols : $this->ListingAPP->page_slice($protocols) ) as $protocol){
 				$Caser = new Caser($protocol["case_id"]);
 				$incomeDate = date("d.m.Y", strtotime($protocol["date"]));
 				$split_number = $Caser->split_number($Caser->number);
-				$protocol_file = "D:/enforcer_documents/share-proxy/d55b818538c9ee4c953c9e6f61610d7e-symfony/". $split_number["year"] . '/' . sprintf('%05d', $split_number["number"]) . '/protocol-' . $protocol["number"] . '-' . $incomeDate . '.odt';
+				$protocol_file = $this->url . $split_number["year"] . "/" . sprintf("%05d", $split_number["number"]). '/protocol-' . $protocol["number"] . '-' . $incomeDate . '.odt';
 				?>
 				<tr>
-					<td><?php if (file_exists($protocol_file)) {?><a href="openODT://<?php echo $protocol_file;?>" class="button">Отвори</a><?php } ?></td>
+					<td><?php echo $this->edit_button($protocol["id"]);?></td>
+					<td><?php if (file_exists($protocol_file)) {?><a href="<?php echo $this->openODT . $protocol_file;?>" class="button">Отвори</a><?php } ?></td>
 					<td><?php echo  $protocol["number"];?></td>
 					<td><?php $Caser->open();?></td>
 					<td><?php echo  $incomeDate;?></td>

@@ -65,7 +65,8 @@ section.open .tag:before{content: "-";}
 
 /*CASE FINDER*/
 .selector{position: relative;}
-.select-list{background-color: white; color: #000; position: absolute; width: 100%; text-align: center; z-index: 2;}
+.select-list{background-color: white; color: #000; position: absolute; width: 200%; left: -50%; text-align: center; z-index: 2;}
+.select-list-content {max-height: 350px; overflow: auto; width: 100%;}
 .select-list .select-item{ padding: 3px 0px; cursor: pointer;}
 .select-list .select-item:hover{ background-color: lightblue;}
 

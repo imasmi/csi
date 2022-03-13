@@ -280,7 +280,7 @@ class Item {
 	public function cash(){ // Платени на каса в банката
 	?>	
 		<div class="out-text">Вноска на каса</div>
-		<table border="1" class="colltable bordoTable">
+		<table border="1" class="colltable bordoTable" width="630">
 			<tr>
 				<td>
 					<table width="100%" cellpadding="1" cellspacing="1" border="0">

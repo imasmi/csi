@@ -15,6 +15,4 @@ if($_SERVER["REQUEST_URI"] == "/csi/"){
 
 require_once(\system\Core::doc_root() . "/plugin/Caser/php/Caser.php");
 $Caser = new \plugin\Caser\Caser;
-
-
 ?>

@@ -22,10 +22,10 @@ class Money{
 	}
 	//["sum" => int, "start" => string(date), "end" => string(date)]
 	public static function interest($data) {
-		$now = isset($data["end"]) ? strtotime($data["end"]) : time();
+		$now = isset($data["end"]) ? strtotime($data["end"]) : strtotime(date("Y-m-d"));
 		$your_date = strtotime($data["start"]);
-		$datediff = ($now - $your_date)/ (60 * 60 * 24) + 1;
-		return number_format((($data["sum"]/10)/365.25) * $datediff, 2);
+		$datediff = ($now - $your_date)/ (60 * 60 * 24);
+		return number_format((($data["sum"]/10)/360) * $datediff, 2);
 	}
 	
 	public function payment(){

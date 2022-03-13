@@ -27,7 +27,7 @@ $listConv = iconv ( "UTF-8", "windows-1251" ,  $list );
     // НАП 191
 		$grao = file_get_contents("file://" . $listConv . '\\' . $f);
 		preg_match('/ЕГН(.*?)LightGreen">(.*?)&nbsp;/s', $grao, $matches);
-		$egn = $matches[2];
+		$egn = isset($matches[2]) ? $matches[2] : "";
 
 		$person = $PDO->query("SELECT id FROM person WHERE EGN_EIK='" . trim($egn) . "'")->fetch();
 		$case = $PDO->query('SELECT case_id FROM caser_title WHERE debtor LIKE \'%"' . $person["id"] . '"%\' ORDER by case_id DESC')->fetch();
