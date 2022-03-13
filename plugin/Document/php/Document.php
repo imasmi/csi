@@ -22,7 +22,8 @@ class Document{
 		$this->case_id = $case_id;
 		$this->ListingAPP = new \module\Listing\ListingAPP;
 		$this->openODT = "openODT://";
-		$this->url = "C:/Users/1/Downloads/enforcer_documents/share-proxy/d55b818538c9ee4c953c9e6f61610d7e-symfony/";
+		//$this->url = "C:/Users/1/Downloads/enforcer_documents/share-proxy/d55b818538c9ee4c953c9e6f61610d7e-symfony/";
+		$this->url = "D:/enforcer_documents/share-proxy/d55b818538c9ee4c953c9e6f61610d7e-symfony/";
 	}
 
 	public function add_button($type){
@@ -175,7 +176,7 @@ class Document{
 					?>
 					<tr>
 						<td><?php echo $this->edit_button($outgoing["id"]);?></td>
-						<td><?php if (file_exists($outgoing_file)) {?><a href="<?php echo $this->openODT . $outgoing_file;?>" class="button">Отвори</a><?php } ?></td>
+						<td><?php if (file_exists(iconv( "UTF-8", "windows-1251" , $outgoing_file))) {?><a href="<?php echo $this->openODT . $outgoing_file;?>" class="button">Отвори</a><?php }?></td>
 						<td><?php echo $outgoing["number"];?></td>
 						<?php if(!$this->case_id){?><td><?php $Caser->open();?></td><?php } ?>
 						<td>
