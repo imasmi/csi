@@ -15,13 +15,13 @@ class Note{
 
 	public static function edit($id){
 	?>
-		<button type="button" class="button" onclick="window.open('<?php echo \system\Core::url() . "Note/edit?id=" . $id;?>', '_blank')">E</button>
+		<button type="button" class="button button-icon" onclick="window.open('<?php echo \system\Core::url() . "Note/edit?id=" . $id;?>', '_self')"><?php echo $GLOBALS["Font_awesome"]->_("Edit icon");?></button>
 	<?php
 	}
 
 	public static function hide($id,$type,$elem){
 	?>
-		<button type="button" class="button" onclick="if(confirm('Сигурни ли сте')){ S.post('<?php echo \system\Core::url() . "Note/query/hide?id=" . $id . "&type=" . $type;?>', '', '<?php echo $elem;?>');} <?php if($type=='short'){?>S.hide('<?php echo $elem;?>')<?php }?>">X</button>
+		<button type="button" class="button button-icon" onclick="if(confirm('Сигурни ли сте')){ S.post('<?php echo \system\Core::url() . "Note/query/hide?id=" . $id . "&type=" . $type;?>', '', '<?php echo $elem;?>');} <?php if($type=='short'){?>S.hide('<?php echo $elem;?>')<?php }?>"><?php echo $GLOBALS["Font_awesome"]->_("Delete icon");?></button>
 	<?php
 	}
 
@@ -81,6 +81,7 @@ class Note{
 		global $csi;
 	?>
 		<table class="listTable" border="1px">
+			<th colspan="2"><button type="button" class="button" onclick="window.open('<?php echo \system\Core::url() . 'Note/add'; if($case_id){ echo '?case_id=' . $case_id;} elseif($person_id){ echo '?person_id=' . $person_id;}?>', '_self')"><?php echo $GLOBALS["Font_awesome"]->_("Add icon");?></button></th>
 			<th>№</th>
 			<th>Бележка</th>
 			<th>Дело</th>
@@ -91,7 +92,6 @@ class Note{
 			<th>Период</th>
 			<th>Скрито</th>
 			<th>Раздели</th>
-			<th colspan="2"><button type="button" class="button" onclick="window.open('<?php echo \system\Core::url() . 'Note/add'; if($case_id){ echo '?case_id=' . $case_id;} elseif($person_id){ echo '?person_id=' . $person_id;}?>', '_self')">ADD</button></th>
 
 		<?php
 		$cnt = 1;
@@ -110,6 +110,8 @@ class Note{
 			$noteColor = (strtotime($note["period"]) < strtotime(date("Y-m-d H:i:s")) && $note["period"] != '0000-00-00 00:00:00') ? 'class="incomingsDocs"' : '';
 		?>
 			<tr <?php echo $noteColor;?>>
+				<td><?php echo static::edit($note["id"]);?></td>
+				<td><?php echo static::hide($note["id"], "full", "#hide" . $note["id"]);?></td>
 				<td><?php echo $cnt;?></td>
 				<td><?php echo $note["note"];?></td>
 				<td><?php echo $Caser->open();?></td>
@@ -145,8 +147,6 @@ class Note{
 						if($note[$key]){ ?> <div><?php echo $value;?></div> <?php }
 					}?>
 				</td>
-				<td><?php echo static::edit($note["id"]);?></td>
-				<td><?php echo static::hide($note["id"], "full", "#hide" . $note["id"]);?></td>
 			</tr>
 		<?php
 		$cnt++;

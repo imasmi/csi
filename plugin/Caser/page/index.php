@@ -8,20 +8,18 @@ include_once(\system\Core::doc_root() . '/plugin/Reference/php/Reference.php');
 $Reference = new \plugin\Reference\Reference;
 ?>
 
-<div class="admin">
+<div class="admin full-width">
 	<a class="button" href="<?php echo $dir;?>/choose-creditor">Избери взискател</a>
-	<a class="button" href="<?php echo $dir;?>/add">Ново дело</a>
 	<h1 class="text-center">Изпълнителни дела</h2>
-	<table class="listing">
+	<table class="listTable full-width">
 		<tr>
+			<th><a class="button" href="<?php echo $dir;?>/add"><?php echo $Font_awesome->_("Add icon");?></a></th>
 			<th>Номер</th>
 			<th>Статус</th>
 			<th>Отговорник</th>
 			<th>Статистика</th>
 			<th>Взискатели</th>
 			<th>Длъжници</th>
-			<th></th>
-			<th></th>
 		</tr>
 		<?php
 		$cases = array();
@@ -43,6 +41,7 @@ $Reference = new \plugin\Reference\Reference;
 			$Caser = new \plugin\Caser\Caser($case["id"]);
 		?>
 		<tr>
+			<td><a class="button button-icon" href="<?php echo \system\Core::this_path(0,-1);?>/open?id=<?php echo $case["id"];?>"><?php echo $Font_awesome->_("Edit icon");?></a></td>
 			<td><?php echo $Caser->number;?></td>
 			<td class="<?php echo $Caser->color;?>"><?php echo $Caser->status;?></td>
 			<td><?php echo $Caser->charger;?></td>
@@ -67,8 +66,6 @@ $Reference = new \plugin\Reference\Reference;
 					}
 				?>
 			</td>
-			<td><?php \plugin\Note\Note::_(" WHERE case_id=" . $case["id"] . " AND spravki=1 AND hide is NULL", $case["id"], "spravki", "#notes" . $case["id"]);?></td>
-			<td><a class="button" href="<?php echo \system\Core::this_path(0,-1);?>/open?id=<?php echo $case["id"];?>"><?php echo $Text->item("open");?></a></td>
 		</tr>
 		<?php } ?>
 	</table>

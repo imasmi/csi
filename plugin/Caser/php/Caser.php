@@ -129,7 +129,7 @@ class Caser{
 	?>
 		<div class="selector">
 			<input type="hidden" name="<?php echo $name;?>" id="<?php echo $name;?>" value="<?php if(isset($caser)){ echo $caser["id"];}?>"/>
-			<input type="text" autocomplete="off" id="<?php echo $name;?>-data" onkeyup="csi.trim(this);S.post('<?php echo \system\Core::url() . $this->plugin;?>/query/selector', {data: this.value, id: '<?php echo $name;?>'}, '#<?php echo $name;?>-list', true)" value="<?php if(isset($caser)){ echo $caser["number"];}?>"/>
+			<input type="text" placeholder="Изп. дело" autocomplete="off" id="<?php echo $name;?>-data" onkeyup="csi.trim(this);S.post('<?php echo \system\Core::url() . $this->plugin;?>/query/selector', {data: this.value, id: '<?php echo $name;?>'}, '#<?php echo $name;?>-list', true)" value="<?php if(isset($caser)){ echo $caser["number"];}?>"/>
 			<div id="<?php echo $name;?>-list" class="select-list"></div>
 		</div>
 	<?php

@@ -30,9 +30,10 @@ class Money{
 	
 	public function payment(){
 	?>
-		<div class="csi view">
+		<div class="admin">
 			<table class="listTable" border="1px" cellpadding="0" cellspacing="0">
 				<tr>
+					<th><a href="<?php echo \system\Core::url();?>Money/payment/add?case_id=<?php echo $this->case_id;?>" class="button"><?php echo $GLOBALS["Font_awesome"]->_("Add icon");?></a></th>
 					<th>Дата</th>
 					<th>Дело</th>
 					<th>Добавил</th>
@@ -67,6 +68,7 @@ class Money{
 				$paymentDate = date("d.m.Y", strtotime($payment["date"]));
 				?>
 				<tr>
+					<td><a href="<?php echo \system\Core::url();?>Money/payment/edit?id=<?php echo $payment["id"];?>" class="button button-icon"><?php echo $GLOBALS["Font_awesome"]->_("Edit icon");?></a></td>
 					<td><?php echo  $paymentDate;?></td>
 					<td><a href="" class="caseNumber"><?php echo $Caser->number;?></a></td>
 					<td><?php echo  $this->User->item($payment["user"])["email"];?></td></td>
@@ -96,8 +98,8 @@ class Money{
 			"Дата" => array("date", 'echo date("d.m.Y", strtotime($list["date"]));'),
 			"Вид" => array("type", 'echo $list["type"] == "bill" ? "Сметка" : "Фактура";'),
 			"Сума" => "sum",
-			"Дело" => array("case_id", '$caser = \system\Data::select($list["case_id"], "id", "caser"); echo $caser["number"];'),
-			"Задължено лице" => array("payer", '$person = \system\Data::select($list["payer"], "id", "person"); echo $person["name"];'),
+			"Дело" => array("case_id", 'echo $this->PDO->query("SELECT number FROM caser WHERE id=$list["case_id"]")->fetch()["number"];'),
+			"Задължено лице" => array("payer", 'echo $this->PDO->query("SELECT name FROM person WHERE id=$list["payer"]")->fetch()["name"];'),
 			"Данъчна основа" => "tax_base",
 			"Данък" => "vat",
 			"Сметка №" => "bill",
@@ -110,9 +112,10 @@ class Money{
 			"delete" => $dir . "/delete"
 		);
 	?>
-		<div class="csi view">
+		<div class="admin">
 			<table class="listTable" border="1px" cellpadding="0" cellspacing="0">
 				<tr>
+					<th><a href="<?php echo \system\Core::url();?>Money/invoice/add?case_id=<?php echo $this->case_id;?>" class="button"><?php echo $GLOBALS["Font_awesome"]->_("Add icon");?></a></th>
 					<th>Дата</th>
 					<th>Вид</th>
 					<th>Сума</th>
@@ -132,16 +135,16 @@ class Money{
 				$invoiceDate = date("d.m.Y", strtotime($invoice["date"]));
 				?>
 				<tr>
+					<td><a href="<?php echo \system\Core::url();?>Money/invoice/edit?id=<?php echo $invoice["id"];?>" class="button button-icon"><?php echo $GLOBALS["Font_awesome"]->_("Edit icon");?></a></td>
 					<td><?php echo  $invoiceDate;?></td>
 					<td><?php echo  $invoice["type"] == "bill" ? "Сметка" : "фактура";?></td>
 					<td><?php echo $this->sum($invoice["sum"]);?></td>
 					<td><a href="" class="caseNumber"><?php echo $Caser->number;?></a></td>
-					<td><?php echo \system\Data::select($invoice["payer"], "id", "person")["name"];?></td></td>
+					<td><?php echo $this->PDO->query("SELECT name FROM person WHERE id='" . $invoice["payer"] . "'")->fetch()["name"];?></td></td>
 					<td><?php echo $this->sum($invoice["tax_base"]);?></td>
 					<td><?php echo $this->sum($invoice["vat"]);?></td>
 					<td><?php echo $invoice["bill"];?></td>
 					<td><?php echo $invoice["invoice"];?></td>
-					<td><button type="button" class="button" onclick="window.open('<?php echo \system\Core::url();?>Money/invoice/edit?id=<?php echo $invoice["id"];?>', '_self')">Редакция</button></td>
 				</tr>
 				<?php } ?>
 			</table>

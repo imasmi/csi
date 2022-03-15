@@ -28,13 +28,13 @@ class Document{
 
 	public function add_button($type){
 		?>
-			<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/add?type=<?php echo $type?>">Добави</a>
+			<a class="button" href="<?php echo \system\Core::url();?>Document/add?type=<?php echo $type; if ($this->case_id) { echo '&case_id=' . $this->case_id;}?>"><?php echo $GLOBALS["Font_awesome"]->_("Add icon");?></a>
 		<?php
 	}
 
 	public function edit_button($id){
 		?>
-			<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/edit?id=<?php echo $id?>">Редактирай</a>
+			<a class="button button-icon" href="<?php echo \system\Core::url();?>Document/edit?id=<?php echo $id?>"><?php echo $GLOBALS["Font_awesome"]->_("Edit icon");?></a>
 		<?php
 	}
 

@@ -29,7 +29,9 @@ $next_number = $PDO->query("SELECT number FROM document WHERE date >= '" . date(
 
             <tr>
                 <td>Дело</td>
-                <td><?php echo $Caser->select("case_id");?></td>
+                <td>
+                    <?php $case_array = isset($_GET["case_id"]) ? ["id" => $_GET["case_id"]] : [];?>
+                    <?php echo $Caser->select("case_id", $case_array);?></td>
                 <script>
                     document.getElementById("case_id-data").addEventListener("change", () => {
                         setTimeout(() => S.post('<?php echo \system\Core::url();?>Person/query/debtor-selector', {case_id: S('#case_id').value, name: 'person'}, '#debtor-select', true), 200)
@@ -39,7 +41,20 @@ $next_number = $PDO->query("SELECT number FROM document WHERE date >= '" . date(
 
             <tr>
                 <td>Длъжник</td>
-                <td id="debtor-select"></td>
+                <td id="debtor-select">
+                    <?php if (isset($_GET["case_id"])) { ?>
+                        <?php 
+                        $Caser = new \plugin\Caser\Caser($_GET["case_id"]);
+                        ?>
+
+                        <select name="person" id="person">
+                            <option value="">Избери</option>
+                            <?php foreach($Caser->debtor as $debtor) { ?>
+                                <option value="<?php echo $debtor;?>"><?php echo $PDO->query("SELECT name FROM person WHERE id='" . $debtor . "'")->fetch()["name"];?></option>
+                            <?php } ?>
+                        </select>
+                    <?php } ?>
+                </td>
             </tr>
             
             <tr>

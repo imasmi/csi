@@ -20,7 +20,7 @@ $actions = array(
 
 
 <div class="admin">
-<div class="title">Банкови сметки: <?php echo $select["name"];?></div>
+<h4 class="title">Банкови сметки: <?php echo $select["name"];?></h4>
 <?php
 if($User->group("admin")){require_once(\system\Core::doc_root() . "/system/module/Listing/php/ListingAPP.php");}
 

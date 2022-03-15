@@ -42,8 +42,8 @@ class Person{
 
 	public function edit(){
 		?>
-			<button class="button" onclick="window.open('<?php echo \system\Core::url();?>Person/edit?id=<?php echo $this->id;?>', '_self')">Редакция</button>
-			<button class="button" onclick="window.open('<?php echo \system\Core::url();?>Money/bank/index?person=<?php echo $this->id;?>', '_self')">Банки</button>
+			<a class="button button-icon" onclick="window.open('<?php echo \system\Core::url();?>Person/edit?id=<?php echo $this->id;?>', '_self')" title="Редакция"><?php echo $GLOBALS["Font_awesome"]->_("Edit icon");?></a>
+			<a class="button button-icon" onclick="window.open('<?php echo \system\Core::url();?>Money/bank/index?person=<?php echo $this->id;?>', '_self')"  title="Банки"><?php echo $GLOBALS["Font_awesome"]->_("Bank icon");?></a>
 		<?php
 	}
 

@@ -4,7 +4,7 @@ $select = $PDO->query("SELECT * FROM person WHERE id='" . $_GET["id"] . "'")->fe
 ?>
 
 <div class="admin">
-<div class="title"><?php echo $select["name"];?></div>
+<h4 class="title"><?php echo $select["name"];?></h4>
 <div class="errorMessage" id="errorMessage"></div>
 <form class="form" id="form" action="<?php echo \system\Core::query_path() . '?id=' . $_GET["id"];?>" method="post">
     <table class="table">

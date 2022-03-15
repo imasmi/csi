@@ -6,13 +6,14 @@ include_once(\system\Core::doc_root() . '/plugin/Person/php/Person.php');
 $Person = new \plugin\Person\Person;
 ?>
 <div class="admin">
-<h2 class="title">Add payment</h2>
+<h3 class="title">Добавяне на плащане</h3>
 <div class="error-message" id="error-message"></div>
 <form class="form" id="form" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#form'), '#error-message')">
     <table class="table">
         <tr>
             <td>Дело</td>
-            <td><?php $Caser->select("case_id");?></td>
+            <?php $case_array = isset($_GET["case_id"]) ? ["id" => $_GET["case_id"]] : [];?>
+            <td><?php $Caser->select("case_id", $case_array);?></td>
         </tr>
 
         <tr>
@@ -68,7 +69,7 @@ $Person = new \plugin\Person\Person;
 
         <tr>
             <td>Основание</td>
-            <td><?php \system\Form::select("reason", system\Database::column_group("reason", "payment"));?></td>
+            <td><?php \system\Form::select("reason", system\Data::column_group("reason", "payment"));?></td>
         </tr>
         
         <tr>

@@ -1,5 +1,4 @@
 <div class="admin">
-<div class="attention">Mozilla Firefox</div>
 <form method="post" action="<?php echo \system\Core::this_path(0, -1);?>/list">
 <table class="listTable" border="1px">
 	<tr>

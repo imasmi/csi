@@ -21,7 +21,7 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 			<div>Статус: <?php echo $Caser->status;?></div>
 			<div>Отговорник: <?php echo $Caser->charger;?></div>
 			<div>Ред статистика: <?php echo $Caser->statistic;?></div>
-			<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/edit?id=<?php echo $_GET["id"];?>">Редакция</a>
+			<a class="button button-icon" href="<?php echo \system\Core::this_path(0, -1);?>/edit?id=<?php echo $_GET["id"];?>"><?php echo $Font_awesome->_("Edit icon");?></a>
 		</div>
 
 		<div class="column-9 admin paddingY-40">
@@ -30,38 +30,35 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 	</div>
 	
 	<div id="title" class="text-center">
-		<h3>Титули</h3>
+		<div class="margin-20"><h3 class="inline-block margin-0">Титули</h3> <a class="button button-icon" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/add?id=<?php echo $_GET["id"];?>"><?php echo $Font_awesome->_("Add icon");?></a></div>
 		<div>
 			Банка по делото: 
 			<?php 
 				echo $PDO->query("SELECT IBAN FROM bank b LEFT JOIN caser c ON b.id = c.prefBANK WHERE c.id ='" . $_GET["id"] . "'")->fetch()["IBAN"];
 			?>
 		</div>
-		<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/add?id=<?php echo $_GET["id"];?>">Добавяне на титул</a>
 		<?php foreach($Caser->title as $title){
 			$Title = new \plugin\Caser\Title($title["id"]);
 			?>
-			<div class="clear">
+			<div class="caser-title clear">
 				<div class="column-4 clear text-center">
 					<?php $Title->data(); ?>
 				</div>
 				
 				<div class="column-4 padding-10 text-center">
 					<div class="column-6">
-						<div class="title">Взискатели</div>
-						<div class="marginY-20"><a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/add-person?id=<?php echo $title["id"];?>&type=creditor">Добавяне на взискател</a></div>
+						<div class="title margin-bottom-20"><h4 class="inline-block margin-0">Взискатели</h4> <a class="button button-icon" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/add-person?id=<?php echo $title["id"];?>&type=creditor"><?php echo $Font_awesome->_("Add icon");?></a></div>
+						<div class="marginY-20"></div>
 						<?php $Title->creditors(); ?>
 					</div>
 					
 					<div class="column-6">
-						<div class="title">Длъжници</div>
-						<div class="marginY-20"><a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/add-person?id=<?php echo $title["id"];?>&type=debtor">Добавяне на длъжник</a></div>
+						<div class="title margin-bottom-20"><h4 class="inline-block margin-0">Длъжници</h4> <a class="button button-icon" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/add-person?id=<?php echo $title["id"];?>&type=debtor"><?php echo $Font_awesome->_("Add icon");?></a></div>
 						<?php $Title->debtors();?>
 					</div>
 				</div>
 
 				<div class="column-4 padding-10">
-					<div class="title">Дълг</div>
 					<h3>Дълг</h3>
 					<table cellspacing="5">
 						<tr>

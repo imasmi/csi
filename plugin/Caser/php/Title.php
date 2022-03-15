@@ -39,10 +39,10 @@ class Title{
 		<div>Съд: <?php echo $this->item["court_id"] != 0 ? $this->PDO->query("SELECT name FROM person WHERE id='" . $this->item["court_id"] . "'")->fetch()["name"] : $this->item["court"];?></div>
 		<div>Тип: <?php echo $this->type;?></div>
 		<div>Номер: <?php echo $this->item["number"];?></div>
-		<div>Дата: <?php echo \web\dates::_($this->item["date"]);?></div>
-		<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/edit?id=<?php echo $this->id;?>">Редакция</a>
-		<a class="button" href="<?php echo \system\Core::url();?>Money/tax/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>">Добави такса</a>
-		<a class="button" href="<?php echo \system\Core::url();?>Money/debt/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>">Добави дълг</a>
+		<div class="margin-bottom-10">Дата: <?php echo \web\dates::_($this->item["date"]);?></div>
+		<a class="button button-icon" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/edit?id=<?php echo $this->id;?>" title="Редакция на титул"><?php echo $GLOBALS["Font_awesome"]->_("Edit icon");?></a>
+		<a class="button button-icon" href="<?php echo \system\Core::url();?>Money/tax/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>" title="Добавяне на такса"><?php echo $GLOBALS["Font_awesome"]->_("Tax icon");?></a>
+		<a class="button button-icon" href="<?php echo \system\Core::url();?>Money/debt/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>" title="Добавяне на дълг"><?php echo $GLOBALS["Font_awesome"]->_("Debt icon");?></a>
 	<?php
 	}
 
@@ -53,13 +53,13 @@ class Title{
 			$pers = $this->PDO->query("SELECT * FROM person WHERE id='" . $person . "'")->fetch();
 			$Person = new \plugin\Person\Person($pers["id"]);
 			?>
-				<b><?php echo $pers["name"];?></b>
+				<b class="color-6"><?php echo $pers["name"];?></b>
 				<br/>
 				<?php echo $this->pType($pers);?> <?php echo $pers["EGN_EIK"];?>
-				<div><?php echo $Person->edit();?></div>
-				<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/change-person?id=<?php echo $this->id;?>&type=creditor&person=<?php echo $pers["id"];?>">Смени взискател</a>
-				<br/>
-				<br/>
+				<div class="marginY-10">
+					<?php echo $Person->edit();?>
+					<a class="button button-icon" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/change-person?id=<?php echo $this->id;?>&type=creditor&person=<?php echo $pers["id"];?>"><?php echo $GLOBALS["Font_awesome"]->_("Change icon");?></a>
+				</div>
 			<?php
 			}
 		}
@@ -73,14 +73,15 @@ class Title{
 			$pers = $this->PDO->query("SELECT * FROM person WHERE id='" . $person . "'")->fetch();
 			$Person = new \plugin\Person\Person($pers["id"]);
 			?>
-				<b><?php echo $pers["name"];?></b>
+				<b class="color-2"><?php echo $pers["name"];?></b>
 				<?php if($bank !== false){ echo $Bnb->checkbox($pers, $this->case["id"]);} ?>
 				<br/><?php echo $this->pType($pers);?> <?php echo $pers["EGN_EIK"];?><br/>
 				<?php if($nap !== false){ $this->nap($pers["id"], $this->case["id"]);} ?>
-				<div><?php echo $Person->edit();?></div>
-				<a class="button" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/change-person?id=<?php echo $this->id;?>&type=debtor&person=<?php echo $pers["id"];?>&debtor">Смени длъжник</a>
-				<a class="button" href="<?php echo \system\Core::url();?>Money/tax/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>&debtor_id=<?php echo $pers["id"];?>">Добави такса</a>
-				<br/><br/>
+				<div class="marginY-10">
+					<?php echo $Person->edit();?>
+					<a class="button button-icon" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/change-person?id=<?php echo $this->id;?>&type=debtor&person=<?php echo $pers["id"];?>&debtor"><?php echo $GLOBALS["Font_awesome"]->_("Change icon");?></a>
+					<a class="button button-icon" href="<?php echo \system\Core::url();?>Money/tax/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>&debtor_id=<?php echo $pers["id"];?>"><?php echo $GLOBALS["Font_awesome"]->_("Tax icon");?></a>
+				</div>
 			<?php 
 			}
 		}

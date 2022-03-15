@@ -13,6 +13,10 @@ if($_SERVER["REQUEST_URI"] == "/csi/"){
 <?php
 }
 
+require_once(\system\Core::doc_root() . "/plugin/Font_awesome/php/Font_awesome.php");
+$Font_awesome = new \plugin\Font_awesome\Font_awesome(0);
+
 require_once(\system\Core::doc_root() . "/plugin/Caser/php/Caser.php");
 $Caser = new \plugin\Caser\Caser;
+
 ?>
