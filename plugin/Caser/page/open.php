@@ -65,7 +65,7 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 				<div class="column-5 padding-10">
 
 					<h3>Такси</h3>
-					<table cellspacing="0" cellspacing="5" class="border-bottom-row">
+					<table cellpadding="5" cellspacing="0" class="border-bottom-row">
 						<tr>
 							<th></th>
 							<th></th>
@@ -128,7 +128,7 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 
 
 					<h3>Дълг</h3>
-					<table cellspacing="5">
+					<table cellpadding="5" cellspacing="0" class="border-bottom-row">
 						<tr>
 							<th>#</th>
 							<th>Вид</th>
