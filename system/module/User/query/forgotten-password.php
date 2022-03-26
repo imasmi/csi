@@ -1,4 +1,5 @@
 <?php
+include_once(\system\Core::doc_root() . "/system/php/Mail.php");
 $check = array();
 
 #CHECK IF EMAIL IS VALID
@@ -21,7 +22,8 @@ if($update_password){
     $subject = $Text->item("Renew password");
     $message = $Text->item("This is your new password: ");
     $message .= $new_pass;
-    \system\Mail::send($Setting->_("Title", array("type" => "", "page_id" => 0)), $Setting->_("Email", array("type" => "", "page_id" => 0)), $_POST["email"], $subject, $message);
+    
+    \system\Mail::send($_POST["email"], $subject, $message, ["from" => $Setting->_("Title", array("type" => "", "page_id" => 0))]);
     ?><script>location.href = '<?php echo \system\Core::url() . "User/message/successful-new-password";?>';</script><?php
 } else {
     echo $Text->_("Something went wrong");

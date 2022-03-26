@@ -30,6 +30,7 @@ section.open .tag{background-color: #92d6e1;}
 section.open .tag:before{content: "-";}
 .space-20{margin: 20px 0;}
 .border-bottom{border-bottom: 1px solid #bbbbbb;}
+.border-bottom-row th, .border-bottom-row td{border-bottom: 1px solid #bbbbbb;}
 .full-width {width: 100%;}
 
 /*HEADER*/

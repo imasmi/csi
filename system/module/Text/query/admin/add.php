@@ -2,7 +2,7 @@
 $check = array();
 
 #CHECK IF LABEL IS FREE
-if($PDO->query("SELECT * FROM " . $Text->table . " WHERE tag='" . $_POST["tag"] . "'")->fetch()->rowCount() > 0){ $check["#username"] = "This tag is already in use";}
+if($PDO->query("SELECT * FROM " . $Text->table . " WHERE tag='" . $_POST["tag"] . "'")->rowCount() > 0){ $check["#username"] = "This tag is already in use";}
 
 
 if(empty($check)){

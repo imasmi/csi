@@ -9,7 +9,7 @@
         
         <tr>
             <td colspan="2" class="text-center">
-                <button type="submit"><?php echo $Text->item("Resend password");?></button>
+                <button type="submit" class="button"><?php echo $Text->item("Resend password");?></button>
                 <button type="button" class="button" onclick="history.go(-1)"><?php echo $Text->item("Back");?></button>
             </td>
         </tr>

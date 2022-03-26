@@ -1,7 +1,6 @@
 <?php
 $check = array();
 include_once(\system\Core::doc_root() . "/system/php/Mail.php");
-$Mail = new \system\Mail;
 
 #CHECK IF USERNAME IS FREE
 $check_for_user = $PDO->query("SELECT id FROM " . $User->table . " WHERE username='" . $_POST["username"]. "'AND deleted IS NULL");
@@ -25,7 +24,7 @@ if(empty($check)){
 #CREATE NEW USERS IF ALL EVERYTHING IS FINE
 $activate_code = md5(rand());
 $array = array(
-            "role" => "guest",
+            "group" => "guest",
             "username" => $_POST["username"],
             "email" => $_POST["email"],
             "password" => password_hash($_POST["password"], PASSWORD_DEFAULT),

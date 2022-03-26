@@ -113,12 +113,15 @@ h1{font-size: 58px;} h2{font-size: 44px;} h3{font-size: 32px;} h4{font-size: 23p
 .inline-block{display: inline-block; vertical-align: top;}
 .table{display: table;}
 .flex{display: flex;}
+.flex > * {box-sizing: border-box;}
 .flex-column {flex-direction: column;}
 .flex-wrap {flex-wrap: wrap;}
 .flex-between{justify-content: space-between;}
 .flex-evenly{justify-content: space-evenly;}
 .flex-around{justify-content: space-around;}
 .flex-align-center{align-items: center;}
+.flex-align-strech{align-items: stretch;}
+.flex-items-equal > * {flex: 1 1 0;}
 .relative{position: relative;}
 .absolute{position: absolute;}
 .fixed{position: fixed;}
@@ -137,4 +140,5 @@ h1{font-size: 58px;} h2{font-size: 44px;} h3{font-size: 32px;} h4{font-size: 23p
     .column-count-2, .column-count-3, .column-count-4, .column-count-5,.column-count-6, .column-count-7, .column-count-8{-ms-column-count:1;-moz-column-count:1;-webkit-column-count:1;column-count: 1;}
     .mobile{display: unset;}
     .desktop{display: none;}
+    .flex-responsive {flex-direction: column;}
 }

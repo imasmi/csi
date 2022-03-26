@@ -164,10 +164,10 @@ S.bind(function() {
 
 /* UPDATE TEXT ON BLUR */
 TextAPP.updateText = function (close=false){
-    id = document.getElementById("selected-content").value;
-    val = document.getElementById("text-edit-" + id).innerHTML;
-    lang = document.getElementById("text-lang-" + id).value;
-    options = (document.getElementById("text-options-" + id)) ? document.getElementById("text-options-" + id).value : "{}";
+    let id = document.getElementById("selected-content").value;
+    let val = document.getElementById("text-edit-" + id).innerHTML;
+    let lang = document.getElementById("text-lang-" + id).value;
+    let options = (document.getElementById("text-options-" + id)) ? document.getElementById("text-options-" + id).value : "{}";
 	if(val != " " && val != "<br>" && val != null && val != "" && val != "\r\n" && val != "\n"){ content = String(val);} else { content = "";}
 	
 	optionsObject = JSON.parse(options);
@@ -205,7 +205,7 @@ TextAPP.langChange = function(id, lang, update=true){
     
     document.getElementById("text-lang-" + id).value = lang;
     
-    S.post(S.url() + 'Text/query/admin/lang-change', {'id': id, 'lang': lang}, '#text-edit-' +  id);
+    //S.post(S.url() + 'Text/query/admin/lang-change', {'id': id, 'lang': lang}, '#text-edit-' +  id);
     if(update == true){document.getElementById("text-edit-" + id).focus();}
 }
 

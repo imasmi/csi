@@ -19,15 +19,18 @@ class User{
         return $GLOBALS["PDO"]->query("SELECT * FROM " . $this->table . " WHERE id='" . $this->id . "'")->fetch();
     }
 
-	public function logger() {
+    //$data possible values: type => string(full|login), username => boolean
+	public function logger($data = []) {
 	    global $Text;
+	    $type = isset($data["type"]) ? $data["type"] : "full";
 	    $output = '<div class="logger">';
+	    if($this->id !== false && (!isset($data["username"]) || $data["username"] == true)){ $output .= '<div class="logger-username">' . $Text->_("Logged as") . '<span>' . $this->item["username"] . '</span></div>'; }
 		if($this->id === false){
 		     $output .= '<a href="' . \system\Core::url() . $this->module . '">' . $Text->item("Login") . '</a>';
-		     $output .= '<a href="' . \system\Core::url() . $this->module . '/register">' . $Text->item("Register") . '</a>';
+		     if ($type == "full") { $output .= '<a href="' . \system\Core::url() . $this->module . '/register">' . $Text->item("Register") . '</a>';}
 		} else {
 		    $output .= '<a href="' . \system\Core::url() . $this->module . '/profile/profile">' . $Text->item("Profile") . '</a>';
-		     $output .= '<a href="' . \system\Core::url() . $this->module . '/query/logout">' . $Text->item("Log out") . '</a>';
+		    if ($type == "full") {$output .= '<a href="' . \system\Core::url() . $this->module . '/query/logout">' . $Text->item("Log out") . '</a>';}
 		}
 		 $output .= '</div>';
 		 return $output;

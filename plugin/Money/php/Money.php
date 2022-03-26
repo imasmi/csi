@@ -17,7 +17,7 @@ class Money{
 		$this->plugin = "Money";
 	}
 	
-	public function sum($sum){
+	public static function sum($sum){
 		return number_format($sum, 2, ".", " ");
 	}
 	//["sum" => int, "start" => string(date), "end" => string(date)]

@@ -82,7 +82,7 @@ class Text{
 	        $output = '<div class="language-editor" id="language-editor-' . $id . '">';
                 foreach($this->Language->items as $key => $value){
                     $selected_language = ($value == \module\Language\Language::_()) ? ' selected-text-lang' : "";
-                    $output .= '<span class="lang-changer' . $selected_language . '" id="lang-changer-' . $value . '-' . $id . '" onclick="TextAPP.langChange(\'' . $id . '\', \'' . $value . '\')">' . $key . '</span>';
+                    $output .= '<span class="lang-changer' . $selected_language . ' TextAPP" id="lang-changer-' . $value . '-' . $id . '" onclick="TextAPP.langChange(\'' . $id . '\', \'' . $value . '\')">' . $key . '</span>';
                 }
                 $output .= '<input type="hidden" id="text-lang-' . $id . '" value="' . \module\Language\Language::_() . '"/>';
             $output .= '</div>';

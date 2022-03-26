@@ -1,4 +1,6 @@
-<?php $PageAPP = new \module\Page\PageAPP;?>
+<?php 
+include_once(\system\Core::doc_root() . "/system/module/Page/php/PageAPP.php");
+$PageAPP = new \module\Page\PageAPP;?>
 <div class="admin">
 <div class="error-message" id="error-message"></div>
 <div class="title text-center">Add text</div>

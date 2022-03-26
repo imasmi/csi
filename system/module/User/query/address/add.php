@@ -4,21 +4,19 @@ require_once(\system\Core::doc_root() . '/system/module/Setting/php/SettingAPP.p
 $SettingAPP = new \module\Setting\SettingAPP($User->id, array("fortable" => $User->table));
 
 if(isset($_POST["default"])){
-    foreach($PDO->query("SELECT * FROM " . $Setting->table . " WHERE `fortable` = '" . $User->table . "' AND page_id='" . $User->id . "' AND link_id='0' AND tag='address'") as $setting){
-        \system\Data::update(array("value" => ""), $setting["id"], "id", $Setting->table);
-    }
+    \system\Data::update(["data" => ["value" => null], "table" => $Setting->table, "where" => "`fortable` = '" . $User->table . "' AND page_id='" . $User->id . "' AND link_id='0' AND tag='address' AND `type`='default'"]);
 }
 
-$array = array(
+$data = [
     "page_id" => $User->id,
     "link_id" => "0",
     "user_id" => $User->id,
     "fortable" => $User->table,
     "tag" => "address",
-    "value" => isset($_POST["default"]) ? "default" : ""
-);
+    "type" => isset($_POST["default"]) ? "default" : ""
+];
 
-\system\Data::insert($array, $Setting->table);
+\system\Data::insert(["data" => $data, "table" => $Setting->table]);
 $link_id = $PDO->lastInsertId();
 
 

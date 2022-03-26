@@ -1,10 +1,13 @@
+<?php 
+include_once(\system\Core::doc_root() . '/system/php/Form.php');
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
+$Caser = new \plugin\Caser\Caser($_GET["caser_id"]);
+?>
 <div class="admin">
 <h2 class="title text-center">Добавяне на такса</h2>
 <div class="error-message" id="error-message"></div>
 <form class="form" id="form" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#form'), '#error-message')">
     <input type="hidden" name="caser_id" value="<?php echo $_GET["caser_id"];?>">
-    <input type="hidden" name="title_id" value="<?php echo isset($_GET["title_id"]) ? $_GET["title_id"] : 0;?>">
-    <input type="hidden" name="debtor_id" value="<?php echo isset($_GET["debtor_id"]) ? $_GET["debtor_id"] : 0;?>">
     <table class="table">
         <tr>
             <td>Точка</td>
@@ -36,6 +39,40 @@
         <tr>
             <td>Бележка</td>
             <td><textarea name="note" id="" cols="30" rows="5"></textarea></td>
+        </tr>
+
+        <tr>
+            <td>Титул</td>
+            <td>
+                <select name="title_id" onchange="S.post('<?php echo \system\Core::url();?>Money/query/tax/title-debtors-select', {id: this.value, caser_id : '<?php echo $_GET["caser_id"];?>'}, '#debtors-select')">
+                    <option value="0">ИЗБЕРИ</option>
+                    <?php 
+                        $titles = [];
+                        foreach($Caser->title as $title){
+                        ?>
+                            <option value="<?php echo $title["id"];?>" <?php if (isset($_GET["title_id"]) && $_GET["title_id"] == $title["id"]) { echo 'selected';}?>><?php echo $title["number"];?></option>
+                        <?php
+                        }
+                    ?>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Длъжници</td>
+            <td id="debtors-select">
+                <?php 
+                $debotrs = [];
+                $debtor_items = [];
+                foreach ($Caser->debtor($_GET["title_id"]) as $debtor) {
+                    $debotrs[$debtor] = $PDO->query("SELECT name FROM person WHERE id='" . $debtor . "'")->fetch()["name"];
+                    if (isset($_GET["debtor_id"]) && $_GET["debtor_id"] == $debtor) {
+                        $debtor_items[] = $debtor;
+                    }
+                }
+                \system\Form::multiselect("debtor_id", ["data" => $debotrs, "items" => $debtor_items]);
+                ?>
+            </td>
         </tr>
 
         <tr>

@@ -56,6 +56,63 @@ class Form{
         <?php
         }
     }
+    
+    //Array possible values:
+    //data => Array(key => value) data fiels for the selector,
+    //items => Array(key => value) key is the id and the value is the selected value from the selected entries,
+    //onchange => javascript function,
+    //onremove => javascript function
+    public static function multiselect( $id, $data ) {
+        $cnt = 0;
+        $onchange = isset($data['onchange']) ? $data['onchange'] : "";
+        $onremove = isset($data['onremove']) ? $data['onremove'] : "";
+    ?>
+        <div id="multiselect-template-<?php echo $id;?>" class="hide">
+            <select onchange="<?php echo $onchange;?>">
+                <option value="">SELECT</option>
+                <?php foreach($data["data"] as $key => $value) { ?>
+                    <option value="<?php echo $key;?>"><?php echo $value;?></option>
+                <?php } ?>
+            </select>
+            <button type="button" class="button remove-button-<?php echo $id;?>">-</button>
+        </div>
+        
+        <div id="multiselect-items-<?php echo $id;?>">
+            <?php 
+            if (isset($data["items"])) {
+                foreach ($data["items"] as $item ) {
+                ?>
+                <div id="multiselect-<?php echo $item;?>-<?php echo $cnt;?>" class="flex">
+                    <select name="multiselect-<?php echo $id;?>-<?php echo $cnt;?>" onchange="<?php echo $onchange;?>">
+                        <option value="">SELECT</option>
+                        <?php foreach($data["data"] as $key => $value) { ?>
+                            <option value="<?php echo $key;?>" <?php if ($key == $item) { echo 'selected';}?>><?php echo $value;?></option>
+                        <?php } ?>
+                    </select>
+                    <button type="button" data-item-id="<?php echo $item;?>" class="button remove-button-<?php echo $item;?>" onclick="S.remove('#multiselect-<?php echo $item;?>-<?php echo $cnt;?>'); <?php echo $onremove;?>">-</button>
+                </div>
+                <?php
+                $cnt++;
+                }
+                ?>
+            <?php 
+            } ?>
+        </div>
+        
+        <button type="button" class="button" onclick="
+        let newRow = document.createElement('div'); 
+        newRow.innerHTML = S('#multiselect-template-<?php echo $id;?>').innerHTML;
+        let newId = `multiselect-<?php echo $id;?>-${S('#multiselect-counter-<?php echo $id;?>').value}`;
+        newRow.setAttribute('id', newId);
+        newRow.setAttribute('class', 'flex');
+        newRow.querySelector('select').setAttribute('name', newId);
+        newRow.querySelector('.remove-button-<?php echo $id;?>').setAttribute('onclick', `S.remove('#${newId}'); <?php echo $onremove;?>`);
+        S('#multiselect-items-<?php echo $id;?>').appendChild(newRow);
+        S('#multiselect-counter-<?php echo $id;?>').value = Number(S('#multiselect-counter-<?php echo $id;?>').value) + 1;
+        ">+</button>
+        <input type="hidden" id="multiselect-counter-<?php echo $id;?>" name="multiselect-counter-<?php echo $id;?>" value="<?php echo $cnt;?>"/>
+    <?php
+    }
 
 	public static function created($name, $value="0000-00-00 00:00:00"){
         ?>

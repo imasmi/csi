@@ -209,3 +209,13 @@ csi.massEdit = function(id){
 		elem.value = elem.value.replace(event.target.id + ",",'');
 	}
 }
+
+csi.totalSum = function(el, resultDestination, value){
+	let resultElement = S(resultDestination);
+	let toFix = 0;
+	if (value.includes(".")){
+		toFix = value.split(".")[1].split("").length;
+	}
+	let finalResult = el.checked ? Number(resultElement.innerHTML) + Number(value) : Number(resultElement.innerHTML) - Number(value);
+	resultElement.innerHTML = finalResult.toFixed(toFix);
+}

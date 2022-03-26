@@ -17,8 +17,9 @@ class Page{
         $this->folder = "/web/page";
 		$this->doc_root = \system\Core::doc_root() . $this->folder;
         $this->id = $page_id != 0 ? $page_id : $this->id();
-        $this->tag = isset($this->items[$this->id]["tag"]) ? $this->items[$this->id]["tag"] : null;
-        $this->type = isset($this->items[$this->id]["type"]) ? $this->items[$this->id]["type"] : null;
+        $this->item = isset($this->items[$this->id]) ? $this->items[$this->id] : [];
+        $this->tag = isset($this->item["tag"]) ? $this->item["tag"] : null;
+        $this->type = isset($this->item["type"]) ? $this->item["type"] : null;
         $this->current_file = $this->current_file();
         if($this->current_file === false && $this->id == 0){ http_response_code(404);}// send response code 404 if page is not found
     }
