@@ -77,14 +77,14 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 							<th>Длъжници</th>
 						</tr>
 						<?php 
-						$total = [];
+						$total_taxes = [];
 						foreach ($PDO->query("SELECT * FROM tax WHERE caser_id='" . $_GET["id"] . "' AND title_id='" . $title["id"] . "'") as $tax) { ?>
 						<tr>
 							<td><a class="button button-icon" href="<?php echo \system\Core::url();?>/Money/tax/edit?id=<?php echo $tax["id"];?>"><?php echo $Font_awesome->_("Edit icon");?></a></td>
 							<td><input type="checkbox" onclick="csi.totalSum(this,'#selected-taxes','<?php echo $tax['count'];?>'); csi.totalSum(this,'#selected-sums','<?php echo $tax['sum'];?>')"></td>
 							<td>т.<?php echo $tax["point_number"];?></td>
-							<td><?php echo $tax["count"]; $total["count"] = total($total, $tax, "count");?></td>
-							<td><?php echo $tax["sum"]; $total["sum"] = total($total, $tax, "sum");?></td>
+							<td><?php echo $tax["count"]; $total_taxes["count"] = total($total_taxes, $tax, "count");?></td>
+							<td><?php echo $tax["sum"]; $total_taxes["sum"] = total($total_taxes, $tax, "sum");?></td>
 							<td><?php echo web\dates::_($tax["date"]);?></td>
 							<td><?php echo $tax["note"];?></td>
 							<td>
@@ -101,7 +101,7 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 						</tr>
 						<?php } ?>
 						
-						<?php if (!empty($total)) { ?>
+						<?php if (!empty($total_taxes)) { ?>
 						<tr>
 							<th>Избрани</th>
 							<th></th>
@@ -117,8 +117,8 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 							<th>Общо</th>
 							<th></th>
 							<th></th>
-							<th><?php echo $total["count"];?></th>
-							<th><?php echo \plugin\Money\Money::sum($total["sum"]);?></th>
+							<th><?php echo $total_taxes["count"];?></th>
+							<th><?php echo \plugin\Money\Money::sum($total_taxes["sum"]);?></th>
 							<th></th>
 							<th></th>
 							<th></th>
@@ -130,34 +130,59 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 					<h3>Дълг</h3>
 					<table cellpadding="5" cellspacing="0" class="border-bottom-row">
 						<tr>
+							<th></th>
+							<th></th>
 							<th>#</th>
 							<th>Вид</th>
 							<th>Сума</th>
 						</tr>
 						<?php 
 						$cnt = 0;
+						$total_debt = 0;
 						foreach ($PDO->query("SELECT * FROM debt WHERE caser_id='" . $_GET["id"] . "' AND title_id='" . $title["id"] . "'") as $debt) { 
 								$setting = $PDO->query("SELECT tag,`type` FROM " . $Setting->table . " WHERE id='" . $debt["setting_id"] . "'")->fetch();
 								$subsetting = $PDO->query("SELECT tag,`type` FROM " . $Setting->table . " WHERE id='" . $debt["subsetting_id"] . "'")->fetch();
 							?>
 						<tr>
+							<td><a class="button button-icon" href="<?php echo \system\Core::url();?>/Money/debt/edit?id=<?php echo $debt["id"];?>"><?php echo $Font_awesome->_("Edit icon");?></a></td>
+							<td><input type="checkbox" onclick="csi.totalSum(this,'#selected-debts','<?php echo $debt["sum"];?>');"></td>
 							<td><?php echo ++$cnt;?></td>
 							<td><?php echo $setting["type"];?>, <?php echo $subsetting["type"];?></td>
-							<td><?php echo $debt["sum"];?></td>
+							<td><?php echo $debt["sum"]; $total_debt += $debt["sum"];?></td>
 						</tr>
 						<?php 
 						if ($setting["tag"] == "interest") {
 							foreach ($PDO->query("SELECT * FROM debt WHERE link_id='" . $debt["id"] . "' ORDER by start ASC") as $subdebt) { 
+								$interest = $Money->interest($subdebt);
 								?>
 							<tr>
+								<td></td>
+								<td><input type="checkbox" onclick="csi.totalSum(this,'#selected-debts','<?php echo $interest;?>');"></td>
 								<td><?php echo ++$cnt;?></td>
 								<td>Законна лихва за <?php echo $subsetting["type"];?> върху <?php echo $subdebt["sum"];?> лева от <?php echo web\dates::_($subdebt["start"]);?></td>
-								<td><?php echo $Money->interest($subdebt);?></td>
+								<td><?php echo $interest; $total_debt += $interest;?></td>
 							</tr>
 							<?php
 							}
 						}
 					} ?>
+
+						<?php if ($total_debt > 0) { ?>
+						<tr>
+							<th>Избрани</th>
+							<th></th>
+							<th></th>
+							<th id="selected-debts"><?php echo \plugin\Money\Money::sum(0);?></th>
+						</tr>
+
+						<tr>
+							<th>Общо</th>
+							<th></th>
+							<th></th>
+							<th><?php echo \plugin\Money\Money::sum($total_debt);?></th>
+						</tr>
+						<?php } ?>
+
 					</table>
 				</div>
 			</div>

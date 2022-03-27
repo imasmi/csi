@@ -1,3 +1,8 @@
+<?php 
+include_once(\system\Core::doc_root() . '/system/php/Form.php');
+include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
+$Caser = new \plugin\Caser\Caser($_GET["caser_id"]);
+?>
 <div class="admin">
 <h2 class="title text-center">Добавяне на дълг</h2>
 <div class="error-message" id="error-message"></div>
