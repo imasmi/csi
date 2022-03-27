@@ -30,10 +30,12 @@ class Money{
 	
 	public function payment(){
 	?>
-		<div class="admin">
+		<form method="post" action="<?php echo \system\Core::url();?>Money/distribution/add" class="admin">
+			<input type="hidden" name="case_id" value="<?php echo $this->case_id;?>">
 			<table class="listTable" border="1px" cellpadding="0" cellspacing="0">
 				<tr>
 					<th><a href="<?php echo \system\Core::url();?>Money/payment/add?case_id=<?php echo $this->case_id;?>" class="button"><?php echo $GLOBALS["Font_awesome"]->_("Add icon");?></a></th>
+					<th></th>
 					<th>Дата</th>
 					<th>Дело</th>
 					<th>Добавил</th>
@@ -63,21 +65,51 @@ class Money{
 						}
 					}
 				}
+				$total = [];
 				foreach(( $this->case_id ? $payments : $this->ListingAPP->page_slice($payments) ) as $payment){
 				$Caser = new Caser($payment["case_id"]);
 				$paymentDate = date("d.m.Y", strtotime($payment["date"]));
 				?>
 				<tr>
 					<td><a href="<?php echo \system\Core::url();?>Money/payment/edit?id=<?php echo $payment["id"];?>" class="button button-icon"><?php echo $GLOBALS["Font_awesome"]->_("Edit icon");?></a></td>
+					<td><input name="payment_<?php echo $payment["id"];?>" type="checkbox" onclick="<?php foreach (["amount", "allocate", "partitioned", "unpartitioned"] as $sum_id){?> csi.totalSum(this,'#selected-<?php echo $sum_id;?>','<?php echo $payment[$sum_id];?>'); <?php } ?>"></td>
 					<td><?php echo  $paymentDate;?></td>
 					<td><a href="" class="caseNumber"><?php echo $Caser->number;?></a></td>
 					<td><?php echo  $this->User->item($payment["user"])["email"];?></td></td>
-					<td><?php //echo $this->PDO->query("SELECT name FROM doc_types WHERE id='" . $payment["name"] . "'")->fetch()["name"];?></td>
 					<td><?php echo $payment["reason"];?></td>
-					<td><?php echo $this->sum($payment["amount"]);?></td>
-					<td><?php echo $payment["allocate"] > 0 ? $this->sum($payment["allocate"]) : "Не се разпределя";?></td>
-					<td><?php echo $payment["allocate"] > 0 ? $this->sum($payment["partitioned"]) : "Не се разпределя";?></td>
-					<td><?php echo $payment["allocate"] > 0 ? $this->sum($payment["unpartitioned"]) : "Не се разпределя";?></td>
+					<td>
+						<?php 
+							foreach(json_decode($payment["debtors"], true) as $debtor_id) {
+							?>
+							<div><?php echo $this->PDO->query("SELECT name FROM person WHERE id='" . $debtor_id . "'")->fetch()["name"];?></div>
+							<?php
+							}
+						?>
+					</td>
+					<td>
+						<?php 
+							echo $this->sum($payment["amount"]);
+							$total["amount"] = isset($total["amount"]) ? $total["amount"] += $payment["amount"] : $payment["amount"];
+						?>
+					</td>
+					<td>
+						<?php 
+						echo $payment["allocate"] > 0 ? $this->sum($payment["allocate"]) : "Не се разпределя";
+						$total["allocate"] = isset($total["allocate"]) ? $total["allocate"] += $payment["allocate"] : $payment["allocate"];
+						?>
+					</td>
+					<td>
+						<?php 
+						echo $payment["allocate"] > 0 ? $this->sum($payment["partitioned"]) : "Не се разпределя";
+						$total["partitioned"] = isset($total["partitioned"]) ? $total["partitioned"] += $payment["partitioned"] : $payment["partitioned"];
+						?>
+					</td>
+					<td>
+						<?php 
+							echo $payment["allocate"] > 0 ? $this->sum($payment["unpartitioned"]) : "Не се разпределя";
+							$total["unpartitioned"] = isset($total["unpartitioned"]) ? $total["unpartitioned"] += $payment["unpartitioned"] : $payment["unpartitioned"];
+						?>
+					</td>
 					<td>
 						<?php 
 						foreach($this->PDO->query("SELECT bill, invoice FROM invoice WHERE payment LIKE '%" . $payment["id"] . "%'") as $invoice){ 
@@ -87,9 +119,33 @@ class Money{
 					</td>
 				</tr>
 				<?php } ?>
+
+				<?php if (!empty($total)) { ?>
+				<tr>
+					<th>Избрани</th>
+					<th colspan="2"><button type="submit" class="button">Разпредели</button></th>
+					<th colspan="4"></th>
+					<th id="selected-amount"><?php echo static::sum(0);?></th>
+					<th id="selected-allocate"><?php echo static::sum(0);?></th>
+					<th id="selected-partitioned"><?php echo static::sum(0);?></th>
+					<th id="selected-unpartitioned"><?php echo static::sum(0);?></th>
+					<th colspan="5"></th>
+				</tr>
+
+				<tr>
+					<th>Общо</th>
+					<th colspan="6"></th>
+					<th><?php echo static::sum($total["amount"]);?></th>
+					<th><?php echo static::sum($total["allocate"]);?></th>
+					<th><?php echo static::sum($total["partitioned"]);?></th>
+					<th><?php echo static::sum($total["unpartitioned"]);?></th>
+					<th></th>
+				</tr>
+				<?php } ?>
+
 			</table>
 			<?php if(!$this->case_id){$this->ListingAPP->pagination(count($payments));}?>
-		</div>
+		</form>
 	<?php
 	}
 	

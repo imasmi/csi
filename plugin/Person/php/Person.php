@@ -22,6 +22,15 @@ class Person{
 		$this->type_name = $this->type == "person" ? "ЕГН" : "ЕИК";
 	}
 	
+	// array: array with person ids
+	public static function list($array){
+		foreach($array as $person_id){
+		?>
+			<div class="person-list"><?php echo $GLOBALS["PDO"]->query("SELECT name FROM person WHERE id='" . $person_id . "'")->fetch()["name"];?></div>
+		<?php
+		}
+	}
+
 	//Array possible values:
 	//id => int (ИД на лице)
 	//name => string (Име на лице)

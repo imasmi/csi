@@ -72,6 +72,8 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 							<th>Точка</th>
 							<th>Брой</th>
 							<th>Сума</th>
+							<th>Платени</th>
+							<th>Остатък</th>
 							<th>Дата</th>
 							<th>Бележка</th>
 							<th>Длъжници</th>
@@ -85,6 +87,8 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 							<td>т.<?php echo $tax["point_number"];?></td>
 							<td><?php echo $tax["count"]; $total_taxes["count"] = total($total_taxes, $tax, "count");?></td>
 							<td><?php echo $tax["sum"]; $total_taxes["sum"] = total($total_taxes, $tax, "sum");?></td>
+							<td></td>
+							<td></td>
 							<td><?php echo web\dates::_($tax["date"]);?></td>
 							<td><?php echo $tax["note"];?></td>
 							<td>
@@ -104,24 +108,18 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 						<?php if (!empty($total_taxes)) { ?>
 						<tr>
 							<th>Избрани</th>
-							<th></th>
-							<th></th>
+							<th colspan="2"></th>
 							<th id="selected-taxes">0</th>
 							<th id="selected-sums"><?php echo \plugin\Money\Money::sum(0);?></th>
-							<th></th>
-							<th></th>
-							<th></th>
+							<th colspan="5"></th>
 						</tr>
 
 						<tr>
 							<th>Общо</th>
-							<th></th>
-							<th></th>
+							<th colspan="2"></th>
 							<th><?php echo $total_taxes["count"];?></th>
 							<th><?php echo \plugin\Money\Money::sum($total_taxes["sum"]);?></th>
-							<th></th>
-							<th></th>
-							<th></th>
+							<th colspan="5"></th>
 						</tr>
 						<?php } ?>
 					</table>
@@ -135,11 +133,14 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 							<th>#</th>
 							<th>Вид</th>
 							<th>Сума</th>
+							<th>Платена</th>
+							<th>Остатък</th>
+							<th>Длъжници</th>
 						</tr>
 						<?php 
 						$cnt = 0;
 						$total_debt = 0;
-						foreach ($PDO->query("SELECT * FROM debt WHERE caser_id='" . $_GET["id"] . "' AND title_id='" . $title["id"] . "'") as $debt) { 
+						foreach ($PDO->query("SELECT * FROM debt WHERE caser_id='" . $_GET["id"] . "' AND title_id='" . $title["id"] . "' AND link_id=0") as $debt) { 
 								$setting = $PDO->query("SELECT tag,`type` FROM " . $Setting->table . " WHERE id='" . $debt["setting_id"] . "'")->fetch();
 								$subsetting = $PDO->query("SELECT tag,`type` FROM " . $Setting->table . " WHERE id='" . $debt["subsetting_id"] . "'")->fetch();
 							?>
@@ -149,18 +150,41 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 							<td><?php echo ++$cnt;?></td>
 							<td><?php echo $setting["type"];?>, <?php echo $subsetting["type"];?></td>
 							<td><?php echo $debt["sum"]; $total_debt += $debt["sum"];?></td>
+							<td></td>
+							<td></td>
+							<td>
+								<?php 
+									foreach(json_decode($debt["debtors"], true) as $debtor_id){
+										?>
+										<div><?php echo $PDO->query("SELECT name FROM person WHERE id='" . $debtor_id . "'")->fetch()["name"];?></div>
+										<?php
+									}
+								?>
+							</td>
 						</tr>
 						<?php 
 						if ($setting["tag"] == "interest") {
+							$sub_cnt = 0;
 							foreach ($PDO->query("SELECT * FROM debt WHERE link_id='" . $debt["id"] . "' ORDER by start ASC") as $subdebt) { 
 								$interest = $Money->interest($subdebt);
 								?>
 							<tr>
-								<td></td>
+								<td><a class="button button-icon" href="<?php echo \system\Core::url();?>/Money/debt/edit?id=<?php echo $subdebt["id"];?>"><?php echo $Font_awesome->_("Edit icon");?></a></td>
 								<td><input type="checkbox" onclick="csi.totalSum(this,'#selected-debts','<?php echo $interest;?>');"></td>
-								<td><?php echo ++$cnt;?></td>
-								<td>Законна лихва за <?php echo $subsetting["type"];?> върху <?php echo $subdebt["sum"];?> лева от <?php echo web\dates::_($subdebt["start"]);?></td>
+								<td></td>
+								<td><?php echo $cnt . '.' . ++$sub_cnt;?>) Законна лихва за <?php echo $subsetting["type"];?> върху <?php echo $subdebt["sum"];?> лева от <?php echo web\dates::_($subdebt["start"]);?></td>
 								<td><?php echo $interest; $total_debt += $interest;?></td>
+								<td></td>
+								<td></td>
+								<td>
+									<?php 
+										foreach(json_decode($subdebt["debtors"], true) as $debtor_id){
+											?>
+											<div><?php echo $PDO->query("SELECT name FROM person WHERE id='" . $debtor_id . "'")->fetch()["name"];?></div>
+											<?php
+										}
+									?>
+								</td>
 							</tr>
 							<?php
 							}
@@ -170,16 +194,16 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 						<?php if ($total_debt > 0) { ?>
 						<tr>
 							<th>Избрани</th>
-							<th></th>
-							<th></th>
+							<th colspan="3"></th>
 							<th id="selected-debts"><?php echo \plugin\Money\Money::sum(0);?></th>
+							<td colspan="3"></td>
 						</tr>
 
 						<tr>
 							<th>Общо</th>
-							<th></th>
-							<th></th>
+							<th colspan="3"></th>
 							<th><?php echo \plugin\Money\Money::sum($total_debt);?></th>
+							<td colspan="3"></td>
 						</tr>
 						<?php } ?>
 

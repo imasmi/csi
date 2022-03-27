@@ -1,12 +1,12 @@
 <?Php 
 include_once(\system\Core::doc_root() . '/system/php/Form.php');
 include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
-$Caser = new \plugin\Caser\Caser;
+$Caser = new \plugin\Caser\Caser($_GET["case_id"]);
 include_once(\system\Core::doc_root() . '/plugin/Person/php/Person.php');
 $Person = new \plugin\Person\Person;
 ?>
 <div class="admin">
-<h3 class="title">Добавяне на плащане</h3>
+<h3 class="text-center">Добавяне на плащане</h3>
 <div class="error-message" id="error-message"></div>
 <form class="form" id="form" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#form'), '#error-message')">
     <table class="table">
@@ -17,13 +17,21 @@ $Person = new \plugin\Person\Person;
         </tr>
 
         <tr>
-            <td>Вносител</td>
-            <td><?php $Person->select("person");?></td>
+            <td>Длъжници</td>
+            <td>
+                <?php 
+                    $debotrs = [];
+                    foreach ($Caser->debtor as $debtor) {
+                        $debotrs[$debtor] = $PDO->query("SELECT name FROM person WHERE id='" . $debtor . "'")->fetch()["name"];
+                    }
+                    \system\Form::multiselect("debtor_id", ["data" => $debotrs]);
+                ?>
+            </td>
         </tr>
 
         <tr>
             <td>Дата</td>
-            <td><input type="date" name="date" id="date" value="<?php echo date("Y-m-d H:i:s");?>"/></td>
+            <td><input type="date" name="date" id="date" value="<?php echo date("Y-m-d H:i:s");?>" required/></td>
         </tr>
 
         <tr>
@@ -38,7 +46,7 @@ $Person = new \plugin\Person\Person;
 
         <tr>
             <td>Бордеро</td>
-            <td><input type="number" name="bordero" id="bordero"/></td>
+            <td><input type="number" name="number"/></td>
         </tr>
 
         <tr>
@@ -48,12 +56,12 @@ $Person = new \plugin\Person\Person;
 
         <tr>
             <td>Вносител</td>
-            <td><textarea name="debtor" id="debtor"></textarea></td>
+            <td><?php echo $Person->select("sender");?></td>
         </tr>
 
         <tr>
             <td>Получател</td>
-            <td><textarea name="creditor" id="creditor"></textarea></td>
+            <td><?php echo $Person->select("receiver", ["id" => 1]);?></td>
         </tr>
 
         <tr>
@@ -64,7 +72,7 @@ $Person = new \plugin\Person\Person;
             }
             ?>
             <td>Банка</td>
-            <td><?php \system\Form::select("bank", $banks);?></td>
+            <td><?php \system\Form::select("bank", $banks, ["required" => true]);?></td>
         </tr>
 
         <tr>
