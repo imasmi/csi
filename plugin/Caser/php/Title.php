@@ -41,8 +41,6 @@ class Title{
 		<div>Номер: <?php echo $this->item["number"];?></div>
 		<div class="margin-bottom-10">Дата: <?php echo \web\dates::_($this->item["date"]);?></div>
 		<a class="button button-icon" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/edit?id=<?php echo $this->id;?>" title="Редакция на титул"><?php echo $GLOBALS["Font_awesome"]->_("Edit icon");?></a>
-		<a class="button button-icon" href="<?php echo \system\Core::url();?>Money/tax/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>" title="Добавяне на такса"><?php echo $GLOBALS["Font_awesome"]->_("Tax icon");?></a>
-		<a class="button button-icon" href="<?php echo \system\Core::url();?>Money/debt/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>" title="Добавяне на дълг"><?php echo $GLOBALS["Font_awesome"]->_("Debt icon");?></a>
 	<?php
 	}
 
@@ -81,7 +79,6 @@ class Title{
 					<?php echo $Person->edit();?>
 					<a class="button button-icon" href="<?php echo \system\Core::this_path(0, -1);?>/caser_title/change-person?id=<?php echo $this->id;?>&type=debtor&person=<?php echo $pers["id"];?>&debtor"><?php echo $GLOBALS["Font_awesome"]->_("Change icon");?></a>
 					<a class="button button-icon" href="<?php echo \system\Core::url();?>Money/tax/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>&debtor_id=<?php echo $pers["id"];?>"><?php echo $GLOBALS["Font_awesome"]->_("Tax icon");?></a>
-					<a class="button button-icon" href="<?php echo \system\Core::url();?>Money/debt/add?caser_id=<?php echo $this->case["id"];?>&title_id=<?php echo $this->id;?>&debtor_id=<?php echo $pers["id"];?>"><?php echo $GLOBALS["Font_awesome"]->_("Debt icon");?></a>
 				</div>
 			<?php 
 			}
