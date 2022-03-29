@@ -67,7 +67,7 @@ section.open .tag:before{content: "-";}
 .admin, .admin table{border-collapse: collapse; margin-top: 0;}
 .admin td{border-bottom: 1px solid #eeeeee; font-size: 16px; padding: 2px 5px; text-align: center;}
 .admin th{background-color: #373737;color: #ffffff; box-shadow: 0 2px 4px #000000; border-bottom: none; padding: 8px 5px;}
-.admin tr:hover td{    background: linear-gradient(to bottom, #e1e1e1, 36%, #c3abab); text-shadow: 0 0 7px #ffffff; font-weight: bold; color: #000000;}
+.admin tr:hover td{    background: linear-gradient(to bottom, #e1e1e1, 36%, #c3abab); text-shadow: 0 0 7px #ffffff; color: #000000;}
 .admin select{width: auto;}
 .admin a{display: inline-block;}
 

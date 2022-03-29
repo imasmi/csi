@@ -93,7 +93,7 @@ class Bnb{
 					<td><?php echo $account["bank_upd_date"];?></td>
 				</tr>
 			
-				<?php if(isset($account["attachments"])){
+				<?php  if(isset($account["attachments"])){
 				?>
 				<tr>
 					<th colspan="7">Идентификационен номер на запор на сметка</th>

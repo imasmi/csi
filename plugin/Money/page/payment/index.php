@@ -11,7 +11,7 @@ $array = array(
 	"Описане" => "description",
 	"Основание" => "reason",
 	"Бордеро" => "number",
-	"Платец" => array("person" => 'echo $this->PDO->query("SELECT name FROM person WHERE id=\'" . $list["person"] . "\'")->fetch()["name"];'),
+	"Платец" => array("sender" => 'echo json_decode($list["sender"], true)["name"];'),
 	"Банка" => array("bank"=>  'echo $this->PDO->query("SELECT IBAN FROM bank WHERE id=\'" . $list["bank"] . "\'")->fetch()["IBAN"];'),
 	"За разпределяне" => array("allocate" => 'echo $list["allocate"] > 0 ? $list["allocate"] : "Не";'),
 	"Разпределени" => array("partitioned" => 'echo $list["allocate"] > 0 ? $list["partitioned"] : "";'),

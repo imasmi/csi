@@ -4,7 +4,7 @@ use \module\Setting\Setting as Setting;
 use \plugin\Caser\Caser as Caser;
 
 class Money{
-	public function __construct($case_id=false){
+	public function __construct($case_id=false, $data = []){
 		global $PDO;
 		$this->PDO = $PDO;
 		global $Page;
@@ -15,11 +15,18 @@ class Money{
 		$this->Setting = $Setting;
 		$this->case_id = $case_id;
 		$this->plugin = "Money";
+		if ($this->case_id != false) {
+			$this->total = ["debt" => ["sum" => 0], "tax" => ["sum" => 0]];
+			$this->date = isset($this->data["date"]) ? $this->data["date"] : date("Y-m-d");
+			$this->debts = $this->debts();
+			$this->taxes = $this->taxes();
+		}
 	}
 	
 	public static function sum($sum){
 		return number_format($sum, 2, ".", " ");
 	}
+	
 	//["sum" => int, "start" => string(date), "end" => string(date)]
 	public static function interest($data) {
 		$now = isset($data["end"]) ? strtotime($data["end"]) : strtotime(date("Y-m-d"));
@@ -27,7 +34,73 @@ class Money{
 		$datediff = ($now - $your_date)/ (60 * 60 * 24);
 		return number_format((($data["sum"]/10)/360) * $datediff, 2);
 	}
+
+    public static function debt_types () {
+        $types = [];
+        foreach($GLOBALS["PDO"]->query("SELECT * FROM " . $GLOBALS["Setting"]->table . " WHERE fortable='debt'", \PDO::FETCH_ASSOC) as $setting){
+            $types[$setting["id"]] = $setting;
+        }
+        return $types;
+    }
+
+    public static function tax ($sum) {
+        $total = 0;
+        if ($sum > 100000) {
+            $total = 5220 + ((($sum - 100000)/100) * 2);
+        } else if ($sum > 50000) {
+            $total = 3220 + ((($sum - 50000)/100) * 4);
+        } else if ($sum > 10000) {
+            $total = 820 + ((($sum - 10000)/100) * 6);
+        } else if ($sum > 1000) {
+            $total = 100 + ((($sum - 1000)/100) * 8);
+        } else {
+            $total = $sum / 10;
+        }
+        return number_format($total, 2);
+    }
 	
+	public function debts(){
+		$debts = [];
+		foreach($this->PDO->query("SELECT * FROM debt WHERE case_id='" . $this->case_id . "'", \PDO::FETCH_ASSOC) as $debt){
+			$debts[$debt["id"]] = $debt;
+			$debts[$debt["id"]]["debt"] = ["sum" => 0];
+			$debts[$debt["id"]]["items"] = [];
+			foreach($this->PDO->query("SELECT * FROM debt_item WHERE debt_id='" . $debt["id"] . "'", \PDO::FETCH_ASSOC) as $debt_item){
+                if ( $debt_item["link_id"] == 0 ) {
+                    $debt_item["type"] = $debt_item["setting_id"] == 110 ? "interest" : "non-interest";
+                    $debts[$debt["id"]]["items"][$debt_item["id"]] = $debt_item;
+					$debts[$debt["id"]]["debt"]["sum"] += $debt_item["sum"];
+					$this->total["debt"]["sum"] += $debt_item["sum"];
+                } else if ($debt_item["date"] <= $this->date) {
+                    $debt_item["amount"] = static::interest(["sum" => $debt_item["sum"], "start" => $debt_item["date"], "end" => $this->date]);
+                    $debts[$debt["id"]]["items"][$debt_item["link_id"]]["interest"][$debt_item["id"]] = $debt_item;
+					$debts[$debt["id"]]["debt"]["sum"]  += static::interest(["sum" => $debt_item["sum"], "start" => $debt_item["date"], "end" => $this->date]);
+					$this->total["debt"]["sum"] += static::interest(["sum" => $debt_item["sum"], "start" => $debt_item["date"], "end" => $this->date]);
+				}
+            }
+
+			$total_tax = static::tax($debts[$debt["id"]]["debt"]["sum"]);
+			$debts[$debt["id"]]["tax"]["sum"] = $total_tax;
+			foreach($debts[$debt["id"]]["items"] as $id => $item){
+				$debts[$debt["id"]]["items"][$id]["tax"] = number_format(($item["sum"] / $debts[$debt["id"]]["debt"]["sum"]) * $total_tax, 2);
+				if ($item["type"] == "interest") {
+					foreach ( $item["interest"] as $interest) {
+						$debts[$debt["id"]]["items"][$id]["interest"][$interest["id"]]["tax"] = number_format(($interest["amount"] / $debts[$debt["id"]]["debt"]["sum"]) * $total_tax, 2);
+					}
+				}
+			}
+		}
+		return $debts;
+	}
+
+	public function taxes(){
+		foreach ($this->PDO->query("SELECT * FROM tax WHERE case_id='" . $this->case_id . "' ORDER by date DESC", \PDO::FETCH_ASSOC) as $tax) {
+			$taxes[$tax["id"]] = $tax;
+			$this->total["tax"]["sum"] += $tax["sum"];
+		}
+		return $taxes;
+	}
+
 	public function payment(){
 	?>
 		<form method="post" action="<?php echo \system\Core::url();?>Money/distribution/add" class="admin">
@@ -79,7 +152,7 @@ class Money{
 					<td><?php echo $payment["reason"];?></td>
 					<td>
 						<?php 
-							foreach(json_decode($payment["debtors"], true) as $debtor_id) {
+							foreach(json_decode($payment["debtor"], true) as $debtor_id) {
 							?>
 							<div><?php echo $this->PDO->query("SELECT name FROM person WHERE id='" . $debtor_id . "'")->fetch()["name"];?></div>
 							<?php

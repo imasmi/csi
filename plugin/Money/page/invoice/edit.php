@@ -40,7 +40,7 @@
 									<button type="button" class="button" onclick="S.remove('#payment-<?php echo $pay_cnt;?>')">-</button>
 									<span><?php echo $payment["amount"];?></span>-
 									<span><?php echo $payment["date"];?></span>
-									<span>Платени от <?php echo $PDO->query("SELECT name FROM person WHERE id='" . $payment["person"] . "'")->fetch()["name"];?></span>
+									<span>Платени от <?php echo json_decode($payment["sender"], true)["name"];?></span>
 									<span> (<?php echo $payment["description"];?>)</span>
 								</div>
 							<?php

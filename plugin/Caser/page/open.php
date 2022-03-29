@@ -6,6 +6,7 @@ include_once(\system\Core::doc_root() . '/plugin/Person/php/Person.php');
 include_once(\system\Core::doc_root() . '/plugin/Reference/php/Reference.php');
 include_once(\system\Core::doc_root() . '/plugin/Document/php/Document.php');
 include_once(\system\Core::doc_root() . '/plugin/Money/php/Money.php');
+require_once(\system\Core::doc_root() . "/plugin/Money/php/Debt.php");
 include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
 include_once(\system\Core::doc_root() . '/web/php/dates.php');
 
@@ -95,8 +96,8 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 						<td><?php echo $tax["note"];?></td>
 						<td>
 							<?php 
-								if ($tax["debtors"] != null) {
-									foreach(json_decode($tax["debtors"], true) as $debtor_id){
+								if ($tax["debtor"] != null) {
+									foreach(json_decode($tax["debtor"], true) as $debtor_id){
 										?>
 										<div><?php echo $PDO->query("SELECT name FROM person WHERE id='" . $debtor_id . "'")->fetch()["name"];?></div>
 										<?php
@@ -133,8 +134,8 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 					<a class="button button-icon" href="<?php echo \system\Core::url();?>Money/debt/add?caser_id=<?php echo $_GET["id"];?>&title_id=<?php echo $title["id"];?>" title="Добавяне на дълг"><?php echo $GLOBALS["Font_awesome"]->_("Add icon");?></a>
 				</div>
 
-				<?php  foreach ($PDO->query("SELECT id, debtors FROM debt WHERE caser_id='" . $_GET["id"] . "' AND title_id='" . $title["id"] . "'") as $debt) { ?>
-					<div class="color-4-bg">Длъжници: <?php echo \plugin\Person\Person::list(json_decode($debt["debtors"], true));?></div>
+				<?php  foreach ($PDO->query("SELECT id, debtor FROM debt WHERE caser_id='" . $_GET["id"] . "' AND title_id='" . $title["id"] . "'") as $debt) { ?>
+					<div class="color-4-bg">Длъжници: <?php echo \plugin\Person\Person::list(json_decode($debt["debtor"], true));?></div>
 
 					<table cellpadding="5" cellspacing="0" class="border-bottom-row">
 						<tr>
@@ -163,13 +164,13 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 							<?php 
 							if ($setting["tag"] == "interest") {
 								$sub_cnt = 0;
-								foreach ($PDO->query("SELECT * FROM debt_item WHERE link_id='" . $debt_item["id"] . "' ORDER by start ASC") as $subdebt) { 
-									$interest = $Money->interest($subdebt);
+								foreach ($PDO->query("SELECT * FROM debt_item WHERE link_id='" . $debt_item["id"] . "' ORDER by date ASC") as $subdebt) { 
+									$interest = \plugin\Money\Debt::interest(["sum" => $subdebt["sum"], "start" => $subdebt["date"], "end" => date("Y-m-d")]);
 									?>
 								<tr>
 									<td><input type="checkbox" onclick="csi.totalSum(this,'#selected-debts','<?php echo $interest;?>');"></td>
 									<td></td>
-									<td><?php echo $cnt . '.' . ++$sub_cnt;?>) Законна лихва за <?php echo $subsetting["type"];?> върху <?php echo $subdebt["sum"];?> лева от <?php echo web\dates::_($subdebt["start"]);?></td>
+									<td><?php echo $cnt . '.' . ++$sub_cnt;?>) Законна лихва за <?php echo $subsetting["type"];?> върху <?php echo $subdebt["sum"];?> лева от <?php echo web\dates::_($subdebt["date"]);?></td>
 									<td><?php echo $interest; $total_debt += $interest;?></td>
 									<td></td>
 									<td></td>
