@@ -224,10 +224,10 @@ csi.distribute = function(elem){
 	const split =  elem.id.split("-");
 	const type = split[0];
 	const id = split[1];
-	const sum = Number(S("#distribute-sum").innerHTML);
-	const current = Number(elem.getAttribute("data-current"));
-	const value = Number(elem.value);
-	const max = Number(elem.max);
+	const sum = Number(S("#distribute-sum").innerHTML); // Get current sum to distribute
+	const current = Number(elem.getAttribute("data-current")); // Current elem value before the change
+	const value = Number(elem.value); // The value we want to use for update
+	const max = Number(elem.max); // Maximum value for the current element
 	let distribute = value;
 
 	//Set distribute sum based on available money and current max value
@@ -240,12 +240,51 @@ csi.distribute = function(elem){
 	
 	if  (type == "tax") {
 		S("#tax-total").innerHTML = (Number(S("#tax-total").innerHTML) - current + distribute).toFixed(2);
-	} else if(type == "tax") {
+	} else if(type == "total") {
 		const debt = elem.getAttribute("debt-id");
+		S(`#${type}-${debt}`).innerHTML = (Number(S(`#${type}-${debt}`).innerHTML) - current + distribute).toFixed(2);
+
+		const sum = S(`#sum-${id}`);
+		const prop = S(`#prop-${id}`);
+		const total = Number(sum.max) + Number(prop.max);
+		const sumValue = Number(sum.max) * (distribute/total);
+		const propValue = Number(prop.max) * (distribute/total);
+		sum.value = sumValue.toFixed(2);
+		prop.value = propValue.toFixed(2);
+		S(`#sum-${debt}`).innerHTML = (Number(S(`#sum-${debt}`).innerHTML) - Number(sum.getAttribute("data-current")) + sumValue).toFixed(2);
+		sum.setAttribute("data-current", sumValue.toFixed(2));
+		S(`#prop-${debt}`).innerHTML = (Number(S(`#prop-${debt}`).innerHTML) - Number(prop.getAttribute("data-current")) + propValue).toFixed(2);
+		prop.setAttribute("data-current", propValue.toFixed(2));
 	} else {
 		const debt = elem.getAttribute("debt-id");
 		S(`#${type}-${debt}`).innerHTML = (Number(S(`#${type}-${debt}`).innerHTML) - current + distribute).toFixed(2);
 	}
 	
-	elem.setAttribute("data-current", distribute);
+	elem.setAttribute("data-current", distribute); // Update current element current value
+}
+
+csi.distributeAuto = function(){
+	let items = [];
+	S.all("#distribute-data input", el => {
+		el.value = 0;
+		el.setAttribute("data-current", "0");
+		if (el.getAttribute("data-order")) {
+			if(!items[el.getAttribute("data-order")]){ items[el.getAttribute("data-order")] = [];}
+			items[el.getAttribute("data-order")].push(el);
+		}
+	});
+
+	S.all(".total", el => {
+		el.innerHTML = 0;
+	});
+	S("#distribute-sum").innerHTML = S("#distribute-amount").innerHTML;
+
+	for(let i = 0; i < items.length; i++){
+		if(items[i]) {
+			for (let n = 0; n < items[i].length; n++) {
+				items[i][n].value = Number.MAX_SAFE_INTEGER;
+				csi.distribute(items[i][n]);
+			}
+		}
+	}
 }

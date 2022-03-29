@@ -4,15 +4,15 @@ $check = array();
 #UPDATE USER DATA IF ALL EVERYTHING IS FINE
 if(empty($check)){
     
-$debtors = [];
+$debtor = [];
 for ($i = 0; $i < $_POST["multiselect-counter-debtor_id"]; $i++){
     if (isset($_POST["multiselect-debtor_id-" . $i])) {
-        $debtors[] = $_POST["multiselect-debtor_id-" . $i];
+        $debtor[] = $_POST["multiselect-debtor_id-" . $i];
     }
 }
 
-if (!empty($debtors)) {
-    $debtors = json_encode(array_unique($debtors));
+if (!empty($debtor)) {
+    $debtor = json_encode(array_unique($debtor));
 } else {
     ?>
     <h3 class="color-2">Добавете поне един длъжник за плащането</h3>
@@ -24,7 +24,7 @@ $data = [
     "date" => $_POST["date"],
     "case_id" => $_POST["case_id"],
     "reason" => $_POST["reason"],
-    "debtors" => $debtors,
+    "debtor" => $debtor,
     "bank" => $_POST["bank"],
     "amount" => $_POST["amount"],
     "allocate" => $_POST["allocate"],

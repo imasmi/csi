@@ -14,10 +14,12 @@ class Money{
 		global $Setting;
 		$this->Setting = $Setting;
 		$this->case_id = $case_id;
+		$this->data = $data;
 		$this->plugin = "Money";
 		if ($this->case_id != false) {
-			$this->total = ["debt" => ["sum" => 0], "tax" => ["sum" => 0]];
+			$this->total = ["sum" => 0, "paid" => 0, "unpaid" => 0, "tax" => 0, "tax-paid" => 0, "tax-unpaid" => 0];
 			$this->date = isset($this->data["date"]) ? $this->data["date"] : date("Y-m-d");
+			$this->distributions = $this->distributions();
 			$this->debts = $this->debts();
 			$this->taxes = $this->taxes();
 		}
@@ -59,45 +61,101 @@ class Money{
         return number_format($total, 2);
     }
 	
+	// sum => погасен дълг
+	// prop => погасена пропорционална такса
+	// tax => погасена обикновенна такса
+	public function distributions(){
+		$distributions = ["sum" => [], "prop" => [], "tax" => []];
+		foreach ($this->PDO->query("SELECT * FROM distribution WHERE case_id='" . $this->case_id . "' AND date <= '" . $this->date . "' ORDER by date DESC") as $distribution) {
+			foreach(json_decode($distribution["debt"], true) as $id => $array){
+				if (!isset($distributions["sum"][$id])) { $distributions["sum"][$id] = 0;}
+				if (!isset($distributions["prop"][$id])) { $distributions["prop"][$id] = 0;}
+				$distributions["sum"][$id] += $array["sum"];
+				$distributions["prop"][$id] += $array["tax"];
+			}
+
+			foreach(json_decode($distribution["tax"], true) as $id => $value){
+				if (!isset($distributions["tax"][$id])) { $distributions["tax"][$id] = 0;}
+				$distributions["tax"][$id] += $value;
+			}
+		}
+		return $distributions;
+	}
+
+
 	public function debts(){
 		$debts = [];
 		foreach($this->PDO->query("SELECT * FROM debt WHERE case_id='" . $this->case_id . "'", \PDO::FETCH_ASSOC) as $debt){
+			$debt["sum"] = 0;
+			$debt["paid"] = 0;
+			$debt["unpaid"] = 0;
+			$debt["tax"] = 0;
+			$debt["tax-paid"] = 0;
+			$debt["tax-unpaid"] = 0;
+
+
 			$debts[$debt["id"]] = $debt;
-			$debts[$debt["id"]]["debt"] = ["sum" => 0];
 			$debts[$debt["id"]]["items"] = [];
-			foreach($this->PDO->query("SELECT * FROM debt_item WHERE debt_id='" . $debt["id"] . "'", \PDO::FETCH_ASSOC) as $debt_item){
+			foreach($this->PDO->query("SELECT * FROM debt_item WHERE debt_id='" . $debt["id"] . "' AND date <= '" . $this->date . "'", \PDO::FETCH_ASSOC) as $debt_item){
+
+				// Платен дълг и пропорционална такса от разпределенията
+				$debt_item["paid"] = isset($this->distributions["sum"][$debt_item["id"]]) ? $this->distributions["sum"][$debt_item["id"]] : 0;
+				$debt_item["tax-paid"] = isset($this->distributions["prop"][$debt_item["id"]]) ? $this->distributions["prop"][$debt_item["id"]] : 0;
+				
                 if ( $debt_item["link_id"] == 0 ) {
                     $debt_item["type"] = $debt_item["setting_id"] == 110 ? "interest" : "non-interest";
+					$debt_item["unpaid"] = $debt_item["sum"] - $debt_item["paid"];
                     $debts[$debt["id"]]["items"][$debt_item["id"]] = $debt_item;
-					$debts[$debt["id"]]["debt"]["sum"] += $debt_item["sum"];
-					$this->total["debt"]["sum"] += $debt_item["sum"];
-                } else if ($debt_item["date"] <= $this->date) {
-                    $debt_item["amount"] = static::interest(["sum" => $debt_item["sum"], "start" => $debt_item["date"], "end" => $this->date]);
-                    $debts[$debt["id"]]["items"][$debt_item["link_id"]]["interest"][$debt_item["id"]] = $debt_item;
-					$debts[$debt["id"]]["debt"]["sum"]  += static::interest(["sum" => $debt_item["sum"], "start" => $debt_item["date"], "end" => $this->date]);
-					$this->total["debt"]["sum"] += static::interest(["sum" => $debt_item["sum"], "start" => $debt_item["date"], "end" => $this->date]);
+					$debts[$debt["id"]]["sum"] += $debt_item["sum"]; //Добавяне към общата сума за този елемент на дълга
+					$this->total["sum"] += $debt_item["sum"]; //Добавяне към общата сума за дълга - всичко
+				} else {
+                    $debt_item["amount"] = static::interest(["sum" => $debt_item["sum"], "start" => $debt_item["date"], "end" => $this->date]); // Изчисляване на сумата на законната лихва към датата на дълга
+					$debt_item["unpaid"] = $debt_item["amount"] - $debt_item["paid"];
+					$debts[$debt["id"]]["items"][$debt_item["link_id"]]["interest"][$debt_item["id"]] = $debt_item;
+					$debts[$debt["id"]]["sum"]  += static::interest(["sum" => $debt_item["sum"], "start" => $debt_item["date"], "end" => $this->date]);//Добавяне към общата сума на законната лихва
+					$this->total["sum"] += static::interest(["sum" => $debt_item["sum"], "start" => $debt_item["date"], "end" => $this->date]); //Добавяне към общата сума за дълга - всичко
 				}
+				
+				//Добавяне към общите суми за този дълг и пропорционална такса
+				$debts[$debt["id"]]["paid"] += $debt_item["paid"];
+				$debts[$debt["id"]]["tax-paid"] += $debt_item["tax-paid"];
+				//Добавяне към общите суми за тоталния дълг и пропорционална такса
+				$this->total["paid"] += $debt_item["paid"];
+				$this->total["tax-paid"] += $debt_item["tax-paid"];
             }
 
-			$total_tax = static::tax($debts[$debt["id"]]["debt"]["sum"]);
-			$debts[$debt["id"]]["tax"]["sum"] = $total_tax;
+			
+
+			$total_tax = static::tax($debts[$debt["id"]]["sum"]);
+			$debts[$debt["id"]]["tax"] = $total_tax;
+			$this->total["tax"] += $total_tax;
+			$debts[$debt["id"]]["unpaid"] = $debts[$debt["id"]]["sum"] - $debts[$debt["id"]]["paid"];
+			$debts[$debt["id"]]["tax-unpaid"] = $debts[$debt["id"]]["tax"] - $debts[$debt["id"]]["tax-paid"];
 			foreach($debts[$debt["id"]]["items"] as $id => $item){
-				$debts[$debt["id"]]["items"][$id]["tax"] = number_format(($item["sum"] / $debts[$debt["id"]]["debt"]["sum"]) * $total_tax, 2);
+				$debts[$debt["id"]]["items"][$id]["tax"] = number_format(($item["sum"] / $debts[$debt["id"]]["sum"]) * $total_tax, 2);
+				$debts[$debt["id"]]["items"][$id]["tax-unpaid"] = $debts[$debt["id"]]["items"][$id]["tax"] - $debts[$debt["id"]]["items"][$id]["tax-paid"];
 				if ($item["type"] == "interest") {
 					foreach ( $item["interest"] as $interest) {
-						$debts[$debt["id"]]["items"][$id]["interest"][$interest["id"]]["tax"] = number_format(($interest["amount"] / $debts[$debt["id"]]["debt"]["sum"]) * $total_tax, 2);
+						$debts[$debt["id"]]["items"][$id]["interest"][$interest["id"]]["tax"] = number_format(($interest["amount"] / $debts[$debt["id"]]["sum"]) * $total_tax, 2);
+						$debts[$debt["id"]]["items"][$id]["interest"][$interest["id"]]["tax-unpaid"] = $debts[$debt["id"]]["items"][$id]["interest"][$interest["id"]]["tax"] - $debts[$debt["id"]]["items"][$id]["interest"][$interest["id"]]["tax-paid"];
 					}
 				}
 			}
+			
 		}
+		$this->total["unpaid"] = $this->total["sum"] - $this->total["paid"];
 		return $debts;
 	}
 
 	public function taxes(){
 		foreach ($this->PDO->query("SELECT * FROM tax WHERE case_id='" . $this->case_id . "' ORDER by date DESC", \PDO::FETCH_ASSOC) as $tax) {
+			$tax["paid"] = isset($this->distributions["tax"][$tax["id"]]) ? $this->distributions["tax"][$tax["id"]] : 0;
+			$tax["unpaid"] = $tax["sum"] - $tax["paid"];
 			$taxes[$tax["id"]] = $tax;
-			$this->total["tax"]["sum"] += $tax["sum"];
+			$this->total["tax"] += $tax["sum"];
+			$this->total["tax-paid"] += $tax["paid"];
 		}
+		$this->total["tax-unpaid"] = $this->total["tax"] - $this->total["tax-paid"];
 		return $taxes;
 	}
 

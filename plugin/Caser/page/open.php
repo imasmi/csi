@@ -6,19 +6,17 @@ include_once(\system\Core::doc_root() . '/plugin/Person/php/Person.php');
 include_once(\system\Core::doc_root() . '/plugin/Reference/php/Reference.php');
 include_once(\system\Core::doc_root() . '/plugin/Document/php/Document.php');
 include_once(\system\Core::doc_root() . '/plugin/Money/php/Money.php');
-require_once(\system\Core::doc_root() . "/plugin/Money/php/Debt.php");
 include_once(\system\Core::doc_root() . '/plugin/Note/php/Note.php');
 include_once(\system\Core::doc_root() . '/web/php/dates.php');
-
-function total($total, $tax, $name) {
-	return isset($total[$name]) ? $total[$name] += $tax[$name] : $tax[$name];
-}
-
+use \plugin\Money\Money;
 $Caser = new \plugin\Caser\Caser($_GET["id"]);
 $charger = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $Caser->charger . "'")->fetch();
 $Reference = new \plugin\Reference\Reference;
 $Document = new \plugin\Document\Document($_GET["id"]);
-$Money = new \plugin\Money\Money($_GET["id"]);
+$date = isset($_GET["debt_date"]) ? $_GET["debt_date"] : date("Y-m-d");
+$Money = new \plugin\Money\Money($_GET["id"], ["date" => $date]);
+$debt_types = Money::debt_types();
+
 ?>
 <div id="caser">
 	<div class="clear">
@@ -64,8 +62,37 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 					</div>
 				</div>
 			</div>
-			
-			
+		<?php } ?>
+
+		<h2>ДЪЛГ към <?php echo \web\dates::_($date);?></h2>
+			<table class="center">
+				<tr>
+					<th></th>
+					<th>Общо</th>
+					<th>Платени</th>
+					<th>Остатък</th>
+				</tr>
+				<tr>
+					<th>За взискатели</th>
+					<td><?php echo $Money->total["sum"];?></td>
+					<td><?php echo $Money->total["paid"];?></td>
+					<td class="color-1-bg"><?php echo $Money->total["unpaid"];?></td>
+				</tr>
+				<tr>
+					<th>За такси</th>
+					<td><?php echo $Money->total["tax"];?></td>
+					<td><?php echo $Money->total["tax-paid"];?></td>
+					<td class="color-1-bg"><?php echo $Money->total["tax-unpaid"];?></td>
+				</tr>
+				<tr>
+					<th>Общо дълг</th>
+					<td><?php echo $Money->total["sum"] + $Money->total["tax"];?></td>
+					<td><?php echo $Money->total["paid"] + $Money->total["tax-paid"];?></td>
+					<td class="color-1-bg"><?php echo $Money->total["unpaid"] + $Money->total["tax-unpaid"];?></td>
+				</tr>
+
+			</table>
+
 			<div class="column-6 padding-10">
 				<h3>Такси</h3>
 				<table cellpadding="5" cellspacing="0" class="border-bottom-row">
@@ -74,24 +101,21 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 						<th></th>
 						<th>Точка</th>
 						<th>Брой</th>
-						<th>Сума</th>
-						<th>Платени</th>
-						<th>Остатък</th>
 						<th>Дата</th>
 						<th>Бележка</th>
 						<th>Длъжници</th>
+						<th>Сума</th>
+						<th>Платени</th>
+						<th>Остатък</th>
 					</tr>
 					<?php 
-					$total_taxes = [];
-					foreach ($PDO->query("SELECT * FROM tax WHERE caser_id='" . $_GET["id"] . "' AND title_id='" . $title["id"] . "'") as $tax) { ?>
+					$total_taxes = ["sum" => 0, "paid" => 0, "unpaid" => 0];
+					foreach ($Money->taxes as $tax) { ?>
 					<tr>
 						<td><a class="button button-icon" href="<?php echo \system\Core::url();?>/Money/tax/edit?id=<?php echo $tax["id"];?>"><?php echo $Font_awesome->_("Edit icon");?></a></td>
 						<td><input type="checkbox" onclick="csi.totalSum(this,'#selected-taxes','<?php echo $tax['count'];?>'); csi.totalSum(this,'#selected-sums','<?php echo $tax['sum'];?>')"></td>
 						<td>т.<?php echo $tax["point_number"];?></td>
-						<td><?php echo $tax["count"]; $total_taxes["count"] = total($total_taxes, $tax, "count");?></td>
-						<td><?php echo $tax["sum"]; $total_taxes["sum"] = total($total_taxes, $tax, "sum");?></td>
-						<td></td>
-						<td></td>
+						<td><?php echo $tax["count"];?></td>
 						<td><?php echo web\dates::_($tax["date"]);?></td>
 						<td><?php echo $tax["note"];?></td>
 						<td>
@@ -105,26 +129,31 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 								}
 							?>
 						</td>
+						<td><?php echo $tax["sum"]; $total_taxes["sum"] += $tax["sum"];?></td>
+						<td><?php echo Money::sum($tax["paid"]);  $total_taxes["paid"] += $tax["paid"];?></td>
+						<td><?php echo Money::sum($tax["unpaid"]); $total_taxes["unpaid"] += $tax["unpaid"];?></td>
 					</tr>
 					<?php } ?>
 					
-					<?php if (!empty($total_taxes)) { ?>
 					<tr>
 						<th>Избрани</th>
 						<th colspan="2"></th>
 						<th id="selected-taxes">0</th>
+						<th colspan="3"></th>
 						<th id="selected-sums"><?php echo \plugin\Money\Money::sum(0);?></th>
-						<th colspan="5"></th>
+						<th></th>
+						<th></th>
 					</tr>
 
 					<tr>
 						<th>Общо</th>
 						<th colspan="2"></th>
-						<th><?php echo $total_taxes["count"];?></th>
+						<th><?php echo count($Money->taxes);?></th>
+						<th colspan="3"></th>
 						<th><?php echo \plugin\Money\Money::sum($total_taxes["sum"]);?></th>
-						<th colspan="5"></th>
+						<th><?php echo \plugin\Money\Money::sum($total_taxes["paid"]);?></th>
+						<th><?php echo \plugin\Money\Money::sum($total_taxes["unpaid"]);?></th>
 					</tr>
-					<?php } ?>
 				</table>
 			</div>
 
@@ -134,7 +163,7 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 					<a class="button button-icon" href="<?php echo \system\Core::url();?>Money/debt/add?caser_id=<?php echo $_GET["id"];?>&title_id=<?php echo $title["id"];?>" title="Добавяне на дълг"><?php echo $GLOBALS["Font_awesome"]->_("Add icon");?></a>
 				</div>
 
-				<?php  foreach ($PDO->query("SELECT id, debtor FROM debt WHERE caser_id='" . $_GET["id"] . "' AND title_id='" . $title["id"] . "'") as $debt) { ?>
+				<?php  foreach ($Money->debts as $debt) { ?>
 					<div class="color-4-bg">Длъжници: <?php echo \plugin\Person\Person::list(json_decode($debt["debtor"], true));?></div>
 
 					<table cellpadding="5" cellspacing="0" class="border-bottom-row">
@@ -143,63 +172,62 @@ $Money = new \plugin\Money\Money($_GET["id"]);
 							<th>#</th>
 							<th>Вид</th>
 							<th>Сума</th>
-							<th>Платена</th>
-							<th>Остатък</th>
+							<th>т.26</th>
+							<th>Неплатена</th>
+							<th>Неплатена т.26</th>
 						</tr>
 						<?php 
 						$cnt = 0;
 						$total_debt = 0;
-						foreach ($PDO->query("SELECT * FROM debt_item WHERE debt_id='" . $debt["id"] . "' AND link_id=0") as $debt_item) { 
-								$setting = $PDO->query("SELECT tag,`type` FROM " . $Setting->table . " WHERE id='" . $debt_item["setting_id"] . "'")->fetch();
-								$subsetting = $PDO->query("SELECT tag,`type` FROM " . $Setting->table . " WHERE id='" . $debt_item["subsetting_id"] . "'")->fetch();
+						foreach ($debt["items"] as $debt_item) { 
 							?>
 							<tr>
 								<td><input type="checkbox" onclick="csi.totalSum(this,'#selected-debts','<?php echo $debt_item["sum"];?>');"></td>
 								<td><?php echo ++$cnt;?></td>
-								<td><?php echo $setting["type"];?>, <?php echo $subsetting["type"];?></td>
-								<td><?php echo $debt_item["sum"]; $total_debt += $debt_item["sum"];?></td>
-								<td></td>
-								<td></td>
+								<td><?php echo $debt_types[$debt_item["setting_id"]]["type"];?>, <?php echo $debt_types[$debt_item["subsetting_id"]]["type"];?></td>
+								<td><?php echo $debt_item["sum"];?></td>
+								<td><?php echo $debt_item["tax"];?></td>
+								<td><?php echo $debt_item["unpaid"];?></td>
+								<td><?php echo $debt_item["tax-unpaid"];?></td>
 							</tr>
 							<?php 
-							if ($setting["tag"] == "interest") {
+							if ($debt_item["type"] == "interest") {
 								$sub_cnt = 0;
-								foreach ($PDO->query("SELECT * FROM debt_item WHERE link_id='" . $debt_item["id"] . "' ORDER by date ASC") as $subdebt) { 
-									$interest = \plugin\Money\Debt::interest(["sum" => $subdebt["sum"], "start" => $subdebt["date"], "end" => date("Y-m-d")]);
+								foreach ($debt_item["interest"] as $interest) { 
 									?>
 								<tr>
-									<td><input type="checkbox" onclick="csi.totalSum(this,'#selected-debts','<?php echo $interest;?>');"></td>
+									<td><input type="checkbox" onclick="csi.totalSum(this,'#selected-debts','<?php echo $interest["amount"];?>');"></td>
 									<td></td>
-									<td><?php echo $cnt . '.' . ++$sub_cnt;?>) Законна лихва за <?php echo $subsetting["type"];?> върху <?php echo $subdebt["sum"];?> лева от <?php echo web\dates::_($subdebt["date"]);?></td>
-									<td><?php echo $interest; $total_debt += $interest;?></td>
-									<td></td>
-									<td></td>
+									<td><?php echo $cnt . '.' . ++$sub_cnt;?>) Законна лихва върху <?php echo $interest["sum"];?> лева от <?php echo web\dates::_($interest["date"]);?> до <?php echo web\dates::_($Money->date);?></td>
+									<td><?php echo $interest["amount"];?></td>
+									<td><?php echo $interest["tax"];?></td>
+									<td><?php echo $interest["unpaid"];?></td>
+									<td><?php echo $interest["tax-unpaid"];?></td>
 								</tr>
 								<?php
 								}
 							}
 						} ?>
 
-						<?php if ($total_debt > 0) { ?>
 						<tr>
 							<th>Избрани</th>
 							<th colspan="2"></th>
 							<th id="selected-debts"><?php echo \plugin\Money\Money::sum(0);?></th>
-							<td colspan="2"></td>
+							<td colspan="3"></td>
 						</tr>
 
 						<tr>
 							<th>Общо</th>
 							<th colspan="2"></th>
-							<th><?php echo \plugin\Money\Money::sum($total_debt);?></th>
-							<td colspan="2"></td>
+							<th><?php echo \plugin\Money\Money::sum($debt["sum"]);?></th>
+							<th><?php echo \plugin\Money\Money::sum($debt["tax"]);?></th>
+							<th><?php echo \plugin\Money\Money::sum($debt["unpaid"]);?></th>
+							<th><?php echo \plugin\Money\Money::sum($debt["tax-unpaid"]);?></th>
 						</tr>
-						<?php } ?>
 
 					</table>
 				<?php } ?>
 			</div>
-		<?php } ?>
 	</div>
 	
 	<section id="incoming">

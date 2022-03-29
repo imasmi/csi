@@ -5,15 +5,15 @@ if(empty($check)){
 
   
 
-    $debtors = [];
+    $debtor = [];
     for ($i = 0; $i < $_POST["multiselect-counter-debtor_id"]; $i++){
         if (isset($_POST["multiselect-debtor_id-" . $i])) {
-            $debtors[] = $_POST["multiselect-debtor_id-" . $i];
+            $debtor[] = $_POST["multiselect-debtor_id-" . $i];
         }
     }
 
-    if (!empty($debtors)) {
-        $debtors = json_encode(array_unique($debtors));
+    if (!empty($debtor)) {
+        $debtor = json_encode(array_unique($debtor));
     } else {
         ?>
         <h3 class="color-2">Добавете поне един длъжник за дълга</h3>
@@ -25,7 +25,7 @@ if(empty($check)){
     $data = [
         "caser_id" => $_POST["caser_id"],
         "title_id" => $_POST["title_id"],
-        "debtors" => $debtors
+        "debtor" => $debtor
     ];
 
     $insert = \system\Data::insert(["data" => $data, "table" => "debt"]);
@@ -39,6 +39,7 @@ if(empty($check)){
                 "setting_id" => $_POST["setting_id-" . $i],
                 "subsetting_id" => $_POST["subsetting_id-" . $i],
                 "sum" => $_POST["sum-" . $i],
+                "date" => $_POST["date-" . $i],
             ];
             \system\Data::insert(["data" => $data, "table" => "debt_item"]);
 
@@ -47,7 +48,7 @@ if(empty($check)){
                     "debt_id" => $debt_id,
                     "link_id" => $PDO->lastInsertId(),
                     "sum" => $_POST["sum-" . $i],
-                    "start" => $_POST["start-" . $i],
+                    "date" => $_POST["date-" . $i],
                 ];
                 \system\Data::insert(["data" => $subdata, "table" => "debt_item"]);
             }

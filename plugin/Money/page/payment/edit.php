@@ -24,7 +24,7 @@ $Person = new \plugin\Person\Person();
                     foreach ($Caser->debtor as $debtor) {
                         $debotrs[$debtor] = $PDO->query("SELECT name FROM person WHERE id='" . $debtor . "'")->fetch()["name"];
                     }
-                    \system\Form::multiselect("debtor_id", ["data" => $debotrs, "items" => json_decode($select["debtors"], true)]);
+                    \system\Form::multiselect("debtor_id", ["data" => $debotrs, "items" => json_decode($select["debtor"], true)]);
                 ?>
             </td>
         </tr>

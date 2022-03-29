@@ -20,11 +20,11 @@ $Person = new \plugin\Person\Person;
             <td>Длъжници</td>
             <td>
                 <?php 
-                    $debotrs = [];
+                    $debtors = [];
                     foreach ($Caser->debtor as $debtor) {
-                        $debotrs[$debtor] = $PDO->query("SELECT name FROM person WHERE id='" . $debtor . "'")->fetch()["name"];
+                        $debtors[$debtor] = $PDO->query("SELECT name FROM person WHERE id='" . $debtor . "'")->fetch()["name"];
                     }
-                    \system\Form::multiselect("debtor_id", ["data" => $debotrs]);
+                    \system\Form::multiselect("debtor_id", ["data" => $debtors]);
                 ?>
             </td>
         </tr>

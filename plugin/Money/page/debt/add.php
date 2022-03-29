@@ -89,7 +89,7 @@ $Caser = new \plugin\Caser\Caser($_GET["caser_id"]);
 <div id="multiselect-template-row" class="hide">
     <div id="multiselect-cnt"></div>
     <div>
-        <select name="setting_id-cnt" id="setting_id" requried onchange="S('#debt-date-cnt').style.display = this.value ==  110 ? 'block' : 'none'; S.post('<?php echo \system\Core::query_path(0, -1);?>/sub-select', {id: this.value, name_cnt: '-cnt'}, '#sub-debt-cnt')"  class="tax-chooser">
+        <select name="setting_id-cnt" id="setting_id" requried onchange="S.post('<?php echo \system\Core::query_path(0, -1);?>/sub-select', {id: this.value, name_cnt: '-cnt'}, '#sub-debt-cnt')"  class="tax-chooser">
             <option value="">Избери </option>
             <?php foreach ($PDO->query("SELECT id, `type` FROM " . $Setting->table . " WHERE `fortable`='debt' AND link_id=0") as $debt) { ?>
                 <option value="<?php echo $debt["id"];?>"><?php echo $debt["type"];?></option>
@@ -97,7 +97,7 @@ $Caser = new \plugin\Caser\Caser($_GET["caser_id"]);
         </select>
     </div>
     <div id="sub-debt-cnt"></div>
-    <div id="debt-date-cnt" class="hide"><input type="date" name="start-cnt" id="start-cnt" value="0000-00-00"/></div>
+    <div id="debt-date-cnt"><input type="date" name="start-cnt" id="start-cnt" value="<?php echo date("Y-m-d");?>"/></div>
     <div><input type="number" step="0.01" name="sum-cnt" id="sum-cnt" required/></div>
     <div><button type="button" class="button remove-button-row">-</button></div>
 </div>
