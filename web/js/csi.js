@@ -219,3 +219,33 @@ csi.totalSum = function(el, resultDestination, value){
 	let finalResult = el.checked ? Number(resultElement.innerHTML) + Number(value) : Number(resultElement.innerHTML) - Number(value);
 	resultElement.innerHTML = finalResult.toFixed(toFix);
 }
+
+csi.distribute = function(elem){
+	const split =  elem.id.split("-");
+	const type = split[0];
+	const id = split[1];
+	const sum = Number(S("#distribute-sum").innerHTML);
+	const current = Number(elem.getAttribute("data-current"));
+	const value = Number(elem.value);
+	const max = Number(elem.max);
+	let distribute = value;
+
+	//Set distribute sum based on available money and current max value
+	if (Number(elem.value) > sum + current) {distribute = sum + current;}
+	if (distribute > max) {distribute = max;}
+	const difference = current - distribute;
+	
+	if(value > distribute) {elem.value = distribute;} //Set distribute value based on current max value
+	S("#distribute-sum").innerHTML = (sum + difference).toFixed(2); //Update current available sum for distribution
+	
+	if  (type == "tax") {
+		S("#tax-total").innerHTML = (Number(S("#tax-total").innerHTML) - current + distribute).toFixed(2);
+	} else if(type == "tax") {
+		const debt = elem.getAttribute("debt-id");
+	} else {
+		const debt = elem.getAttribute("debt-id");
+		S(`#${type}-${debt}`).innerHTML = (Number(S(`#${type}-${debt}`).innerHTML) - current + distribute).toFixed(2);
+	}
+	
+	elem.setAttribute("data-current", distribute);
+}
