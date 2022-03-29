@@ -10,7 +10,7 @@ for($a = 1; $a <= $_POST["cnt"]; ++$a){
 			"type" => $_POST["type_" . $a],
 			"user" => $User->id,
 			"reason" => $_POST["reason"],
-			"debtors" => json_encode([$person["id"]]),
+			"debtor" => json_encode([$person["id"]]),
 			"bank" => $_POST["bank_" . $a] != 0 ? $_POST["bank_" . $a] : $_POST["bank"],
 			"amount" => $_POST["amount_" . $a],
 			"allocate" => $_POST["reason"] == "Погaсяване на дълг" ? $_POST["amount_" . $a] : 0,
