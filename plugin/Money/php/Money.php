@@ -202,7 +202,10 @@ class Money{
 				$paymentDate = date("d.m.Y", strtotime($payment["date"]));
 				?>
 				<tr>
-					<td><a href="<?php echo \system\Core::url();?>Money/payment/edit?id=<?php echo $payment["id"];?>" class="button button-icon"><?php echo $GLOBALS["Font_awesome"]->_("Edit icon");?></a></td>
+					<td>
+						<a href="<?php echo \system\Core::url();?>Money/payment/edit?id=<?php echo $payment["id"];?>" class="button button-icon"><?php echo $GLOBALS["Font_awesome"]->_("Edit icon");?></a>
+						<?php if ($payment["number"] !== null) { ?><a href="<?php echo \system\Core::url();?>Money/payment/bordero?id=<?php echo $payment["id"];?>" class="button button-icon" target="_blank"><?php echo $GLOBALS["Font_awesome"]->_("Debt icon");?></a><?php } ?>
+					</td>
 					<td><input name="payment_<?php echo $payment["id"];?>" type="checkbox" onclick="<?php foreach (["amount", "allocate", "partitioned", "unpartitioned"] as $sum_id){?> csi.totalSum(this,'#selected-<?php echo $sum_id;?>','<?php echo $payment[$sum_id];?>'); <?php } ?>"></td>
 					<td><?php echo  $paymentDate;?></td>
 					<td><a href="" class="caseNumber"><?php echo $Caser->number;?></a></td>

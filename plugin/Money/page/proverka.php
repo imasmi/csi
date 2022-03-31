@@ -48,6 +48,7 @@ foreach ($PDO->query("SELECT * FROM payment WHERE (date BETWEEN '" . $start . "'
 
 		$array[$Caser->item["number"]] = array(
 						"id" => $Caser->item["id"],
+						"payment_id" => $payment["id"],
 						"amount" => $payment["amount"],
 						"number" => $Caser->item["number"],
 						"creditor" => $cred["name"],
@@ -68,6 +69,7 @@ $title = ($start === $end) ? $start : $start . " - " . $end;
 
 	<tr>
 		<th>№</th>
+		<th></th>
 		<th>Сума</th>
 		<th>Дело</th>
 		<th>Взискател</th>
@@ -84,6 +86,7 @@ $title = ($start === $end) ? $start : $start . " - " . $end;
 	?>
 		<tr style="background-color: <?php echo $data["color"];?>">
 			<td><?php echo $cnt;?></td>
+			<td><a href="<?php echo \system\Core::url();?>Money/payment/bordero?id=<?php echo $data["payment_id"];?>" class="button button-icon" target="_blank"><?php echo $GLOBALS["Font_awesome"]->_("Debt icon");?></a></td>
 			<td><?php echo $data["amount"];?></td>
 			<td><?php echo $data["number"];?></td>
 			<td><?php echo $data["creditor"];?></td>

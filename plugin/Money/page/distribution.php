@@ -84,7 +84,7 @@ foreach($PDO->query("SELECT * FROM caser c, distribution d WHERE d.case_id=c.id 
 	?>	
 		<input type="hidden" name="caseID<?php echo $a;?>" value="<?php echo $distribution[0];?>"/>
 		<tr class="<?php echo $rowClass;?>">
-			<td>
+			<td><?php echo $distribution["id"];?>
 				<?php $type = ($creditorID != 0 && $creditor["budget"] == 1) ? "budget" : "direct";?>
 				<input type="checkbox" name="payment<?php echo $a;?>" class="distribution" id="payment<?php echo $a;?>" <?php echo (($sum > 0 && $type=='direct') ? "checked" : "");?>/>
 				<input type="hidden" name="type<?php echo $a;?>" id="type<?php echo $a;?>" value="<?php echo $type;?>"/>

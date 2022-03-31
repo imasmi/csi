@@ -3,6 +3,26 @@ $caser = array();
 $sums = array();
 
 $cnt = 0;
+
+$cases = [];
+foreach($csv as $t){
+	$case = explode("/", $t[2]);
+	if (isset($case[1])) {
+		$cases[$case[1]][] = $case[0];
+		$cnt++;
+	} else {
+		print_r($t); 
+	}
+}
+ksort($cases);
+
+foreach($cases as $year => $case_items) {
+	echo $year . ": " . implode(",", $case_items);
+	echo '<br><br>';
+}
+echo $cnt;
+exit;
+
 foreach($csv as $t){
 	$case_sum = $t[3];
 	$sums[] = $case_sum;
