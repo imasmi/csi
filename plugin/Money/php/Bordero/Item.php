@@ -280,7 +280,7 @@ class Item {
 	public function cash(){ // Платени на каса в банката
 	?>	
 		<div class="out-text">Вноска на каса</div>
-		<table border="1" class="colltable bordoTable" width="630">
+		<table border="1" class="colltable bordoTable">
 			<tr>
 				<td>
 					<table width="100%" cellpadding="1" cellspacing="1" border="0">
@@ -670,7 +670,7 @@ class Item {
 	public function received_budget(){
 	?>
 	<center xmlns:xsi="http://web.w3.org/2001/XMLSchema-instance">
-		<table width="630" border="1" class="colltable bordoTable">
+		<table border="1" class="colltable bordoTable">
 			<tbody>
 				<tr>
 					<td>

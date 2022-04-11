@@ -2,15 +2,13 @@
 $Object = $Plugin->object();
 $select = $PDO->query("SELECT * FROM " . $Page->table . " WHERE id='" . $_GET["id"] . "'")->fetch();
 require_once(\system\Core::doc_root() . "/system/php/Form.php");
-$Form = new \system\Form;
+require_once(\system\Core::doc_root() . "/system/php/Info.php");
 require_once(\system\Core::doc_root() . "/system/module/Page/php/PageAPP.php");
 $PageAPP = new \module\Page\PageAPP($_GET["id"]);
 require_once(\system\Core::doc_root() . "/system/module/Setting/php/SettingAPP.php");
 $SettingAPP_select = new \module\Setting\SettingAPP($_GET["id"], array("plugin" => $Object->plugin));
 require_once(\system\Core::doc_root() . "/system/module/File/php/FileAPP.php");
 $FileAPP_page = new \module\File\FileAPP($_GET["id"], array("plugin" => $Object->plugin));
-require_once(\system\Core::doc_root() . "/system/php/Info.php");
-$Info = new \system\Info;
 ?>
 <div class="admin">
 <h2 class="text-center title">Edit <?php echo $Page->map($_GET["id"]);?></h2>

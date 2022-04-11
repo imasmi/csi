@@ -66,7 +66,7 @@ class Money{
 	// tax => погасена обикновенна такса
 	public function distributions(){
 		$distributions = ["sum" => [], "prop" => [], "tax" => []];
-		foreach ($this->PDO->query("SELECT * FROM distribution WHERE case_id='" . $this->case_id . "' AND date <= '" . $this->date . "' ORDER by date DESC") as $distribution) {
+		foreach ($this->PDO->query("SELECT * FROM distribution WHERE case_id='" . $this->case_id . "' AND date <= '" . $this->date . "' AND debt IS NOT null ORDER by date DESC") as $distribution) {
 			foreach(json_decode($distribution["debt"], true) as $id => $array){
 				if (!isset($distributions["sum"][$id])) { $distributions["sum"][$id] = 0;}
 				if (!isset($distributions["prop"][$id])) { $distributions["prop"][$id] = 0;}
@@ -148,6 +148,7 @@ class Money{
 	}
 
 	public function taxes(){
+		$taxes = [];
 		foreach ($this->PDO->query("SELECT * FROM tax WHERE case_id='" . $this->case_id . "' ORDER by date DESC", \PDO::FETCH_ASSOC) as $tax) {
 			$tax["paid"] = isset($this->distributions["tax"][$tax["id"]]) ? $this->distributions["tax"][$tax["id"]] : 0;
 			$tax["unpaid"] = $tax["sum"] - $tax["paid"];
@@ -305,7 +306,7 @@ class Money{
 		<div class="admin">
 			<table class="listTable" border="1px" cellpadding="0" cellspacing="0">
 				<tr>
-					<th><a href="<?php echo \system\Core::url();?>Money/invoice/add?case_id=<?php echo $this->case_id;?>" class="button"><?php echo $GLOBALS["Font_awesome"]->_("Add icon");?></a></th>
+					<th></th>
 					<th>Дата</th>
 					<th>Вид</th>
 					<th>Сума</th>

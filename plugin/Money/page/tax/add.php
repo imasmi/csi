@@ -1,13 +1,13 @@
 <?php 
 include_once(\system\Core::doc_root() . '/system/php/Form.php');
 include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
-$Caser = new \plugin\Caser\Caser($_GET["caser_id"]);
+$Caser = new \plugin\Caser\Caser($_GET["case_id"]);
 ?>
 <div class="admin">
 <h2 class="title text-center">Добавяне на такса</h2>
 <div class="error-message" id="error-message"></div>
 <form class="form" id="form" action="<?php echo \system\Core::query_path();?>" method="post" onsubmit="return S.post('<?php echo \system\Core::query_path();?>', S.serialize('#form'), '#error-message')">
-    <input type="hidden" name="caser_id" value="<?php echo $_GET["caser_id"];?>">
+    <input type="hidden" name="case_id" value="<?php echo $_GET["case_id"];?>">
     <table class="table">
         <tr>
             <td>Точка</td>
@@ -35,6 +35,16 @@ $Caser = new \plugin\Caser\Caser($_GET["caser_id"]);
             <td>Дата</td>
             <td><input type="date" name="date" id="date" value="<?php echo date("Y-m-d");?>" required/></td>
         </tr>
+        
+        <tr>
+            <td>За разпределяне</td>
+            <td><input type="checkbox" name="distribute" id="distribute" checked/></td>
+        </tr>
+
+        <tr>
+            <td>За свършване</td>
+            <td><input type="checkbox" name="final" id="final" /></td>
+        </tr>
 
         <tr>
             <td>Бележка</td>
@@ -44,7 +54,7 @@ $Caser = new \plugin\Caser\Caser($_GET["caser_id"]);
         <tr>
             <td>Титул</td>
             <td>
-                <select name="title_id" onchange="S.post('<?php echo \system\Core::url();?>Money/query/tax/title-debtors-select', {id: this.value, caser_id : '<?php echo $_GET["caser_id"];?>'}, '#debtors-select')">
+                <select name="title_id" onchange="S.post('<?php echo \system\Core::url();?>Money/query/tax/title-debtors-select', {id: this.value, caser_id : '<?php echo $_GET["case_id"];?>'}, '#debtors-select')">
                     <option value="0">ИЗБЕРИ</option>
                     <?php 
                         $titles = [];

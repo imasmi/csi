@@ -95,66 +95,77 @@ $debt_types = Money::debt_types();
 
 			<div class="column-6 padding-10">
 				<h3>Такси</h3>
-				<table cellpadding="5" cellspacing="0" class="border-bottom-row">
-					<tr>
-						<th><a class="button button-icon" href="<?php echo \system\Core::url();?>Money/tax/add?caser_id=<?php echo $_GET["id"];?>&title_id=<?php echo $title["id"];?>" title="Добавяне на такса"><?php echo $GLOBALS["Font_awesome"]->_("Add icon");?></a></th>
-						<th></th>
-						<th>Точка</th>
-						<th>Брой</th>
-						<th>Дата</th>
-						<th>Бележка</th>
-						<th>Длъжници</th>
-						<th>Сума</th>
-						<th>Платени</th>
-						<th>Остатък</th>
-					</tr>
-					<?php 
-					$total_taxes = ["sum" => 0, "paid" => 0, "unpaid" => 0];
-					foreach ($Money->taxes as $tax) { ?>
-					<tr>
-						<td><a class="button button-icon" href="<?php echo \system\Core::url();?>/Money/tax/edit?id=<?php echo $tax["id"];?>"><?php echo $Font_awesome->_("Edit icon");?></a></td>
-						<td><input type="checkbox" onclick="csi.totalSum(this,'#selected-taxes','<?php echo $tax['count'];?>'); csi.totalSum(this,'#selected-sums','<?php echo $tax['sum'];?>')"></td>
-						<td>т.<?php echo $tax["point_number"];?></td>
-						<td><?php echo $tax["count"];?></td>
-						<td><?php echo web\dates::_($tax["date"]);?></td>
-						<td><?php echo $tax["note"];?></td>
-						<td>
-							<?php 
-								if ($tax["debtor"] != null) {
-									foreach(json_decode($tax["debtor"], true) as $debtor_id){
-										?>
-										<div><?php echo $PDO->query("SELECT name FROM person WHERE id='" . $debtor_id . "'")->fetch()["name"];?></div>
-										<?php
+				<form action="<?php echo \system\Core::url();?>Money/invoice/add?case_id=<?php echo $_GET["id"];?>" method="post">
+					<table cellpadding="5" cellspacing="0" class="border-bottom-row">
+						<tr>
+							<th><a class="button button-icon" href="<?php echo \system\Core::url();?>Money/tax/add?case_id=<?php echo $_GET["id"];?>&title_id=<?php echo $title["id"];?>" title="Добавяне на такса"><?php echo $GLOBALS["Font_awesome"]->_("Add icon");?></a></th>
+							<th><button class="button">Фактура</button></th>
+							<th>Точка</th>
+							<th>Брой</th>
+							<th>Дата</th>
+							<th>Бележка</th>
+							<th>Предплатил</th>
+							<th>Длъжници</th>
+							<th>Сума</th>
+							<th>Платени</th>
+							<th>Остатък</th>
+						</tr>
+						<?php 
+						$total_taxes = ["sum" => 0, "paid" => 0, "unpaid" => 0];
+						foreach ($Money->taxes as $tax) { ?>
+						<tr>
+							<td><a class="button button-icon" href="<?php echo \system\Core::url();?>/Money/tax/edit?id=<?php echo $tax["id"];?>"><?php echo $Font_awesome->_("Edit icon");?></a></td>
+							<td><input type="checkbox" name="tax_<?php echo $tax["id"];?>" onclick="csi.totalSum(this,'#selected-taxes','<?php echo $tax['count'];?>'); csi.totalSum(this,'#selected-sums','<?php echo $tax['sum'];?>')"></td>
+							<td>т.<?php echo $tax["point_number"];?></td>
+							<td><?php echo $tax["count"];?></td>
+							<td><?php echo web\dates::_($tax["date"]);?></td>
+							<td><?php echo $tax["note"];?></td>
+							<td>
+								<?php 
+									if($tax["prepaid"] == 1) {
+										$payer = $PDO->query("SELECT payer FROM invoice WHERE tax LIKE '%\"" . $tax["id"] . "\":%'")->fetch()["payer"];
+										echo $PDO->query("SELECT name FROM person WHERE id='$payer'")->fetch()["name"];
 									}
-								}
-							?>
-						</td>
-						<td><?php echo $tax["sum"]; $total_taxes["sum"] += $tax["sum"];?></td>
-						<td><?php echo Money::sum($tax["paid"]);  $total_taxes["paid"] += $tax["paid"];?></td>
-						<td><?php echo Money::sum($tax["unpaid"]); $total_taxes["unpaid"] += $tax["unpaid"];?></td>
-					</tr>
-					<?php } ?>
-					
-					<tr>
-						<th>Избрани</th>
-						<th colspan="2"></th>
-						<th id="selected-taxes">0</th>
-						<th colspan="3"></th>
-						<th id="selected-sums"><?php echo \plugin\Money\Money::sum(0);?></th>
-						<th></th>
-						<th></th>
-					</tr>
+								?>
+							</td>
+							<td>
+								<?php 
+									if ($tax["debtor"] != null) {
+										foreach(json_decode($tax["debtor"], true) as $debtor_id){
+											?>
+											<div><?php echo $PDO->query("SELECT name FROM person WHERE id='" . $debtor_id . "'")->fetch()["name"];?></div>
+											<?php
+										}
+									}
+								?>
+							</td>
+							<td><?php echo $tax["sum"]; $total_taxes["sum"] += $tax["sum"];?></td>
+							<td><?php echo Money::sum($tax["paid"]);  $total_taxes["paid"] += $tax["paid"];?></td>
+							<td><?php echo Money::sum($tax["unpaid"]); $total_taxes["unpaid"] += $tax["unpaid"];?></td>
+						</tr>
+						<?php } ?>
+						
+						<tr>
+							<th>Избрани</th>
+							<th colspan="2"></th>
+							<th id="selected-taxes">0</th>
+							<th colspan="3"></th>
+							<th id="selected-sums"><?php echo \plugin\Money\Money::sum(0);?></th>
+							<th></th>
+							<th></th>
+						</tr>
 
-					<tr>
-						<th>Общо</th>
-						<th colspan="2"></th>
-						<th><?php echo count($Money->taxes);?></th>
-						<th colspan="3"></th>
-						<th><?php echo \plugin\Money\Money::sum($total_taxes["sum"]);?></th>
-						<th><?php echo \plugin\Money\Money::sum($total_taxes["paid"]);?></th>
-						<th><?php echo \plugin\Money\Money::sum($total_taxes["unpaid"]);?></th>
-					</tr>
-				</table>
+						<tr>
+							<th>Общо</th>
+							<th colspan="2"></th>
+							<th><?php echo count($Money->taxes);?></th>
+							<th colspan="3"></th>
+							<th><?php echo \plugin\Money\Money::sum($total_taxes["sum"]);?></th>
+							<th><?php echo \plugin\Money\Money::sum($total_taxes["paid"]);?></th>
+							<th><?php echo \plugin\Money\Money::sum($total_taxes["unpaid"]);?></th>
+						</tr>
+					</table>
+				</form>
 			</div>
 
 			<div class="column-6">

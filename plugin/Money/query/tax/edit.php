@@ -5,15 +5,15 @@ $check = array();
 if(empty($check)){
     
     if ($_POST["multiselect-counter-debtor_id"]) {
-        $debtors = [];
+        $debtor = [];
         for ($i = 0; $i < $_POST["multiselect-counter-debtor_id"]; $i++){
             if (isset($_POST["multiselect-debtor_id-" . $i])) {
-                $debtors[] = $_POST["multiselect-debtor_id-" . $i];
+                $debtor[] = $_POST["multiselect-debtor_id-" . $i];
             }
         }
-        $debtors = json_encode(array_unique($debtors));
+        $debtor = json_encode(array_unique($debtor));
     } else {
-        $debtors = null;
+        $debtor = null;
     }
 
     #INSERT IF ALL EVERYTHING IS FINE
@@ -21,9 +21,11 @@ if(empty($check)){
         "setting_id" => $_POST["setting_id"],
         "point_number" => $PDO->query("SELECT `row` FROM " . $Setting->table . " WHERE id='" . $_POST["setting_id"] . "'")->fetch()["row"],
         "title_id" => $_POST["title_id"],
-        "debtors" => $debtors,
+        "debtor" => $debtor,
         "count" => $_POST["count"],
         "sum" => $_POST["sum"],
+        "distribute" => isset($_POST["distribute"]) && $_POST["distribute"] == "on" ? 1 : 0,
+        "final" => isset($_POST["final"]) && $_POST["final"] == "on" ? 1 : 0,
         "note" => $_POST["note"],
         "date" => date("Y-m-d"),
     ];

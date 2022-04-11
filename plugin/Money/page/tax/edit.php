@@ -2,7 +2,7 @@
 include_once(\system\Core::doc_root() . '/system/php/Form.php');
 include_once(\system\Core::doc_root() . '/plugin/Caser/php/Caser.php');
 $select = $select = $PDO->query("SELECT * FROM tax WHERE id='" . $_GET["id"] . "'")->fetch();
-$Caser = new \plugin\Caser\Caser($select["caser_id"]);
+$Caser = new \plugin\Caser\Caser($select["case_id"]);
 ?>
 
 <div class="admin">
@@ -38,6 +38,16 @@ $Caser = new \plugin\Caser\Caser($select["caser_id"]);
         </tr>
 
         <tr>
+            <td>За разпределяне</td>
+            <td><input type="checkbox" name="distribute" id="distribute" <?php if ( $select['distribute'] == 1 ) { echo 'checked';}?>/></td>
+        </tr>
+
+        <tr>
+            <td>За свършване</td>
+            <td><input type="checkbox" name="final" id="final" <?php if ( $select['final'] == 1 ) { echo 'checked';}?>/></td>
+        </tr>
+
+        <tr>
             <td>Бележка</td>
             <td><textarea name="note" id="" cols="30" rows="5"><?php echo $select['note'];?></textarea></td>
         </tr>
@@ -45,7 +55,7 @@ $Caser = new \plugin\Caser\Caser($select["caser_id"]);
         <tr>
             <td>Титул</td>
             <td>
-                <select name="title_id" onchange="S.post('<?php echo \system\Core::url();?>Money/query/tax/title-debtors-select', {id: this.value, caser_id : '<?php echo $select["caser_id"];?>'}, '#debtors-select')">
+                <select name="title_id" onchange="S.post('<?php echo \system\Core::url();?>Money/query/tax/title-debtors-select', {id: this.value, caser_id : '<?php echo $select["case_id"];?>'}, '#debtors-select')">
                     <option value="0">ИЗБЕРИ</option>
                     <?php 
                         $titles = [];
@@ -64,7 +74,7 @@ $Caser = new \plugin\Caser\Caser($select["caser_id"]);
             <td id="debtors-select">
                 <?php 
                 $debotrs = [];
-                $debtor_items = $select["debtors"] !== null ? json_decode($select["debtors"], true) : [];
+                $debtor_items = $select["debtor"] !== null ? json_decode($select["debtor"], true) : [];
                 foreach ($Caser->debtor($select["title_id"]) as $debtor) {
                     $debotrs[$debtor] = $PDO->query("SELECT name FROM person WHERE id='" . $debtor . "'")->fetch()["name"];
                 }
