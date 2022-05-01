@@ -1,6 +1,7 @@
 <?php 
 include_once(\system\Core::doc_root() . "/plugin/Select/php/Select.php");
 $document = $PDO->query("SELECT * FROM document WHERE id='" . $_GET["id"] . "'")->fetch();
+$Template = $Plugin->object("Template");
 ?>
 <div class="admin">
     <h2 class="title text-center">Редакция на <?php echo $Text->_($document["type"] . " document");?></h2>
@@ -22,6 +23,14 @@ $document = $PDO->query("SELECT * FROM document WHERE id='" . $_GET["id"] . "'")
                 ]);?></td>
             </tr>
         
+        <?php if ($document["type"] == "outgoing") { ?>
+            <script>document.getElementById("name-data").addEventListener("change", () => setTimeout(() => {S.post('<?php echo \system\Core::url();?>Document/query/template-select', {doc_type: S('#name').value}, "#template-container")}, 200))</script>
+            <tr>
+                <td>Шаблон</td>
+                <td id="template-container"><?php $Template->select($document["name"], $document["template"]);?></td>
+            </tr>
+        <?php } ?>
+
         <?php if ($document["type"] != "protocol") { ?>
             <tr>
                 <td><?php echo $document["type"] == "incoming" ? "Подател" : "Адресат";?></td>

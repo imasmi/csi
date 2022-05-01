@@ -29,7 +29,7 @@ class Plugin{
 
     public function object($class = false, $parameter=false){
         $object_name = ($class !== false) ? $class : $this->_();
-        require_once(\system\Core::doc_root() . "/plugin/" . $object_name . "/php/" . $object_name . ".php");
+        require_once(\system\Core::doc_root() . "/plugin/" .  $this->_() . "/php/" . $object_name . ".php");
         $object = "\plugin\\" . $this->_() . "\\" . $object_name;
         return ($parameter !== false) ? new $object($parameter) : new $object;
     }

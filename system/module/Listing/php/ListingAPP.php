@@ -258,7 +258,7 @@ class ListingAPP{
             }
         $cnt++;
         }
-        return \system\Core::url() . $output;
+        return \system\Core::url() . htmlspecialchars($output);
     }
 
     private function listing_view($list, $value){

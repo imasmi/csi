@@ -10,12 +10,6 @@ $select = $PDO->query("SELECT * FROM " . $Page->table . " WHERE id='" . $_GET["i
 $page_path = $Page->path($_GET["id"]);
 if($CodeAPP->special_characters_check($_POST["filename"]) === true){$check["#filename"] = "Special characters are not allowed.";}
 
-foreach($Language->items as $value){
-    if($CodeAPP->special_characters_check($_POST[$value]) === true){
-        $check["#" . $value] = "Special characters are not allowed.";
-    }
-}
-
 #UPDATE USER DATA IF ALL EVERYTHING IS FINE
 if(empty($check)){
     #EDIT PAGE
@@ -35,7 +29,7 @@ if(empty($check)){
     foreach($Language->items as $key=>$value){
         $array[$value] = (strpos($_POST[$value], "http") !== false) ? $_POST[$value] : $PageAPP->url_format($_POST[$value]);
     }
-    
+
     $update = \system\Data::update($array, $_GET["id"]);
     
     if($update){

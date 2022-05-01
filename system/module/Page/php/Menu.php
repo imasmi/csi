@@ -4,7 +4,7 @@ use \module\Setting\Setting as Setting;
 
 class Menu{
 
-    public function __construct($menu, $array = array("submenu" => true, "mobile-open" => false, "mobile-close" => "X", "ul-class" => "top-menu", "query" => false)){
+    public function __construct($menu, $array = array("submenu" => true, "mobile-open" => false, "mobile-close" => "X", "ul-class" => "top-menu", "query" => false, "theme" => true)){
         global $PDO;
         $this->PDO = $PDO;
         global $Plugin;
@@ -41,7 +41,16 @@ class Menu{
 
     public function select($link_id){
         $pages = array();
-        $query = isset($this->arr["query"]) && $this->arr["query"] !== false && $link_id == $this->link_id ? $this->arr["query"] : "SELECT id, link_id, menu FROM " . $this->Page->table . " WHERE " . $this->like . " AND link_id='" . $link_id . "' AND theme LIKE '" . $GLOBALS["Theme"]->name . "' ORDER by `row` ASC, id ASC";
+        if (isset($this->arr["theme"]) && $this->arr["theme"] !== true) {
+            if ($this->arr["theme"] === false) {
+                $theme = "";
+            } else {
+                $theme = "AND theme LIKE '" . $this->arr["theme"] . "'";
+            }
+        }  else {
+            $theme = "AND theme LIKE '" . $GLOBALS["Theme"]->name . "'";
+        }
+        $query = isset($this->arr["query"]) && $this->arr["query"] !== false && $link_id == $this->link_id ? $this->arr["query"] : "SELECT id, link_id, menu FROM " . $this->Page->table . " WHERE " . $this->like . " AND link_id='" . $link_id . "' {$theme} ORDER by `row` ASC, id ASC";
         foreach($this->PDO->query($query) as $key=>$page){
             $multiple = explode(",", $page["menu"]);
             if(count($multiple) > 1){

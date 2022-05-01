@@ -44,7 +44,7 @@ class Text{
                 return $this->items[$id]["id"];
             }
         }
-
+        
         if(http_response_code() != '404'){
             $check_tag = $this->PDO->query("SELECT * FROM " . $this->table . " WHERE tag='" . $id . "' AND fortable IS NULL");
             if($check_tag->rowCount() > 0 && !isset($array["page_id"]) && (isset($this->arr["page_id"]) && $this->arr["page_id"] == 0)){

@@ -18,7 +18,17 @@ $next_number = $PDO->query("SELECT number FROM document WHERE date >= '" . date(
             <tr>
                 <td>Вид документ</td>
                 <td><?php echo \plugin\Select\Select::_(["name" => "name", "url" => \system\Core::url() . 'Select/query/doc-type?type=' . $_GET["type"]]);?></td>
+
             </tr>
+        
+        <?php if ($_GET["type"] == "outgoing") { ?>
+            <script>document.getElementById("name-data").addEventListener("change", () => setTimeout(() => {S.post('<?php echo \system\Core::url();?>Document/query/template-select', {doc_type: S('#name').value}, "#template-container")}, 200))</script>
+            <tr>
+                <td>Шаблон</td>
+                <td id="template-container"></td>
+            </tr>
+        <?php } ?>
+
 
         <?php if ($_GET["type"] != "protocol") { ?>
             <tr>

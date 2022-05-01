@@ -78,8 +78,7 @@ class CodeAPP{
     }
 
     public static function special_characters_remove($string){
-        $search = array('/','\\',':',';','!','@','#','$','%','^','*','(',')','=','|','{','}','[',']','"',"'",'<','>',',','?','~','`','&',' ','.');
-        return str_replace($search, "", $string); // Removes special chars.
+        return preg_replace('/[`~!@#$%^&*()|+\=?;:\'",.<>\{\}\[\]\/\\\]/', "", $string);
     }
 }
 ?>

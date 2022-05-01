@@ -59,7 +59,7 @@ class Form{
     
     //Array possible values:
     //data => Array(key => value) data fiels for the selector,
-    //items => Array(key => value) key is the id and the value is the selected value from the selected entries,
+    //items => Array(value) a value to select key in the above data array,
     //onchange => javascript function,
     //onremove => javascript function
     public static function multiselect( $id, $data ) {
@@ -101,11 +101,13 @@ class Form{
         
         <button type="button" class="button" onclick="
         let newRow = document.createElement('div'); 
+        let count = S('#multiselect-counter-<?php echo $id;?>').value;
         newRow.innerHTML = S('#multiselect-template-<?php echo $id;?>').innerHTML;
-        let newId = `multiselect-<?php echo $id;?>-${S('#multiselect-counter-<?php echo $id;?>').value}`;
+        let newId = `multiselect-<?php echo $id;?>-${count}`;
         newRow.setAttribute('id', newId);
         newRow.setAttribute('class', 'flex');
         newRow.querySelector('select').setAttribute('name', newId);
+        newRow.querySelector('.remove-button-<?php echo $id;?>').setAttribute('id', `multiselect-<?php echo $id;?>-${count}-remove`);
         newRow.querySelector('.remove-button-<?php echo $id;?>').setAttribute('onclick', `S.remove('#${newId}'); <?php echo $onremove;?>`);
         S('#multiselect-items-<?php echo $id;?>').appendChild(newRow);
         S('#multiselect-counter-<?php echo $id;?>').value = Number(S('#multiselect-counter-<?php echo $id;?>').value) + 1;

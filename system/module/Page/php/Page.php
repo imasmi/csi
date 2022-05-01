@@ -21,7 +21,7 @@ class Page{
         $this->tag = isset($this->item["tag"]) ? $this->item["tag"] : null;
         $this->type = isset($this->item["type"]) ? $this->item["type"] : null;
         $this->current_file = $this->current_file();
-        if($this->current_file === false && $this->id == 0){ http_response_code(404);}// send response code 404 if page is not found
+        if($this->current_file === false && $this->id == 0){ http_response_code(404);} else {http_response_code(200);}// send response code 404 if page is not found
     }
 
     public function items($page_id){
@@ -117,7 +117,7 @@ class Page{
 
     public function url($id, $language = false){
         $lang = ($language !== false) ? $language : \module\Language\Language::_();
-        $page = isset($this->items[$id]) ? $this->items[$id] : $this->PDO->query("SELECT * FROM " . $this->table . " WHERE id='" . $id . "'")->fetch();
+        $page = isset($this->items[$id]) ? $this->items[$id] : $this->PDO->query("SELECT id, {$lang} FROM " . $this->table . " WHERE id='" . $id . "'")->fetch();
         $link_name = !empty($page[$lang]) ? $page[$lang] : $page["id"];
         if(strpos($link_name, "http") !== false){
             $output = $link_name;
@@ -184,7 +184,7 @@ class Page{
         return false;
     }
     
-    // Array possible values: ["favicon" => string (File->table tag), "og_image" => "string" (File->table tag)]...
+    // Array possible values: ["favicon" => string (File->table tag), "og-image" => "string" (File->table tag)]...
     public function head($array = array()){
         global $Setting;
         global $File;
@@ -195,7 +195,7 @@ class Page{
                 if(isset($array["title"])) {
                     echo $array["title"];
                 } else {
-                    echo (!empty($Setting->_("Title",  array("type" => \module\Language\Language::_(), "page_id" => $this->id)))) ? $Setting->_("Title",  array("type" => \module\Language\Language::_(), "page_id" => $this->id())) : $Setting->_("Title", array("type" => \module\Language\Language::_(), "page_id" => "0"));   
+                    echo $Setting->_("Title",  array("type" => \module\Language\Language::_(), "page_id" => $this->id)) !== false ? $Setting->_("Title",  array("type" => \module\Language\Language::_(), "page_id" => $this->id)) : $Setting->_("Title", array("type" => \module\Language\Language::_(), "page_id" => "0"));   
                 }
             ?>
             </title>
@@ -212,9 +212,14 @@ class Page{
         <meta property="og:url" content="<?php echo isset($array["og:url"]) ? $array["og:url"] : \system\Core::domain() . $_SERVER["REQUEST_URI"];?>" />
         <meta property="og:description" content="<?php echo isset($array["og:description"]) ? $array["og:description"] : $Setting->_("Description");?>"/>
         <?php
-        $og_image = isset($array["og_image"]) ? $array["og_image"] : "Og";
-        $og = isset($File->items[$og_image]) ? $File->items[$og_image]["path"] : false;
-        if($og){
+        if (isset($array["og-image"])) {
+            $og = $array["og-image"];
+        } else if (isset($File->items["Og"])) {
+            $og = \system\Core::doc_root() . '/'. $File->items["Og"]["path"];
+        } else {
+            $og = false;
+        }
+        if(is_file($og)){
             $info = pathinfo($og);
             foreach($File->imagesize as $size => $pixels){
                 $new_name = $info["dirname"] . '/' . $info["filename"] . '_' . $size . '.' . $info["extension"];

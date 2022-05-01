@@ -8,7 +8,7 @@ if(!is_dir($Plugin->doc_root)){mkdir($Plugin->doc_root);}
 if(!in_array($plugin_name, scandir($Plugin->doc_root))){
     $new_plugin = $Plugin->doc_root . '/' . $plugin_name;
     mkdir($Plugin->doc_root . '/' . $plugin_name);
-    $FileAPP->copy_dir(\system\Core::doc_root() . '/system/template/Plugin_template/Plugin_' . $_POST["type"], $new_plugin);
+    $FileAPP->copy_dir(\system\Core::doc_root() . '/system/template/Plugin_' . $_POST["type"], $new_plugin);
     rename($new_plugin . "/php/Plugin_" . $_POST["type"] . ".php", $new_plugin . "/php/" . $plugin_name . ".php");
     $module_file = file_get_contents($new_plugin . "/php/" . $plugin_name . ".php");
     $module_file = str_replace("Plugin_" . $_POST["type"], ucfirst($plugin_name), $module_file);

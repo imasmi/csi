@@ -23,6 +23,7 @@ for($a = 0; $a < $_POST["rows"]; ++$a){
 	}
 	
 	if(isset($array["bill"])){
+		unset($array["unpayed"]);
 		$checks = $PDO->query("SELECT * FROM invoice WHERE bill='" . $array["bill"] . "'");
 		if($checks->rowCount() > 0){
 			$check = $checks->fetch();

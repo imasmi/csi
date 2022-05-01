@@ -7,6 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInit69edeff0e215c63b03ec8a5f2e9b2e21
 {
     public static $files = array (
+        '7e9bd612cc444b3eed788ebbe46263a0' => __DIR__ . '/..' . '/laminas/laminas-zendframework-bridge/src/autoload.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
     );
 
@@ -18,10 +19,16 @@ class ComposerStaticInit69edeff0e215c63b03ec8a5f2e9b2e21
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+            'PhpOffice\\PhpWord\\' => 18,
         ),
         'M' => 
         array (
             'Mpdf\\' => 5,
+        ),
+        'L' => 
+        array (
+            'Laminas\\ZendFrameworkBridge\\' => 28,
+            'Laminas\\Escaper\\' => 16,
         ),
         'D' => 
         array (
@@ -38,9 +45,21 @@ class ComposerStaticInit69edeff0e215c63b03ec8a5f2e9b2e21
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
+        'PhpOffice\\PhpWord\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpoffice/phpword/src/PhpWord',
+        ),
         'Mpdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
+        ),
+        'Laminas\\ZendFrameworkBridge\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laminas/laminas-zendframework-bridge/src',
+        ),
+        'Laminas\\Escaper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laminas/laminas-escaper/src',
         ),
         'DeepCopy\\' => 
         array (

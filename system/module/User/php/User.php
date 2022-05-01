@@ -29,7 +29,7 @@ class User{
 		     $output .= '<a href="' . \system\Core::url() . $this->module . '">' . $Text->item("Login") . '</a>';
 		     if ($type == "full") { $output .= '<a href="' . \system\Core::url() . $this->module . '/register">' . $Text->item("Register") . '</a>';}
 		} else {
-		    $output .= '<a href="' . \system\Core::url() . $this->module . '/profile/profile">' . $Text->item("Profile") . '</a>';
+		    $output .= '<a href="' . \system\Core::url() . $this->module . '/profile/index">' . $Text->item("Profile") . '</a>';
 		    if ($type == "full") {$output .= '<a href="' . \system\Core::url() . $this->module . '/query/logout">' . $Text->item("Log out") . '</a>';}
 		}
 		 $output .= '</div>';

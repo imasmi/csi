@@ -24,6 +24,11 @@ class Document{
 		$this->openODT = "openODT://";
 		//$this->url = "C:/Users/1/Downloads/enforcer_documents/share-proxy/d55b818538c9ee4c953c9e6f61610d7e-symfony/";
 		$this->url = "D:/enforcer_documents/share-proxy/d55b818538c9ee4c953c9e6f61610d7e-symfony/";
+		$this->types = [
+			"incoming" => "Входящ",
+			"outgoing" => "Изходящ",
+			"protocol" => "Протокол",
+		];
 	}
 
 	public function add_button($type){
@@ -176,7 +181,14 @@ class Document{
 					?>
 					<tr>
 						<td><?php echo $this->edit_button($outgoing["id"]);?></td>
-						<td><?php if (file_exists(iconv( "UTF-8", "windows-1251" , $outgoing_file))) {?><a href="<?php echo $this->openODT . $outgoing_file;?>" class="button">Отвори</a><?php }?></td>
+						<td>
+							<?php 
+								if (file_exists(iconv( "UTF-8", "windows-1251" , $outgoing_file))) {?>
+									<a href="<?php echo $this->openODT . $outgoing_file;?>" class="button">Отвори</a>
+								<?php } else if ($outgoing["template"] != 0) {?>
+									<a href="<?php echo \system\Core::url();?>Document/query/document-template-create?id=<?php echo $outgoing["id"];?>&path=<?php echo $outgoing_file;?>" class="button">Създай</a>
+								<?php } ?>
+						</td>
 						<td><?php echo $outgoing["number"];?></td>
 						<?php if(!$this->case_id){?><td><?php $Caser->open();?></td><?php } ?>
 						<td>

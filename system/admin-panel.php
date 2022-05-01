@@ -34,7 +34,6 @@
     </div>
     <a href="<?php echo \system\Core::url();?>Store/admin/index" id="webstore">WEB STORE</a>
     <a href="http://web.imasmi.com" id="admin-web" title="Imasmi Web">
-        <img id="text-logo" src="<?php echo \system\Core::url();?>system/file/text-logo.png">
         <img id="web-logo" src="<?php echo \system\Core::url();?>system/file/web-logo.png">
     </a>
 </div>

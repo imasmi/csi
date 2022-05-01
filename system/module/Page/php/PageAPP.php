@@ -12,11 +12,10 @@ class PageAPP{
 
     public function url_format($string){
         require_once(\system\Core::doc_root() . "/system/module/Code/php/CodeAPP.php");
-        $CodeAPP = new \module\Code\CodeAPP;
         $string = html_entity_decode($string);
         $string = strip_tags($string);
-        $string = preg_replace(['/\s+/', '/-+/'], '-', $string);
-        $string = $CodeAPP->special_characters_remove($string);
+        $string = preg_replace(['/\s+/u', '/-+/'], '-', $string);
+        $string = \module\Code\CodeAPP::special_characters_remove($string);
         $string = trim($string);
         return $string;
     }

@@ -24,7 +24,6 @@ $profile = $PDO->query("SELECT * FROM " . $User->table . " WHERE id='" . $User->
     </tr>
 
     <tr><td colspan="2"><button type="button" class="button" onclick="window.open('<?php echo \system\Core::url() . \system\Module::_() . '/profile/edit';?>', '_self')"><?php echo $Text->item("Edit profile");?></button></td></tr>
-    <tr><td colspan="2"><button type="button" class="button" onclick="window.open('<?php echo \system\Core::url() . \system\Module::_() . '/address/index';?>', '_self')"><?php echo $Text->item("Addresses");?></button></td></tr>
     <tr><td colspan="2"><button type="button" class="button" onclick="window.open('<?php echo \system\Core::url() . \system\Module::_() . '/profile/change-password';?>', '_self')"><?php echo $Text->item("Change password");?></button></td></tr>
     <tr><td colspan="2"><button type="button" class="button" onclick="window.open('<?php echo \system\Core::url() . \system\Module::_() . '/profile/delete';?>', '_self')"><?php echo $Text->item("Delete profile");?></button></td></tr>
 </table>

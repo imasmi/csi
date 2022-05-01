@@ -14,19 +14,21 @@ class FileAPP extends File{
         return $path . ($link_id != 0 ? $link_id . '/' : "") . $id;
     }
 
-    public function delete_dir($path) {
+    public static function delete_dir($path) {
         $files = glob($path . '/*');
     	foreach ($files as $file) {
-    		is_dir($file) ? $this->delete_dir($file) : unlink($file);
+    		is_dir($file) ? static::delete_dir($file) : unlink($file);
     	}
     	rmdir($path);
     	return;
     }
 
     public function copy_dir($src,$dst){
+        if (!is_dir($src)){return false;}
         $dir = opendir($src);
         if(!is_dir($dst)){mkdir($dst);}
-        while(false !== ( $file = readdir($dir)) ) {
+        
+        while(( $file = readdir($dir)) !== false) {
             if (( $file != '.' ) && ( $file != '..' )) {
                 if ( is_dir($src . '/' . $file) ) {
                     $this->copy_dir($src . '/' . $file,$dst . '/' . $file);

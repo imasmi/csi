@@ -128,7 +128,7 @@ class File{
         			        }
         			        $newName = $info["dirname"] . '/' . $info["filename"] . '.webp';
         			        if(file_exists($newName)){$output .= '<source srcset="' . \system\Core::url() . $newName . '" type="image/webp">';}
-                            $output .= '<img ' . $style . ' src="' . \system\Core::url() .$file["path"] . '" ' . $trigger_file . ' alt="' . $file[\module\Language\Language::_()] . '" title="' . $file[\module\Language\Language::_()] . '">';
+                            $output .= '<img ' . $style . ' src="' . \system\Core::url() .$file["path"] . '" ' . $trigger_file . ' alt="' . (isset($array["alt"]) ? $array["alt"] : $file[\module\Language\Language::_()]) . '" title="' . $file[\module\Language\Language::_()] . '">';
     			        }
     			    $output .= '</picture>';
     			} elseif($file["type"] == "audio"){

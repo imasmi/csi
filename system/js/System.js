@@ -379,17 +379,17 @@ S.galleryItem = function(itemNumb, selector, cnt = false){
     gallery.style.display = "block";
 }
 
+// Add S.gallery(id) after the HTML with addEventListener if needed
+//Items numbers can be added manually with data-gallery-item, or will receive default values in the order of appearance
 S.gallery = function(selector){
-    
     let gallery = {};
-    S.all(selector + " *", function(el){
-        if(el.classList.contains('gallery-item') === true){
-            gallery[el.getAttribute("data-gallery-item")] = el.innerHTML;
-            el.addEventListener("click", function(){S.galleryItem(this.getAttribute("data-gallery-item"), selector);});
-        }
+    let item_count = 0;
+    S.all(selector + " .gallery-item", function(el){
+        item_count = el.getAttribute("data-gallery-item") ? el.getAttribute("data-gallery-item") : ++item_count;
+        gallery[item_count] = el.innerHTML;
+        el.addEventListener("click", function(){S.galleryItem(this.getAttribute("data-gallery-item"), selector, item_count);});
     });
-    
-    //let gallery = S.galleryGetImages(category);
+
     let current = 1;
     let cnt = Object.keys(gallery).length;
     
