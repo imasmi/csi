@@ -36,6 +36,7 @@ section.open .tag:before{content: "-";}
 /*HEADER*/
 #header{height: min-content; padding: 10px;background-color: #274f87;color: #ffffff; box-shadow: 0 1px 5px #000000;}
 #header-logo{height: 40px;}
+#header-searches{width: 160px;}
 #index{display: block;padding: 0px;margin-bottom: 100px;}
 #footer{position: absolute;bottom: 0px;height: 100px;width: 100%;background-color: #b10000;color: #ffffff;}
 .logger,.languages{display: inline-block; margin: 0px 30px;}

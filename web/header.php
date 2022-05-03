@@ -13,9 +13,13 @@
 			</ul>
 		</li>
 		<li><a href="<?php echo \system\Core::url();?>Caser/index">Дела</a></li>
-		<li><a href="<?php echo \system\Core::url();?>Document/incoming">Входящи</a></li>
-		<li><a href="<?php echo \system\Core::url();?>Document/outgoing">Изходящи</a></li>
-		<li><a href="<?php echo \system\Core::url();?>Document/protocol">Протоколи</a></li>
+		<li>
+			<a>Документи</a>
+			<ul class="sub-menu">	
+				<li><a href="<?php echo \system\Core::url();?>Document/incoming">Входящи</a></li>
+				<li><a href="<?php echo \system\Core::url();?>Document/outgoing">Изходящи</a></li>
+				<li><a href="<?php echo \system\Core::url();?>Document/protocol">Протоколи</a></li>
+			</ul>
 		<li>
 			<a>Пари</a>
 			<ul class="sub-menu">
